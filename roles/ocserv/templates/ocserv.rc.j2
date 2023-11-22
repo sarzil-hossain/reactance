@@ -1,0 +1,14 @@
+#!/bin/ksh
+
+daemon="/usr/local/sbin/ocserv"
+daemon_flags="-c /etc/vpns/ocserv/ocserv.conf"
+
+. /etc/rc.d/rc.subr
+
+pexp="ocserv: ocserv-main"
+
+rc_pre() {
+	/usr/bin/install -d -o _ocserv /etc/vpns/ocserv/run/
+}
+
+rc_cmd $1

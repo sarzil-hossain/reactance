@@ -1,0 +1,6 @@
+---
+- name: start_ocserv
+  ansible.builtin.service:
+    name: ocserv
+    state: restarted
+    enabled: true

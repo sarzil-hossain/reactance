@@ -1,0 +1,3 @@
+---
+- name: "setup ocserv"
+  include_tasks: install_ocserv.yaml
