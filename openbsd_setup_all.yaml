@@ -1,8 +1,8 @@
 ---
-- name: "openbsd : setup ocserv, v2ray, ssh vpn"
+- name: "openbsd : setup ocserv, xray, ssh vpn"
   hosts: all
   become: true
   roles:
     - role: ocserv
-    - role: v2ray
+    - role: xray
     - role: ssh

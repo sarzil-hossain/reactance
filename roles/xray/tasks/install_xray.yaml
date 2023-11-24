@@ -1,0 +1,49 @@
+---
+- name: "install unzip"
+  community.general.openbsd_pkg:
+    name:
+      - unzip--
+      - curl--
+    state: present
+
+- name: "create temporary directory"
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: temp
+  register: xray_tempdir
+  notify:
+    - remove_xray_tempdir
+
+- name: "get latest version"
+  ansible.builtin.shell: 'curl --silent "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | jq -r .tag_name'
+  register: xray_latest_version
+
+- name: "download latest version"
+  ansible.builtin.get_url:
+    url: "https://github.com/XTLS/Xray-core/releases/download/{{ xray_latest_version.stdout }}/Xray-openbsd-64.zip"
+    dest: "{{ xray_tempdir.path }}/xray.zip"
+
+- name: "unzip xray"
+  ansible.builtin.shell: "unzip xray.zip"
+  args:
+    chdir: "{{ xray_tempdir.path }}"
+
+- name: "install xray"
+  ansible.builtin.shell: "{{ item }}"
+  loop:
+    - "install -m 755 -g bin {{ xray_tempdir.path }}/xray /usr/local/bin/xray"
+    - "install -d /usr/local/share/xray"
+
+- name: "copy geoip.dat, geosite.dat files to asset directory"
+  ansible.builtin.shell: "install -m 755 -g bin {{ xray_tempdir.path }}/{{ item }} /usr/local/share/xray/{{ item }}"
+  loop:
+    - "geoip.dat"
+    - "geosite.dat"
+
+- name: "template out init script"
+  ansible.builtin.template:
+    src: xray.rc.j2
+    dest: "{{ xray_tempdir.path }}/xray.rc"
+
+- name: "install init script"
+  ansible.builtin.shell: "install -m 755 -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"

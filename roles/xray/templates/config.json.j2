@@ -1,0 +1,130 @@
+{
+  "log": {
+    "loglevel": "error",
+    "access": "/etc/vpns/xray/logs/xray-access.log",
+    "error": "/etc/vpns/xray/logs/xray-error.log",
+    "dnsLog": false
+  },
+  "stats": {},
+  "api": {
+    "tag": "api",
+    "services": [
+      "StatsService"
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    }
+  },
+  "dns": {
+    "servers": [
+        "46.23.90.31"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 443,
+      "protocol": "trojan",
+      "settings": {
+        "clients": []
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+        "show": false,
+        "dest": "behindthename.com:443",
+        "serverNames": [
+            "behindthename.com",
+            "www.behindthename.com"
+        ],
+        "xver": 0,
+        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "maxTimeDiff": 0,
+        "shortIds": [""]
+        }
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 44300,
+      "protocol": "vless",
+      "settings": {
+        "decryption": "none",
+        "clients": []
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+        "show": false,
+        "dest": "behindthename.com:443",
+        "serverNames": [
+            "behindthename.com",
+            "www.behindthename.com"
+        ],
+        "xver": 0,
+        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "maxTimeDiff": 0,
+        "shortIds": [""]
+        }
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 8443,
+      "protocol": "vmess",
+      "settings": {
+        "clients": []
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+        "show": false,
+        "dest": "behindthename.com:443",
+        "serverNames": [
+            "behindthename.com",
+            "www.behindthename.com"
+        ],
+        "xver": 0,
+        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "maxTimeDiff": 0,
+        "shortIds": [""]
+        }
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10085,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      }
+    ]
+  }
+}
+

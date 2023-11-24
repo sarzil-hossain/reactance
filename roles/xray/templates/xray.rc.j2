@@ -1,0 +1,13 @@
+#!/bin/ksh
+#
+# $OpenBSD: xray
+
+daemon="/usr/local/bin/xray run"
+daemon_flags="-c {{ vpns_dir }}/xray/config.json"
+
+. /etc/rc.d/rc.subr
+
+rc_bg=YES
+rc_reload=NO
+
+rc_cmd $1

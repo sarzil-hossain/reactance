@@ -1,0 +1,6 @@
+---
+- name: "setup xray"
+  include_tasks:
+    - install_xray.yaml
+    - setup_xray.yaml
+

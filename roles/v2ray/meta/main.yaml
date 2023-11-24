@@ -1,6 +1,0 @@
----
-- name: start_v2ray
-  ansible.builtin.service:
-    name: v2ray
-    state: restarted
-    enabled: true
