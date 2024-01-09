@@ -1,0 +1,55 @@
+{
+ "listen": 4435,
+ "acme": {
+  "tls": {
+   "cert": "/etc/vpns/hysteria/cert/server-cert.pem",
+   "key": "/etc/ssl/private/server-key.pem"
+  }
+ },
+ "disableUDP": false,
+ "bandwidth": {
+  "up": "1 gbps",
+  "down": "1 gbps"
+ },
+ "auth": {
+  "type": "userpass",
+  "userpass": {
+   "comrademp": "FQYFnTOObNzgzTHbHlubgXsKirz5eZFx/o+JQnoUL8Y="
+  }
+ },
+ "obfs": {
+  "type": "salamander",
+  "salamander": {
+   "password": "COoL/Kg9iEwlHsngXazBzDszs71vutdv1Sem+Hui9ZI="
+  }
+ },
+ "resolver": {
+  "type": "udp",
+  "udp": {
+   "addr": "127.0.0.1:53"
+  }
+ },
+ "outbounds": [
+  {
+   "name": "direct_out",
+   "type": "direct",
+   "direct": {
+    "mode": "auto"
+   }
+  }
+ ],
+ "trafficStats": {
+  "listen": "127.0.0.1:9999",
+  "secret": "JPiU8Hj1uwUmEao2ab+hJg=="
+ },
+ "masquerade": {
+  "type": "string",
+  "string": {
+   "content": "Hallo World",
+   "headers": {
+    "content-type": "text/plain"
+   },
+   "statusCode": 200
+  }
+ }
+}

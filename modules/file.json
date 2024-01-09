@@ -1,0 +1,172 @@
+{
+ "log": {
+  "loglevel": "error",
+  "access": "/logs/xray-access.log",
+  "error": "/logs/xray-error.log",
+  "dnsLog": false
+ },
+ "stats": {},
+ "api": {
+  "tag": "api",
+  "services": [
+   "StatsService"
+  ]
+ },
+ "policy": {
+  "levels": {
+   "0": {
+    "statsUserUplink": true,
+    "statsUserDownlink": true
+   }
+  }
+ },
+ "dns": {
+  "servers": [
+   "46.23.90.31"
+  ]
+ },
+ "inbounds": [
+  {
+   "listen": "0.0.0.0",
+   "port": 4436,
+   "protocol": "trojan",
+   "settings": {
+    "clients": [
+     {
+      "password": "ijmbjUjSNCqqRorhfS140KgOVsI=",
+      "email": "comrademp"
+     }
+    ]
+   },
+   "streamSettings": {
+    "network": "tcp",
+    "security": "reality",
+    "realitySettings": {
+     "show": false,
+     "dest": "behindthename.com:443",
+     "serverNames": [
+      "behindthename.com",
+      "www.behindthename.com"
+     ],
+     "xver": 0,
+     "privateKey": "12345",
+     "maxTimeDiff": 0,
+     "shortIds": [
+      ""
+     ]
+    }
+   }
+  },
+  {
+   "listen": "0.0.0.0",
+   "port": 4437,
+   "protocol": "vless",
+   "settings": {
+    "decryption": "none",
+    "clients": [
+     {
+      "email": "comrademp",
+      "password": "61c90403-50f5-9e90-687b-9af05082a0ab",
+      "flow": "xtls-rprx-vision"
+     },
+     {
+      "email": "a",
+      "id": "/FP23PCV0lGXctFGxWKyLGu1jYLuXoNt4rCXpHHYSew=\n",
+      "flow": "xtls-rprx-vision"
+     },
+     {
+      "email": "b",
+      "id": "4tDoLmUfBOayhtTVE6nl0GZLy/mH7LAXjW5l+xw24/Q=\n",
+      "flow": "xtls-rprx-vision"
+     }
+    ]
+   },
+   "streamSettings": {
+    "network": "tcp",
+    "security": "reality",
+    "realitySettings": {
+     "show": false,
+     "dest": "behindthename.com:443",
+     "serverNames": [
+      "behindthename.com",
+      "www.behindthename.com"
+     ],
+     "xver": 0,
+     "privateKey": "12345",
+     "maxTimeDiff": 0,
+     "shortIds": [
+      ""
+     ]
+    }
+   }
+  },
+  {
+   "listen": "0.0.0.0",
+   "port": 4438,
+   "protocol": "vmess",
+   "settings": {
+    "clients": [
+     {
+      "flow": "xtls-rprx-vision",
+      "email": "comrademp",
+      "id": "61c90403-50f5-9e90-687b-9af05082a0ab",
+      "level": 0
+     },
+     {
+      "email": "ungabunga",
+      "id": "hello werld"
+     },
+     {
+      "email": "u12ngabunga",
+      "id": "hello werld",
+      "flow": "xtls-rprx-vision"
+     }
+    ]
+   },
+   "streamSettings": {
+    "network": "tcp",
+    "security": "reality",
+    "realitySettings": {
+     "show": false,
+     "dest": "behindthename.com:443",
+     "serverNames": [
+      "behindthename.com",
+      "www.behindthename.com"
+     ],
+     "xver": 0,
+     "privateKey": "12345",
+     "maxTimeDiff": 0,
+     "shortIds": [
+      ""
+     ]
+    }
+   }
+  },
+  {
+   "listen": "127.0.0.1",
+   "port": 10085,
+   "protocol": "dokodemo-door",
+   "settings": {
+    "address": "127.0.0.1"
+   },
+   "tag": "api"
+  }
+ ],
+ "outbounds": [
+  {
+   "protocol": "freedom",
+   "tag": "direct"
+  }
+ ],
+ "routing": {
+  "rules": [
+   {
+    "inboundTag": [
+     "api"
+    ],
+    "outboundTag": "api",
+    "type": "field"
+   }
+  ]
+ }
+}
