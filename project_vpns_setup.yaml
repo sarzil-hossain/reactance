@@ -1,0 +1,30 @@
+---
+- name: "openbsd : setup ocserv, xray, hysteria, ssh vpn"
+  hosts: ocserv
+  become: true
+  roles:
+    - role: base
+    - role: ocserv
+    - role: xray
+    - role: hysteria
+
+- name: "openbsd : setup ocserv"
+  hosts: ocserv
+  become: true
+  roles:
+    - role: base
+    - role: ocserv
+
+- name: "openbsd : setup xray vpn"
+  hosts: xray
+  become: true
+  roles:
+    - role: base
+    - role: xray
+
+- name: "openbsd : setup hysteria"
+  hosts: ocserv
+  become: true
+  roles:
+    - role: base
+    - role: hysteria

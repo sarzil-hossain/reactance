@@ -1,0 +1,60 @@
+---
+- name: "create directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: _vpn
+    group: _vpn
+    mode: 0700
+  loop:
+    - "/var/vpns/hysteria"
+    - "/var/vpns/hysteria/bin"
+    - "/var/vpns/hysteria/etc"
+
+- name: "install necessary utils"
+  community.general.openbsd_pkg:
+    name:
+      - git--
+      - go--
+      - rsync--
+    state: present
+
+- name: "create temporary directory"
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: temp
+  register: hysteria_tempdir
+  notify:
+    - remove_hysteria_tempdir
+
+- name: "clone hysteria"
+  ansible.builtin.shell: "git clone https://github.com/apernet/hysteria.git"
+  args:
+    chdir: "{{ hysteria_tempdir.path }}"
+
+- name: "build hysteria"
+  ansible.builtin.shell: "python3 hyperbole.py build"
+  args:
+    chdir: "{{ hysteria_tempdir.path }}/hysteria"
+
+- name: "install hysteria"
+  ansible.builtin.shell: "{{ item }}"
+  loop:
+    - "install -m 750 -g bin {{ hysteria_tempdir.path }}/hysteria/build/hysteria-openbsd-* /var/vpns/hysteria/bin/hysteria"
+
+# Find the list of dependences through ldd and copy them over
+- name: "copy chroot dependencies"
+  ansible.builtin.shell: "hysteria_deps=$(ldd /var/vpns/hysteria | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/hysteria; done"
+
+- name: "template out config and init script"
+  ansible.builtin.template:
+    src: "{{ item.file_src }}"
+    dest: "{{ item.file_dest }}"
+  loop:
+    - file_src: hysteria.rc.j2
+      file_dest: "{{ hysteria_tempdir.path }}/hysteria.rc"
+    - file_src: config.json.j2
+      file_dest: "/var/vpns/hysteria/etc/config.json"
+
+- name: "install init script"
+  ansible.builtin.shell: "install -m 755 -g bin {{ hysteria_tempdir.path }}/hysteria.rc /etc/rc.d/hysteria"

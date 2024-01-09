@@ -1,0 +1,12 @@
+---
+- name: "Check if xray is already installed"
+  ansible.builtin.stat:
+    path: /var/vms/xray
+  register: xray_directory
+- name: "Install xray if directory doesn't exist"
+  ansible.builtin.include_tasks: install_xray.yaml
+  when:  xray_directory.stat.exists == false
+- name: "Configure xray"
+  ansible.builtin.include_tasks: configure_xray.yaml
+- name: "Create xray users"
+  ansible.builtin.include_tasks: create_users_xray.yaml

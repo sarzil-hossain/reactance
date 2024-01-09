@@ -1,0 +1,8 @@
+all_users:
+  - user: my-user
+    gen_pass: true
+  - user: my-other-user
+ocserv_users:
+  - user: uungabunga
+trojan_users:
+  - user: lmao_lmfao

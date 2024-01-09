@@ -1,0 +1,3 @@
+---
+- name: "setup hysteria"
+  ansible.builtin.include_tasks: check_hysteria_exists.yaml

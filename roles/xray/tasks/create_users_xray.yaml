@@ -1,0 +1,18 @@
+---
+- name: "vless user management"
+  xray:
+    users: "{{ all_users|default([]) + vless_users }}"
+    protocol: vless
+  when: vless_users is defined
+
+- name: "vmess user management"
+  xray:
+    users: "{{ all_users|default([]) + vmess_users }}"
+    protocol: vmess
+  when: vmess_users is defined
+
+- name: "trojan user management"
+  xray:
+    users: "{{ all_users|default([]) + trojan_users }}"
+    protocol: trojan
+  when: trojan_users is defined

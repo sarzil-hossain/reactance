@@ -1,0 +1,51 @@
+
+{
+  "listen": "{{ hysteria_port | default('4435') }}",
+  "tls": {
+    "cert": "",
+    "key": ""
+  },
+  "disableUDP": false,
+  "bandwidth": {
+    "up": "1 gbps",
+    "down": "1 gbps"
+  },
+  "auth": {
+    "type": "userpass",
+    "userpass": {
+      "user": "password"
+    }
+  },
+  "obfs": {
+    "type": "salamander",
+    "salamander": {
+      "password": "password"
+    }
+  },
+  "resolver": {
+    "type": "udp",
+    "udp": {
+      "addr": "127.0.0.1:53"
+    }
+  },
+  "outbounds": [{
+    "name": "direct_out",
+    "type": "direct",
+    "direct": {
+      "mode": "auto"
+    }}],
+  "trafficStats": {
+    "listen": "127.0.0.1:9999",
+    "secret": "secret"
+  },
+  "masquerade": {
+    "type": "string",
+    "string": {
+      "content": "Hello World",
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "statusCode": 200
+    }
+  }
+}

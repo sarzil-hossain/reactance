@@ -1,8 +1,0 @@
----
-- name: "openbsd : setup ocserv, xray, ssh vpn"
-  hosts: all
-  become: true
-  roles:
-    - role: ocserv
-    - role: xray
-    - role: ssh

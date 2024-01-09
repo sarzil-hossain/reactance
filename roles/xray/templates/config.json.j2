@@ -1,8 +1,8 @@
 {
   "log": {
     "loglevel": "error",
-    "access": "/etc/vpns/xray/logs/xray-access.log",
-    "error": "/etc/vpns/xray/logs/xray-error.log",
+    "access": "/logs/xray-access.log",
+    "error": "/logs/xray-error.log",
     "dnsLog": false
   },
   "stats": {},
@@ -26,9 +26,10 @@
     ]
   },
   "inbounds": [
+{% if trojan_users is defined %}
     {
       "listen": "0.0.0.0",
-      "port": 443,
+      "port": 4436,
       "protocol": "trojan",
       "settings": {
         "clients": []
@@ -44,15 +45,17 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "privateKey": "{{ private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }
       }
     },
+{% endif %}
+{% if vless_users is defined %}
     {
       "listen": "0.0.0.0",
-      "port": 44300,
+      "port": 4437,
       "protocol": "vless",
       "settings": {
         "decryption": "none",
@@ -69,15 +72,17 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "privateKey": "{{ private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }
       }
     },
+{% endif %}
+{% if vmess_users is defined %}
     {
       "listen": "0.0.0.0",
-      "port": 8443,
+      "port": 4438,
       "protocol": "vmess",
       "settings": {
         "clients": []
@@ -93,12 +98,13 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ keypair.stdout | split('\n')[0]}}",
+        "privateKey": "{{ private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }
       }
     },
+{% endif %}
     {
       "listen": "127.0.0.1",
       "port": 10085,

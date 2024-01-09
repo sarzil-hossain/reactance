@@ -1,0 +1,16 @@
+---
+- name: "Create vpns user"
+  ansible.builtin.user:
+    name: _vpn
+    comment: Project VPN user
+    state: present
+    home: false
+    shell: /sbin/nologin
+
+- name: "Create root directory of vpn services"
+  ansible.builtin.file:
+    path: /var/vpns/
+    state: directory
+    owner: _vpn
+    group: nogroup
+    mode:  0700

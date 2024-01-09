@@ -1,28 +1,31 @@
 ---
-- name: "make configuration directory"
-  ansible.builtin.file:
-    path: /etc/vpns/ocserv
-    owner: _ocserv
-    group: root
-    mode: 0700
-    state: directory
-
 - name: "install ocserv"
   community.general.openbsd_pkg:
     name: ocserv--
     state: present
 
+- name: "move ocserv to vpns root"
+  ansible.builtin.shell: "mv /etc/ocserv /var/vpns/ocserv"
+
+- name: "create temporary directory"
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: temp
+  register: ocserv_tempdir
+  notify:
+    - remove_ocserv_tempdir
+
 - name: "template out config"
   ansible.builtin.template:
     src: ocserv.conf.j2
-    dest: /etc/vpns/ocserv/ocserv.conf.j2
+    dest: /var/vpns/ocserv/ocserv.conf
 
 - name: "template out init script"
   ansible.builtin.template:
     src: ocserv.rc.j2
-    dest: /etc/vpns/ocserv/ocserv.rc
+    dest: "{{ ocserv_tempdir.path }}/ocserv.rc"
 
 - name: "install init script"
-  ansible.builtin.shell: "install -m 755 -g bin /etc/vpns/ocserv/ocserv.rc /etc/rc.d/ocserv && rm -rf /etc/vpns/ocserv/ocserv.rc"
+  ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/vpns/ocserv/ocserv.rc"
   notify:
     - start_ocserv

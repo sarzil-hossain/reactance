@@ -1,0 +1,11 @@
+---
+- name: start_xray
+  ansible.builtin.service:
+    name: xray
+    state: restarted
+    enabled: true
+
+- name: remove_xray_tempdir
+  ansible.builtin.file:
+    path: "{{ xray_tempdir.path }}"
+    state: absent

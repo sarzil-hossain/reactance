@@ -1,6 +1,3 @@
 ---
-- name: "setup xray"
-  include_tasks:
-    - install_xray.yaml
-    - setup_xray.yaml
-
+- name: "setup xray vpn"
+  ansible.builtin.include_tasks: check_xray_exists.yaml

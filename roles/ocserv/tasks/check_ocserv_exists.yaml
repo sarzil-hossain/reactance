@@ -1,0 +1,8 @@
+---
+- name: "Check if ocserv is already installed"
+  ansible.builtin.stat:
+    path: /var/vms/ocserv
+  register: ocserv_directory
+- name: "Install ocserv if directory doesn't exist"
+  ansible.builtin.include_tasks: install_ocserv.yaml
+  when:  ocserv_directory.stat.exists == false

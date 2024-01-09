@@ -2,12 +2,21 @@
 #
 # $OpenBSD: xray
 
-daemon="/usr/local/bin/xray run"
-daemon_flags="-c {{ vpns_dir }}/xray/config.json"
+chroot_dir=/var/vpns/xray
+chroot_user=_vpn
+daemon_class=daemon
+daemon=/bin/xray
+daemon_flags="-c /etc/config.json"
+daemon_user=root
 
 . /etc/rc.d/rc.subr
+
+rc_start() {
+	rc_exec "chroot -u $chroot_user $chroot_dir $daemon $daemon_flags"
+}
 
 rc_bg=YES
 rc_reload=NO
 
 rc_cmd $1
+

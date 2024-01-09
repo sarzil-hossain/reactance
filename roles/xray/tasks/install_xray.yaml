@@ -1,9 +1,23 @@
 ---
-- name: "install unzip"
+- name: "create directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: _vpn
+    group: _vpn
+    mode: 0700
+  loop:
+    - "/var/vpns/xray"
+    - "/var/vpns/xray/bin"
+    - "/var/vpns/xray/etc"
+
+- name: "install necessary utils"
   community.general.openbsd_pkg:
     name:
       - unzip--
       - curl--
+      - rsync--
+      - jq--
     state: present
 
 - name: "create temporary directory"
@@ -24,26 +38,26 @@
     dest: "{{ xray_tempdir.path }}/xray.zip"
 
 - name: "unzip xray"
-  ansible.builtin.shell: "unzip xray.zip"
-  args:
-    chdir: "{{ xray_tempdir.path }}"
+  ansible.builtin.unarchive:
+    src: "{{ xray_tempdir.path }}/xray.zip"
+    dest: "{{ xray_tempdir.path }}"
+    remote_src: yes
+
+- name: "copy chroot dependencies"
+  ansible.builtin.shell: "xray_deps=$(ldd /var/vpns/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/xray; done"
+
+- name: "template out init script"
+  ansible.builtin.template:
+    src: "{{ item.file_src }}"
+    dest: "{{ item.file_dest }}"
+  loop:
+    - file_src: xray.rc.j2
+      file_dest: "{{ xray_tempdir.path }}/xray.rc"
 
 - name: "install xray"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "install -m 755 -g bin {{ xray_tempdir.path }}/xray /usr/local/bin/xray"
-    - "install -d /usr/local/share/xray"
-
-- name: "copy geoip.dat, geosite.dat files to asset directory"
-  ansible.builtin.shell: "install -m 755 -g bin {{ xray_tempdir.path }}/{{ item }} /usr/local/share/xray/{{ item }}"
-  loop:
-    - "geoip.dat"
-    - "geosite.dat"
-
-- name: "template out init script"
-  ansible.builtin.template:
-    src: xray.rc.j2
-    dest: "{{ xray_tempdir.path }}/xray.rc"
-
-- name: "install init script"
-  ansible.builtin.shell: "install -m 755 -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"
+    - "install -m 750 -g bin {{ xray_tempdir.path }}/xray /var/vpns/xray/bin/xray"
+    - "install -m 755 -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"
+    - "install -m 755 -g bin {{ xray_tempdir.path }}/geoip.dat /var/vpns/xray/bin/geoip.dat"
+    - "install -m 755 -g bin {{ xray_tempdir.path }}/geosite.dat /var/vpns/xray/bin/geosite.dat"

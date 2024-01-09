@@ -1,0 +1,12 @@
+---
+- name: start_hysteria
+  ansible.builtin.service:
+    name: hysteria
+    state: restarted
+    enabled: true
+
+- name: remove_hysteria_tempdir
+  ansible.builtin.file:
+    path: "{{ hysteria_tempdir.path }}"
+    state: absent
+ 
