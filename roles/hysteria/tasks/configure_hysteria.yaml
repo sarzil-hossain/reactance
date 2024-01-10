@@ -1,0 +1,37 @@
+---
+# check if salamander password file exists
+- name: "check if obfuscation password file exists "
+  ansible.builtin.stat:
+    path: "/var/vpns/hysteria/salamander_password"
+  register: salamander_password_file
+
+# generate salamander password
+- name: "generate salamander password for obfuscation "
+  ansible.builtin.shell: "openssl rand -base64 32"
+  register: random_string
+  when: salamander_password_file.stat.exists != true
+
+# retrieve password from file, if exists 
+- name: "use previous password, if it exists"
+  become_user: root
+  become: yes
+  become_method: doas
+  ansible.builtin.set_fact:
+    salamander_password: "{{ lookup('file', '/var/vpns/hysteria/salamander_password') }}"
+  when: salamander_password_file.stat.exists
+
+- name: "set salamander password as var"
+  ansible.builtin.set_fact:
+    salamander_password: "{{ random_string.stdout }}"
+  when: salamander_password_file.stat.exists != true
+
+- name: "write obfuscation password to file"
+  ansible.builtin.copy:
+    content: "{{ salamander_password }}"
+    dest: "/var/vpns/hysteria/salamander_password"
+  when: salamander_password_file.stat.exists != true
+
+- name: "template out config"
+  ansible.builtin.template:
+    src: config.json.j2
+    dest: "/var/vpns/hysteria/etc/config.json"

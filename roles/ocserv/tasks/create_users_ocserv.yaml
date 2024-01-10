@@ -1,5 +1,5 @@
 ---
 - name: "ocserv user management"
   xray:
-    users: "{{ all_users|('default') + ocserv_users }}"
+    users: "{{ all_users|default([]) + ocserv_users }}"
   when: ocserv_users is defined

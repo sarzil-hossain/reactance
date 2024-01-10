@@ -1,0 +1,5 @@
+---
+- name: "hysteria user management"
+  hysteria:
+    users: "{{ all_users|default([]) + hysteria_users }}"
+  when: hysteria_users is defined

@@ -1,14 +1,22 @@
-import json, subprocess
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+import json
+import shlex
 
 OCSERV_CONFIG_PATH = "/var/vpns/ocserv/ocserv.passwd"
 
-def exec_shell(cmd):
-    return subprocess.run(cmd, shell=True, capture_output=True).stdout.decode().strip()
+def exec_shell(cmd, module):
+    cmd_args = shlex.split(cmd)
+    ran_cmd = module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    if ran_cmd.rc != 0:
+        raise Exception(ran_cmd.stderr)
+    return ran_cmd.stdout
 
 def ocserv_gen_password():
     return exec_shell("openssl rand -base64 32")
 
-def xray_get_users():
+def ocserv_get_users():
     with open(OCSERV_CONFIG_PATH, "r") as f:
         ocserv_content = f.read()
 
@@ -16,7 +24,7 @@ def xray_get_users():
     return ocserv_config_dict.keys(), ocserv_config_dict
 
 def ocserv_user_control(update_password):
-    previous_users, previous_user_password = xray_get_users()
+    previous_users, previous_user_password = ocserv_get_users()
     updated_users = set(update_password.keys())
     selected_users = set(updated_users)
     new_users_list = []

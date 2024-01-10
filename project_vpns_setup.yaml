@@ -1,7 +1,9 @@
 ---
-- name: "openbsd : setup ocserv, xray, hysteria, ssh vpn"
-  hosts: ocserv
+- name: "openbsd : setup all"
+  hosts: all
   become: true
+  become_method: doas
+  become_user: root
   roles:
     - role: base
     - role: ocserv
@@ -11,20 +13,44 @@
 - name: "openbsd : setup ocserv"
   hosts: ocserv
   become: true
+  become_method: doas
+  become_user: root
   roles:
     - role: base
     - role: ocserv
 
 - name: "openbsd : setup xray vpn"
-  hosts: xray
+  hosts: vless
   become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: base
+    - role: xray
+
+- name: "openbsd : setup xray vpn"
+  hosts: vmess
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: base
+    - role: xray
+
+- name: "openbsd : setup xray vpn"
+  hosts: trojan
+  become: true
+  become_method: doas
+  become_user: root
   roles:
     - role: base
     - role: xray
 
 - name: "openbsd : setup hysteria"
-  hosts: ocserv
+  hosts: hysteria
   become: true
+  become_method: doas
+  become_user: root
   roles:
     - role: base
     - role: hysteria

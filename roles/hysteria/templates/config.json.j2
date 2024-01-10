@@ -1,4 +1,3 @@
-
 {
   "listen": "{{ hysteria_port | default('4435') }}",
   "tls": {
@@ -12,14 +11,12 @@
   },
   "auth": {
     "type": "userpass",
-    "userpass": {
-      "user": "password"
-    }
+    "userpass": {}
   },
   "obfs": {
     "type": "salamander",
     "salamander": {
-      "password": "password"
+      "password": "{{ salamander_password }}"
     }
   },
   "resolver": {

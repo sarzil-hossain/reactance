@@ -13,4 +13,4 @@
     state: directory
     owner: _vpn
     group: nogroup
-    mode:  0700
+    mode:  0755

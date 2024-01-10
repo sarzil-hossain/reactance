@@ -44,17 +44,12 @@
 
 # Find the list of dependences through ldd and copy them over
 - name: "copy chroot dependencies"
-  ansible.builtin.shell: "hysteria_deps=$(ldd /var/vpns/hysteria | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/hysteria; done"
+  ansible.builtin.shell: "deps=$(ldd /var/vpns/hysteria/bin/hysteria | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/hysteria; done"
 
 - name: "template out config and init script"
   ansible.builtin.template:
-    src: "{{ item.file_src }}"
-    dest: "{{ item.file_dest }}"
-  loop:
-    - file_src: hysteria.rc.j2
-      file_dest: "{{ hysteria_tempdir.path }}/hysteria.rc"
-    - file_src: config.json.j2
-      file_dest: "/var/vpns/hysteria/etc/config.json"
+    src: hysteria.rc.j2
+    dest: "{{ hysteria_tempdir.path }}/hysteria.rc"
 
 - name: "install init script"
   ansible.builtin.shell: "install -m 755 -g bin {{ hysteria_tempdir.path }}/hysteria.rc /etc/rc.d/hysteria"

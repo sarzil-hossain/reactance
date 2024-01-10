@@ -14,7 +14,7 @@ def exec_shell(cmd, module):
     return ran_cmd.stdout
 
 def xray_gen_password(protocol):
-    return exec_shell({'xray': 'openssl rand -base64 32', 'vless': 'xray uuid', 'vmess': 'xray uuid'}[protocol])
+    return exec_shell({'xray': 'openssl rand -base64 32', 'vless': '/var/vpns/xray/bin/xray uuid', 'vmess': '/var/vpns/xray/bin/xray uuid'}[protocol])
 
 def xray_get_users(protocol):
     with open(XRAY_CONFIG_PATH, "r") as f:
