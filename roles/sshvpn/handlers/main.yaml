@@ -1,0 +1,6 @@
+---
+- name: "Start ssh service"
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+    enabled: yes

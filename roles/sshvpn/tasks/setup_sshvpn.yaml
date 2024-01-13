@@ -1,0 +1,13 @@
+---
+- name: "Create sshvpns user"
+  ansible.builtin.user:
+    name: sshvpn
+    shell: /sbin/nologin
+    home: /var/vpns/sshvpn
+
+- name: "Create .ssh directory"
+  ansible.builtin.file:
+    path: /var/vpns/sshvpn/.ssh
+    owner: sshvpn
+    group: sshvpn
+    mode: 700
