@@ -1,0 +1,5 @@
+---
+- name: "sshvpn user management"
+  sshvpn:
+    users: "{{ all_users|default([]) + sshvpn_users }}"
+  when: sshvpn_users is defined

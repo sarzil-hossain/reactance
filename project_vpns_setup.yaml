@@ -1,6 +1,6 @@
 ---
 - name: "openbsd : setup all"
-  hosts: all
+  hosts: all_vpns
   become: true
   become_method: doas
   become_user: root
@@ -54,3 +54,12 @@
   roles:
     - role: base
     - role: hysteria
+
+- name: "openbsd : setup sshvpn"
+  hosts: sshvpn
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: base
+    - role: sshvpn

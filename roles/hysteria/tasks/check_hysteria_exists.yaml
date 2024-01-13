@@ -1,7 +1,7 @@
 ---
 - name: "Check if hysteria is already installed"
   ansible.builtin.stat:
-    path: /var/vms/hysteria
+    path: /var/vps/hysteria
   register: hysteria_directory
 - name: "Install hysteria if directory doesn't exist"
   ansible.builtin.include_tasks: install_hysteria.yaml

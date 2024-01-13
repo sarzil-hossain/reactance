@@ -10,20 +10,32 @@
     path: "/var/vpns/xray/private_key"
   register: private_key_file
 
+- name: "get old key"
+  ansible.builtin.slurp:
+    src: /var/vpns/xray/private_key
+  register: slurped_private_key
+  when: public_key_file.stat.exists and private_key_file.stat.exists
+
+- name: "get old pubkey"
+  ansible.builtin.slurp:
+    src: /var/vpns/xray/public_key
+  register: slurped_public_key
+  when: public_key_file.stat.exists and private_key_file.stat.exists
+
+- name: "set previous keys as facts"
+  become_user: root
+  become: yes # needed for lookup
+  become_method: doas
+  ansible.builtin.set_fact:
+    private_key: "{{ slurped_private_key['content'] | b64decode }}"
+    public_key: "{{ slurped_public_key['content'] | b64decode }}"
+  when: public_key_file.stat.exists and private_key_file.stat.exists
+
 # generate keypair, needed for config
 - name: "generate private, public keypair for xtls-reality"
   ansible.builtin.shell: "/var/vpns/xray/bin/xray x25519 | awk '{ print $3 }' | tr '\n' ','"
   register: keypair
   when: (public_key_file.stat.exists and private_key_file.stat.exists) != true
-
-- name: "use previous keys, if they exist"
-  become_user: root
-  become: yes # needed for lookup
-  become_method: doas
-  ansible.builtin.set_fact:
-    private_key: "{{ lookup('file', '/var/vpns/xray/private_key') }}"
-    public_key: "{{ lookup('file', '/var/vpns/xray/public_key') }}"
-  when: public_key_file.stat.exists and private_key_file.stat.exists
 
 - name: "set private key as var"
   ansible.builtin.set_fact:

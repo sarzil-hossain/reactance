@@ -1,6 +1,9 @@
+#!/usr/local/bin/python3
+
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+from ansible.module_utils.basic import AnsibleModule
 import json
 import shlex
 
@@ -49,9 +52,9 @@ def run_module():
     update_password = {}
     for user in users:
         if 'regen_pass' in user.keys() and user['regen_pass']:
-            update_password[user['name']] = True
+            update_password[user['user']] = True
         else:
-            update_password[user['name']] = False
+            update_password[user['user']] = False
 
     ocserv_user_control(update_password)
 

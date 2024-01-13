@@ -6,3 +6,5 @@ ocserv_users:
   - user: uungabunga
 trojan_users:
   - user: lmao_lmfao
+sshvpn_users:
+  - user: hello

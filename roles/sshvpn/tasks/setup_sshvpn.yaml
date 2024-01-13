@@ -11,3 +11,6 @@
     owner: sshvpn
     group: sshvpn
     mode: 700
+
+- name: "Run user management script"
+  include_tasks: create_users_sshvpn.yaml
