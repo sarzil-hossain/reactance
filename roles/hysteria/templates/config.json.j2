@@ -1,8 +1,8 @@
 {
-  "listen": "{{ hysteria_port | default('4435') }}",
+  "listen": "0.0.0.0:{{ hysteria_port | default('4435') }}",
   "tls": {
-    "cert": "",
-    "key": ""
+    "cert": "/certs/server-cert.pem",
+    "key": "/certs/server-key.pem"
   },
   "disableUDP": false,
   "bandwidth": {

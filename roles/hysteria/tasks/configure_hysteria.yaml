@@ -29,9 +29,17 @@
   ansible.builtin.copy:
     content: "{{ salamander_password }}"
     dest: "/var/vpns/hysteria/salamander_password"
+
   when: salamander_password_file.stat.exists != true
+
+- name: "generate public, private key pair"
+  ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/vpns/hysteria/certs/server-key.pem -out /var/vpns/hysteria/certs/server-cert.pem -sha256 -days 3650 -nodes -subj /CN=example &>/dev/null"
+
 
 - name: "template out config"
   ansible.builtin.template:
     src: config.json.j2
     dest: "/var/vpns/hysteria/etc/config.json"
+    owner: _vpn
+    group: _vpn
+    mode: 0700

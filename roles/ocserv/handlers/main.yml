@@ -1,5 +1,5 @@
 ---
-- name: start_ocserv
+- name: restart_ocserv
   ansible.builtin.service:
     name: ocserv
     state: restarted
@@ -9,3 +9,7 @@
   ansible.builtin.file:
     path: "{{ ocserv_tempdir.path }}"
     state: absent
+
+- name: ocserv_debug_passwords
+  ansible.builtin.debug:
+    var: ocserv_user_pass_dict

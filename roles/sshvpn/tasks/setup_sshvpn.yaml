@@ -9,7 +9,7 @@
   ansible.builtin.file:
     path: /var/vpns/sshvpn/.ssh
     owner: sshvpn
-    group: sshvpn
+    group: _vpn
     mode: 700
 
 - name: "Run user management script"

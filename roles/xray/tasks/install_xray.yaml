@@ -10,6 +10,7 @@
     - "/var/vpns/xray"
     - "/var/vpns/xray/bin"
     - "/var/vpns/xray/etc"
+    - "/var/vpns/xray/logs"
 
 - name: "install necessary utils"
   community.general.openbsd_pkg:
@@ -43,9 +44,6 @@
     dest: "{{ xray_tempdir.path }}"
     remote_src: yes
 
-- name: "copy chroot dependencies"
-  ansible.builtin.shell: "deps=$(ldd /var/vpns/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/xray; done"
-
 - name: "template out init script"
   ansible.builtin.template:
     src: "{{ item.file_src }}"
@@ -57,7 +55,10 @@
 - name: "install xray"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "install -m 750 -g bin {{ xray_tempdir.path }}/xray /var/vpns/xray/bin/xray"
-    - "install -m 755 -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"
-    - "install -m 755 -g bin {{ xray_tempdir.path }}/geoip.dat /var/vpns/xray/bin/geoip.dat"
-    - "install -m 755 -g bin {{ xray_tempdir.path }}/geosite.dat /var/vpns/xray/bin/geosite.dat"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/xray /var/vpns/xray/bin/xray"
+    - "install -m 755 -o _vpn -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geoip.dat /var/vpns/xray/bin/geoip.dat"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geosite.dat /var/vpns/xray/bin/geosite.dat"
+
+- name: "copy chroot dependencies"
+  ansible.builtin.shell: "deps=$(ldd /var/vpns/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/xray; done"

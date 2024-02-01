@@ -1,6 +1,11 @@
 ---
-- name: "Start ssh service"
+- name: restart_ssh
   ansible.builtin.service:
     name: sshd
     state: restarted
     enabled: yes
+
+- name: sshvpn_debug_passwords
+  ansible.builtin.debug:
+    var: sshvpn_user_pass_dict
+

@@ -1,5 +1,8 @@
 ---
 - name: "ocserv user management"
-  xray:
-    users: "{{ all_users|default([]) + ocserv_users }}"
-  when: ocserv_users is defined
+  ocserv:
+    users: "{{ all_users|default([]) + ocserv_users|default([]) }}"
+  register: ocserv_user_pass_dict
+  notify:
+    - ocserv_debug_passwords
+    - restart_ocserv

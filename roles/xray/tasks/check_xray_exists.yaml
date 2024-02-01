@@ -1,7 +1,7 @@
 ---
 - name: "Check if xray is already installed"
   ansible.builtin.stat:
-    path: /var/vps/xray
+    path: /var/vpns/xray
   register: xray_directory
 - name: "Install xray if directory doesn't exist"
   ansible.builtin.include_tasks: install_xray.yaml

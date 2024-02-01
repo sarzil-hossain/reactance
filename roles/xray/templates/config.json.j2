@@ -26,7 +26,7 @@
     ]
   },
   "inbounds": [
-{% if trojan_users is defined %}
+{% if inventory_hostname in (groups['trojan']|default([]))%}
     {
       "listen": "0.0.0.0",
       "port": 4436,
@@ -52,7 +52,7 @@
       }
     },
 {% endif %}
-{% if vless_users is defined %}
+{% if inventory_hostname in (groups['vless']|default([]))%}
     {
       "listen": "0.0.0.0",
       "port": 4437,
@@ -79,7 +79,7 @@
       }
     },
 {% endif %}
-{% if vmess_users is defined %}
+{% if inventory_hostname in (groups['vmess']|default([]))%}
     {
       "listen": "0.0.0.0",
       "port": 4438,

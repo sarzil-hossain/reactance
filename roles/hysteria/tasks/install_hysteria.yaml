@@ -10,6 +10,7 @@
     - "/var/vpns/hysteria"
     - "/var/vpns/hysteria/bin"
     - "/var/vpns/hysteria/etc"
+    - "/var/vpns/hysteria/certs"
 
 - name: "install necessary utils"
   community.general.openbsd_pkg:
@@ -40,13 +41,13 @@
 - name: "install hysteria"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "install -m 750 -g bin {{ hysteria_tempdir.path }}/hysteria/build/hysteria-openbsd-* /var/vpns/hysteria/bin/hysteria"
+    - "install -m 750 -o _vpn -g bin {{ hysteria_tempdir.path }}/hysteria/build/hysteria-openbsd-* /var/vpns/hysteria/bin/hysteria"
 
 # Find the list of dependences through ldd and copy them over
 - name: "copy chroot dependencies"
   ansible.builtin.shell: "deps=$(ldd /var/vpns/hysteria/bin/hysteria | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/hysteria; done"
 
-- name: "template out config and init script"
+- name: "template out init script"
   ansible.builtin.template:
     src: hysteria.rc.j2
     dest: "{{ hysteria_tempdir.path }}/hysteria.rc"

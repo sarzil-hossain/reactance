@@ -1,5 +1,7 @@
 ---
 - name: "sshvpn user management"
   sshvpn:
-    users: "{{ all_users|default([]) + sshvpn_users }}"
-  when: sshvpn_users is defined
+    users: "{{ all_users|default([]) + sshvpn_users|default([]) }}"
+  register: sshvpn_user_pass_dict
+  notify:
+    - sshvpn_debug_passwords

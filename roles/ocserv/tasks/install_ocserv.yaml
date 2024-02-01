@@ -1,4 +1,6 @@
 ---
+# No need to use a separate user for chrooting ocserv as it should be chrooted by default.
+
 - name: "install ocserv"
   community.general.openbsd_pkg:
     name: ocserv--
@@ -27,5 +29,3 @@
 
 - name: "install init script"
   ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/vpns/ocserv/ocserv.rc"
-  notify:
-    - start_ocserv

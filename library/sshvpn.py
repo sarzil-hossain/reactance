@@ -12,27 +12,31 @@ AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def exec_shell(cmd, module):
     cmd_args = shlex.split(cmd)
-    ran_cmd = module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
-    if ran_cmd.rc != 0:
-        raise Exception(ran_cmd.stderr)
-    return ran_cmd.stdout
+    rc, stdout, stderr= module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    if rc != 0:
+        module.fail_json(stderr)
+    return stdout
 
 def sshvpn_get_users():
-    ssh_dir = os.path.join(os.getcwd(), SSH_ROOT)
-    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(ssh_dir) if i.endswith(".pub")]
+    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]
     return previous_users
 
 def sshvpn_update_users(update_password, module):
     previous_users = sshvpn_get_users()
-    new_users = {}
+    all_users = set(previous_users)
+
     for user in update_password.keys():
-        if user in previous_users and not update_password[user]:
-            pass
-        exec_shell(f"ssh-keygen -t rsa -b 4096 -C {user} -N '' -f '{user}'", module)
+        if user not in previous_users or update_password[user]:
+            ssh_keygen_cmd = "ssh-keygen -t rsa -b 4096 -C {user} -N '' -f '{SSH_ROOT}/{user}'"
+            exec_shell(f"[[ -f {SSH_ROOT}/{user} ]] && {ssh_keygen_cmd} <<<y || {ssh_keygen_cmd}", module)
+            all_users.add(user)
+
+    # Overwrite existing authorized_key file
     with open(AUTHORIZED_KEYS, "w") as f:
-        for user_key in new_users.keys():
-            with open(os.path.join(SSH_ROOT, user_key + ".pub"), "r") as f_pub:
-                f.write(f_pub.read())
+        for user in all_users:
+            user_pubkey_file = os.path.join(SSH_ROOT, f"{user}.pub")
+            with open(user_pubkey_file, "r") as pkey:
+                f.write(pkey.read())
 
 def run_module():
     module = AnsibleModule(
@@ -50,6 +54,7 @@ def run_module():
         else:
             update_password[user['user']] = False
     sshvpn_update_users(update_password, module)
+    module.exit_json(changed=True, msg=f"Retrieve keys from {SSH_ROOT}")
 
 def main():
     run_module()

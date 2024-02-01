@@ -1,5 +1,5 @@
 ---
-- name: start_hysteria
+- name: restart_hysteria
   ansible.builtin.service:
     name: hysteria
     state: restarted
@@ -10,3 +10,6 @@
     path: "{{ hysteria_tempdir.path }}"
     state: absent
  
+- name: hysteria_debug_passwords
+  ansible.builtin.debug:
+    var: hysteria_user_pass_dict

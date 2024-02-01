@@ -1,6 +1,5 @@
 chroot-dir = /var/vpns/ocserv
-auth = "certificate"
-enable-auth = "plain[passwd=/var/vpns/ocserv/ocserv.passwd]"
+auth = "plain[passwd=/var/vpns/ocserv/ocserv.passwd]"
 tcp-port = {{ ocserv_port | default("4430") }}
 run-as-user = _ocserv
 run-as-group = _ocserv

@@ -7,16 +7,15 @@ from ansible.module_utils.basic import AnsibleModule
 import json
 import shlex
 
-XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
 
-HYSTERIA_CONFIG_FILE = "config.json"
+HYSTERIA_CONFIG_FILE = "/var/vpns/hysteria/etc/config.json"
 
 def exec_shell(cmd, module):
     cmd_args = shlex.split(cmd)
-    ran_cmd = module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
-    if ran_cmd.rc != 0:
-        raise Exception(ran_cmd.stderr)
-    return ran_cmd.stdout
+    rc, stdout, stderr= module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    if rc != 0:
+        module.fail_json(stderr)
+    return stdout
 
 def hysteria_get_users():
     with open(HYSTERIA_CONFIG_FILE, "r") as f:
@@ -24,20 +23,20 @@ def hysteria_get_users():
         previous_users = hysteria_config_dict["auth"]["userpass"]
     return previous_users, hysteria_config_dict
 
-def hysteria_update_users(update_password):
+def hysteria_user_control(update_password, module):
     previous_users, hysteria_config_dict = hysteria_get_users()
-    updated_users = set(update_password.keys())
-    selected_users = set(updated_users)
+    selected_users = set(update_password.keys())
     new_users_dict = {}
-    for user in previous_users:
-        if user in selected_users and not update_password[user]:
-            new_users_dict[user] = previous_users[user]
     for user in selected_users:
-        if user not in previous_users or update_password[user]:
-            new_users_dict[user] = exec_shell("openssl rand -base64 32")
-    with open("hysteria.json", "w") as f:
+        if user in previous_users and not update_password[user]:
+            new_users_dict[user] = previous_users[user]
+        else:
+            new_users_dict[user] = exec_shell("openssl rand -base64 32", module)
+    with open(HYSTERIA_CONFIG_FILE, "w") as f:
         hysteria_config_dict["auth"]["userpass"] = new_users_dict
         f.write(json.dumps(hysteria_config_dict, indent=1))
+
+    return new_users_dict
 
 def run_module():
     module = AnsibleModule(
@@ -54,7 +53,8 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    ocserv_user_control(update_password)
+    user_pass_dict = hysteria_user_control(update_password, module)
+    module.exit_json(changed=True, msg=user_pass_dict)
 
 def main():
     run_module()

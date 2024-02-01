@@ -1,10 +1,19 @@
 # Project VPN
 __VPN Setup automation for bypassing government censorship_
 
+## Table of Contents
+  - [Goals](#goals)
+  - [Protocols](#protocols)
+  - [To Do](#to-do)
+  - [Server Definitions](#server-definitions)
+  - [User Definitions](#user-definitions)
+  - [Playbook Execution](#playbook-execution)
+
 ### Goals
-- Wide range of up-to-date secure VPN protocols
+- Automatically sets up a wide range of up-to-date secure VPN protocols
 - Automated User Management
 - Bypasses Censorship
+- Easy to set up and manage
 
 ### Protocols:
 1. OpenConnect AnyConnect (ocserv) + Self Signed TLS Cert
@@ -15,51 +24,28 @@ __VPN Setup automation for bypassing government censorship_
 6. Hysteria + Self Signed TLS Cert
 
 ### TO DO
- Testing the following protocols on all devices
-- [X] xray protocols (vless, trojan, vmess with xtls-)
-- [ ] Hysteria
-- [X] ocserv 
-- [ ] SSH
+- [X] Single server support
+- [ ] Multiple servers support
 
-### Writing Ansible playbooks for
-- [ ] xray
-- [ ] ocserv
-- [ ] sing-box
-- [ ] ssh vpn
-
-### VPN Server Definitions
-All your servers are defined in the inventory.ini file
-Example: The following config will setup all vpn servers on box1, only xray on box2 and box4, and only ocserv on box3
+### Server Definitions
+Servers are defined in inventory.yaml file. There are different groups for different protocols.
+Example: The following config will setup all vpn servers on box1, only trojan on box2 and box4, and only ocserv on box3
 
 ```ini
-[all]
+[all_vpns]
 box1
 
-[xray]
+[trojan]
 box2
 box4
 
 [ocserv]
 box3
 ```
+Supported groups: `all_vpns`, `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
 
-### Users Definitions
-Users are defined as group variables in <protocol>.yaml files
-Example: user1, user2 and user3 for all VPN servers, but user4 only for xray
-
-```
-all.yaml
-users:
-    - user1
-    - user2
-    - user3
-      regen_pass: true
-```
-```
-xray.yaml
-users:
-    - user4
-```
+### User Definitions
+Users are defined as group variables. Please read the [README.md](group_vars/README.md) file in group_vars directory.
 
 ### Playbook Execution
-To execute the playbook, simply run `ansible-playbook --become-method=doas --become --ask-become-pass project_vpns_setup.yaml`
+To execute the playbook, simply run `ansible-playbook --become-method=doas --become -i inventory.ini project_vpns_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
