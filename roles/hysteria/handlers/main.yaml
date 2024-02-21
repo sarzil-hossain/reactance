@@ -10,6 +10,6 @@
     path: "{{ hysteria_tempdir.path }}"
     state: absent
  
-- name: hysteria_debug_passwords
+- name: debug_passwords
   ansible.builtin.debug:
-    var: hysteria_user_pass_dict
+    var: user_pass_list

@@ -5,7 +5,6 @@
     state: restarted
     enabled: yes
 
-- name: sshvpn_debug_passwords
+- name: debug_passwords
   ansible.builtin.debug:
-    var: sshvpn_user_pass_dict
-
+    var: user_pass_list

@@ -5,29 +5,26 @@
   xray:
     users: "{{ all_users|default([]) + vless_users|default([]) }}"
     protocol: vless
-  when: inventory_hostname in (groups['vless']|default([]))
+  when: inventory_hostname in (groups['vless']|default([])) + (groups['all_vpns']|default([]))
   register: vless_user_pass_dict
-  notify:
-    - vless_debug_passwords
-    - restart_xray
-
 
 - name: "vmess user management"
   xray:
     users: "{{ all_users|default([]) + vmess_users|default([]) }}"
     protocol: vmess
-  when: inventory_hostname in (groups['vmess']|default([]))
+  when: inventory_hostname in (groups['vmess']|default([])) + (groups['all_vpns']|default([]))
   register: vmess_user_pass_dict
-  notify:
-    - vmess_debug_passwords
-    - restart_xray
 
 - name: "trojan user management"
   xray:
     users: "{{ all_users|default([]) + trojan_users|default([]) }}"
     protocol: trojan
-  when: inventory_hostname in (groups['trojan']|default([]))
+  when: inventory_hostname in (groups['trojan']|default([])) + (groups['all_vpns']|default([]))
   register: trojan_user_pass_dict
+
+- name: "add xray user password pair to list"
+  set_fact:
+    user_pass_list: "{{ user_pass_list|default([]) + [vless_user_pass_dict|default([])] + [vmess_user_pass_dict|default([])] + [trojan_user_pass_dict|default([])] }}"
   notify: 
-    - trojan_debug_passwords
+    - debug_passwords
     - restart_xray

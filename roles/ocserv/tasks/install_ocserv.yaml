@@ -6,8 +6,21 @@
     name: ocserv--
     state: present
 
-- name: "move ocserv to vpns root"
-  ansible.builtin.shell: "mv /etc/ocserv /var/vpns/ocserv"
+- name: "create directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: _vpn
+    group: _vpn
+    mode: 0700
+  loop:
+    - /var/vpns/ocserv
+    - /var/vpns/ocserv/run
+    - /var/vpns/ocserv/etc
+    - /var/vpns/ocserv/etc/certs
+
+      # - name: "move ocserv to vpns root"
+      #   ansible.builtin.shell: "mv /etc/ocserv /var/vpns/ocserv"
 
 - name: "create temporary directory"
   ansible.builtin.tempfile:

@@ -1,5 +1,5 @@
 # Project VPN
-__VPN Setup automation for bypassing government censorship_
+VPN Setup automation for bypassing government censorship
 
 ## Table of Contents
   - [Goals](#goals)

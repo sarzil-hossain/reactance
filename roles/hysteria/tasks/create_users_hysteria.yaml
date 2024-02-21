@@ -1,11 +1,12 @@
 ---
-- name: "Lol"
-  debug:
-    msg: "{{ all_users|default([]) + hysteria_users|default([]) }}"
 - name: "hysteria user management"
   hysteria:
     users: "{{ all_users|default([]) + hysteria_users|default([]) }}"
   register: hysteria_user_pass_dict
+
+- name: "add hysteria user password pair to list"
+  set_fact:
+    user_pass_list: "{{ user_pass_list|default([]) + [hysteria_user_pass_dict] }}"
   notify:
-    - hysteria_debug_passwords
+    - debug_passwords
     - restart_hysteria

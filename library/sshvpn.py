@@ -4,18 +4,17 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-import json, os
-import shlex
+import json, shlex, os
+from datetime import datetime
 
 SSH_ROOT = "/var/vpns/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def exec_shell(cmd, module):
-    cmd_args = shlex.split(cmd)
-    rc, stdout, stderr= module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
         module.fail_json(stderr)
-    return stdout
+    return stdout.rstrip()
 
 def sshvpn_get_users():
     previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]
@@ -23,18 +22,23 @@ def sshvpn_get_users():
 
 def sshvpn_update_users(update_password, module):
     previous_users = sshvpn_get_users()
-    all_users = set(previous_users)
 
+    # Remove users not in new group_vars
+    for user in previous_users:
+        if user not in update_password.keys():
+            os.remove(os.path.join(SSH_ROOT,f"{user}"))
+            os.remove(os.path.join(SSH_ROOT,f"{user}.pub"))
+
+    # Update keys for new users or regenerate keys for old users
     for user in update_password.keys():
         if user not in previous_users or update_password[user]:
-            ssh_keygen_cmd = "ssh-keygen -t rsa -b 4096 -C {user} -N '' -f '{SSH_ROOT}/{user}'"
-            exec_shell(f"[[ -f {SSH_ROOT}/{user} ]] && {ssh_keygen_cmd} <<<y || {ssh_keygen_cmd}", module)
-            all_users.add(user)
+            exec_shell(f"yes | ssh-keygen -q -t rsa -b 4096 -C {user} -N \'\' -f \'{SSH_ROOT}/{user}\'", module)
 
     # Overwrite existing authorized_key file
+    users_pubkeys = [i for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]
     with open(AUTHORIZED_KEYS, "w") as f:
-        for user in all_users:
-            user_pubkey_file = os.path.join(SSH_ROOT, f"{user}.pub")
+        for user_pubkey in users_pubkeys:
+            user_pubkey_file = os.path.join(SSH_ROOT, user_pubkey)
             with open(user_pubkey_file, "r") as pkey:
                 f.write(pkey.read())
 
@@ -46,13 +50,14 @@ def run_module():
         supports_check_mode=True
     )
     users = module.params["users"]
-
     update_password = {}
+
     for user in users:
         if 'regen_pass' in user.keys() and user['regen_pass']:
             update_password[user['user']] = True
         else:
             update_password[user['user']] = False
+
     sshvpn_update_users(update_password, module)
     module.exit_json(changed=True, msg=f"Retrieve keys from {SSH_ROOT}")
 

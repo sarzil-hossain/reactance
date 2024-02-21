@@ -10,18 +10,6 @@
     path: "{{ xray_tempdir.path }}"
     state: absent
 
-- name: trojan_debug_passwords
+- name: debug_passwords
   ansible.builtin.debug:
-    var: trojan_user_pass_dict
-  when: trojan_users is defined
-
-- name: vmess_debug_passwords
-  ansible.builtin.debug:
-    var: vmess_user_pass_dict
-  when: vmess_users is defined
-
-- name: vless_debug_passwords
-  ansible.builtin.debug:
-    var: vless_user_pass_dict
-  when: vless_users is defined
-
+    var: user_pass_list

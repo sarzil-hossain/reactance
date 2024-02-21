@@ -4,18 +4,16 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-import json
-import shlex
-import os
+import json, shlex, os
+from datetime import datetime
 
 OCSERV_CONFIG_PATH = "/var/vpns/ocserv/ocserv.passwd"
 
 def exec_shell(cmd, module):
-    cmd_args = shlex.split(cmd)
-    rc, stdout, stderr= module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
         module.fail_json(stderr)
-    return stdout
+    return stdout.rstrip()
 
 def ocserv_get_users():
     ocserv_config_dict = {}
@@ -27,21 +25,20 @@ def ocserv_get_users():
 
 def ocserv_user_control(update_password, module):
     previous_users, previous_user_password = ocserv_get_users()
-    updated_users = set(update_password.keys())
-    selected_users = set(updated_users)
-    new_users_list = []
+    selected_users = set(update_password.keys())
     user_pass_dict = {}
-    for user in selected_users:
-        if user in previous_users and not update_password[user]:
-            new_users_list.append({'user': user, 'password': previous_user_password[user]})
-            user_pass_dict[user] = previous_user_password[user]
-        else:
-            ocserv_password = exec_shell("openssl rand -base64 32", module)
-            new_users_list.append({'user': user, 'password': ocserv_password })
-            user_pass_dict[user] = ocserv_password
 
-    with open(OCSERV_CONFIG_PATH, "w") as f:
-        f.write('\n'.join(list(map(lambda x: f"{x['user']}:*:{x['password']}", new_users_list))))
+    # Remove users not in group_vars
+    for user in previous_users:
+        if user not in selected_users:
+            exec_shell(f"ocpasswd -d {user} -c {OCSERV_CONFIG_PATH}", module)
+
+    # Add new users or update password of existing users
+    for user in selected_users:
+        if user not in previous_users or update_password[user]:
+            ocserv_password = exec_shell("openssl rand -base64 32", module)
+            exec_shell(f"echo '{ocserv_password}' | ocpasswd -c {OCSERV_CONFIG_PATH} {user}", module)
+            user_pass_dict[user] = ocserv_password
 
     return user_pass_dict
         
@@ -54,6 +51,7 @@ def run_module():
     )
     users = module.params["users"]
     update_password = {}
+
     for user in users:
         if 'regen_pass' in user.keys() and user['regen_pass']:
             update_password[user['user']] = True
@@ -61,7 +59,7 @@ def run_module():
             update_password[user['user']] = False
 
     user_pass_dict = ocserv_user_control(update_password, module)
-    module.exit_json(changed=False, msg=user_pass_dict)
+    module.exit_json(changed=True, msg=user_pass_dict)
 
 def main():
     run_module()

@@ -4,18 +4,16 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-import json
-import shlex
+import json, shlex, os
+from datetime import datetime
 
 XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
 
 def exec_shell(cmd, module):
-    cmd_args = shlex.split(cmd)
-    rc, stdout, stderr= module.run_command(cmd_args, environ_update={'TERM': 'dumb'})
+    rc, stdout, stderr = module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
         module.fail_json(stderr)
-    return stdout
-
+    return stdout.rstrip()
 def xray_gen_password(protocol, module):
     login_method = {'vmess': 'id', 'vless': 'id', 'trojan': 'password'}[protocol]
     return login_method, exec_shell({'trojan': 'openssl rand -base64 32', 'vless': '/var/vpns/xray/bin/xray uuid', 'vmess': '/var/vpns/xray/bin/xray uuid'}[protocol], module)
@@ -74,8 +72,9 @@ def run_module():
 
     users = module.params["users"]
     protocol = module.params["protocol"]
-
+    
     update_password = {}
+
     for user in users:
         if 'regen_pass' in user.keys() and user['regen_pass']:
             update_password[user['user']] = True

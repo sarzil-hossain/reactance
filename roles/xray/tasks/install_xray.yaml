@@ -62,3 +62,16 @@
 
 - name: "copy chroot dependencies"
   ansible.builtin.shell: "deps=$(ldd /var/vpns/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/xray; done"
+
+# xray will fail without these two files 
+- name: "copy hosts and resolv.conf"
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - src: /etc/hosts
+      dest: /var/vpns/xray/etc/hosts
+    - src: /etc/resolv.conf
+      dest: /var/vpns/xray/etc/resolv.conf
+

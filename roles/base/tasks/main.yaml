@@ -4,7 +4,6 @@
     name: _vpn
     comment: Project VPN user
     state: present
-    home: false
     shell: /sbin/nologin
 
 - name: "Create root directory of vpn services"
@@ -14,3 +13,6 @@
     owner: _vpn
     group: nogroup
     mode:  0755
+
+- name: "Setup user expiry"
+  include_tasks: user_expiry_setup.yaml

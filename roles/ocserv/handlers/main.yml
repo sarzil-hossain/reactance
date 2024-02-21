@@ -10,6 +10,6 @@
     path: "{{ ocserv_tempdir.path }}"
     state: absent
 
-- name: ocserv_debug_passwords
+- name: debug_passwords
   ansible.builtin.debug:
-    var: ocserv_user_pass_dict
+    var: user_pass_list
