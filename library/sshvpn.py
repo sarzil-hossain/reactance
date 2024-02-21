@@ -28,6 +28,7 @@ def sshvpn_update_users(update_password, module):
         if user not in update_password.keys():
             os.remove(os.path.join(SSH_ROOT,f"{user}"))
             os.remove(os.path.join(SSH_ROOT,f"{user}.pub"))
+            exec_shell(f"pkill -u {user}", module)
 
     # Update keys for new users or regenerate keys for old users
     for user in update_password.keys():
@@ -59,7 +60,7 @@ def run_module():
             update_password[user['user']] = False
 
     sshvpn_update_users(update_password, module)
-    module.exit_json(changed=True, msg=f"Retrieve keys from {SSH_ROOT}")
+    module.exit_json(changed=True, msg={"sshvpn": f"Retrieve keys from {SSH_ROOT}"})
 
 def main():
     run_module()

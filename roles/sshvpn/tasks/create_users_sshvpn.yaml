@@ -3,10 +3,9 @@
   sshvpn:
     users: "{{ all_users|default([]) + sshvpn_users|default([]) }}"
   register: sshvpn_user_pass_dict
+  notify:
+    - debug_passwords # cant restart SSH, or ansible would also be interrupted.
 
 - name: "add sshvpn user password pair to list"
   set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [sshvpn_user_pass_dict] }}"
-  notify:
-    - debug_passwords
-
+    user_pass_list: "{{ user_pass_list|default([]) + [sshvpn_user_pass_dict['msg']] }}"

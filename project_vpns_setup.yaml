@@ -9,6 +9,7 @@
     - role: ocserv
     - role: xray
     - role: hysteria
+    - role: sshvpn
 
 - name: "openbsd : setup ocserv"
   hosts: ocserv

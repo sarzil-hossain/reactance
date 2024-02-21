@@ -53,7 +53,7 @@ def run_module():
             update_password[user['user']] = False
 
     user_pass_dict = hysteria_user_control(update_password, module)
-    module.exit_json(changed=True, msg=user_pass_dict)
+    module.exit_json(changed=True, msg={"hysteria": user_pass_dict})
 
 def main():
     run_module()

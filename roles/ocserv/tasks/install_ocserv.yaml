@@ -1,5 +1,5 @@
 ---
-# No need to use a separate user for chrooting ocserv as it should be chrooted by default.
+# ocserv has built-in chroot functionality
 
 - name: "install ocserv"
   community.general.openbsd_pkg:
@@ -16,11 +16,7 @@
   loop:
     - /var/vpns/ocserv
     - /var/vpns/ocserv/run
-    - /var/vpns/ocserv/etc
-    - /var/vpns/ocserv/etc/certs
-
-      # - name: "move ocserv to vpns root"
-      #   ansible.builtin.shell: "mv /etc/ocserv /var/vpns/ocserv"
+    - /var/vpns/ocserv/certs
 
 - name: "create temporary directory"
   ansible.builtin.tempfile:

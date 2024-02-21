@@ -82,7 +82,7 @@ def run_module():
             update_password[user['user']] = False
 
     new_users_dict = xray_user_control(update_password, protocol, module)
-    module.exit_json(changed=True, msg=new_users_dict)
+    module.exit_json(changed=True, msg={protocol: new_users_dict})
 
 def main():
     run_module()

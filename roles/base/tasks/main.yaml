@@ -2,6 +2,7 @@
 - name: "Create vpns user"
   ansible.builtin.user:
     name: _vpn
+    create_home: no
     comment: Project VPN user
     state: present
     shell: /sbin/nologin

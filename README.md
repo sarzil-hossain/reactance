@@ -24,8 +24,7 @@ VPN Setup automation for bypassing government censorship
 6. Hysteria + Self Signed TLS Cert
 
 ### TO DO
-- [X] Single server support
-- [ ] Multiple servers support
+Read [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ### Server Definitions
 Servers are defined in inventory.yaml file. There are different groups for different protocols.

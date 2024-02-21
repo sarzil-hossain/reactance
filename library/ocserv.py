@@ -59,7 +59,7 @@ def run_module():
             update_password[user['user']] = False
 
     user_pass_dict = ocserv_user_control(update_password, module)
-    module.exit_json(changed=True, msg=user_pass_dict)
+    module.exit_json(changed=True, msg={"ocserv": user_pass_dict})
 
 def main():
     run_module()
