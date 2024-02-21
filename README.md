@@ -1,4 +1,4 @@
-# Project VPN
+# Project VPN - User Manual
 VPN Setup automation for bypassing government censorship
 
 ## Table of Contents
