@@ -60,7 +60,8 @@ def run_module():
             update_password[user['user']] = False
 
     sshvpn_update_users(update_password, module)
-    module.exit_json(changed=True, msg={"sshvpn": f"Retrieve keys from {SSH_ROOT}"})
+    msg = {"sshvpn":{"retrieve keys from": SSH_ROOT}}
+    module.exit_json(changed=True, msg=msg)
 
 def main():
     run_module()

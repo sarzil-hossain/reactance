@@ -4,7 +4,7 @@
     users: "{{ all_users|default([]) + sshvpn_users|default([]) }}"
   register: sshvpn_user_pass_dict
   notify:
-    - debug_passwords # cant restart SSH, or ansible would also be interrupted.
+    - debug_passwords
 
 - name: "add sshvpn user password pair to list"
   set_fact:
