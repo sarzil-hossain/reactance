@@ -1,0 +1,8 @@
+all_users:
+  - user: example_user_1
+    regen_pass: true
+    expire: "2020-1-2"
+  - user: hysteria_only_2
+    expire: "2025-12-28"
+sshvpn_users:
+  - user: sshvpn_only_3
