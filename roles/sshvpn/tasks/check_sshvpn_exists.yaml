@@ -1,7 +1,7 @@
 ---
 - name: "Check if sshvpn is already installed"
   ansible.builtin.stat:
-    path: /var/vpns/sshvpn
+    path: /home/sshvpn
   register: sshvpn_directory
 - name: "Setup sshvpn if directory doesn't exist"
   ansible.builtin.include_tasks: setup_sshvpn.yaml

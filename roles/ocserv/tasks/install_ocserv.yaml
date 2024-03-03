@@ -40,7 +40,7 @@
 - name: "copy ocserv-worker"
   ansible.builtin.copy:
     owner: _vpn
-    group: _ocserv
+    group: _vpn
     remote_src: true
     src: /usr/local/sbin/ocserv-worker
     dest: /var/vpns/ocserv/ocserv-worker

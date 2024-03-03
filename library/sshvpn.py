@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-SSH_ROOT = "/var/vpns/sshvpn/.ssh"
+SSH_ROOT = "/home/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def exec_shell(cmd, module):

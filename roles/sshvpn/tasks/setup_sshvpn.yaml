@@ -3,13 +3,13 @@
   ansible.builtin.user:
     name: sshvpn
     shell: /sbin/nologin
-    home: /var/vpns/sshvpn
+    home: /home/sshvpn
 
-- name: "Create .ssh directory"
+- name: "Create .ssh directory (if not exists)"
   ansible.builtin.file:
-    path: /var/vpns/sshvpn/.ssh
+    path: /home/sshvpn/.ssh
     owner: sshvpn
-    group: _vpn
+    group: sshvpn
     mode: 700
 
 - name: "Run user management script"

@@ -8,7 +8,7 @@ daemon_flags="-c /var/vpns/ocserv/ocserv.conf"
 pexp="ocserv: ocserv-main"
 
 rc_pre() {
-	/usr/bin/install -d -o _ocserv /var/vpns/ocserv/run/
+	/usr/bin/install -d -o _vpn /var/vpns/ocserv/run/
 }
 
 rc_cmd $1
