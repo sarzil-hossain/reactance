@@ -19,7 +19,8 @@ def pipeline_1():
 		"image": "alpine:latest",
 		"commands": [
 			'busybox wget -S --spider {} &>/dev/null && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
-		]
+		],
+		"failure": "ignore"
 	})
 
 	# step 2: if doesn't exist, build and publish image to registry
