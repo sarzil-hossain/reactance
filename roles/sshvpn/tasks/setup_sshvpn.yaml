@@ -10,7 +10,7 @@
     path: /home/sshvpn/.ssh
     owner: sshvpn
     group: sshvpn
-    mode: 700
+    mode: 0700
 
 - name: "Run user management script"
   include_tasks: create_users_sshvpn.yaml

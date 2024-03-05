@@ -3,15 +3,19 @@
   ansible.builtin.stat:
     path: /var/vpns/hysteria
   register: hysteria_directory
+
 - name: "Check if hysteria is configured"
   ansible.builtin.stat:
     path: /var/vpns/hysteria/etc/config.json
   register: hysteria_config
+
 - name: "Install hysteria if directory doesn't exist"
   ansible.builtin.include_tasks: install_hysteria.yaml
   when:  hysteria_directory.stat.exists == false
+
 - name: "Configure hysteria"
   ansible.builtin.include_tasks: configure_hysteria.yaml
   when: hysteria_config.stat.exists == false
+
 - name: "Create hysteria users"
   ansible.builtin.include_tasks: create_users_hysteria.yaml

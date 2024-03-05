@@ -1,64 +1,23 @@
 ---
-# cant use register with loop, so need two separate tasks
-- name: "check if public key.stat.exists "
-  ansible.builtin.stat:
-    path: "/var/vpns/xray/private_key"
-  register: public_key_file
-
-- name: "check if private key.stat.exists "
-  ansible.builtin.stat:
-    path: "/var/vpns/xray/private_key"
-  register: private_key_file
-
-- name: "get old key"
-  ansible.builtin.slurp:
-    src: /var/vpns/xray/private_key
-  register: slurped_private_key
-  when: public_key_file.stat.exists and private_key_file.stat.exists
-
-- name: "get old pubkey"
-  ansible.builtin.slurp:
-    src: /var/vpns/xray/public_key
-  register: slurped_public_key
-  when: public_key_file.stat.exists and private_key_file.stat.exists
-
-- name: "set previous keys as facts"
-  become_user: root
-  become: yes # needed for lookup
-  become_method: doas
-  ansible.builtin.set_fact:
-    private_key: "{{ slurped_private_key['content'] | b64decode }}"
-    public_key: "{{ slurped_public_key['content'] | b64decode }}"
-  when: public_key_file.stat.exists and private_key_file.stat.exists
-
 # generate keypair, needed for config
 - name: "generate private, public keypair for xtls-reality"
   ansible.builtin.shell: "/var/vpns/xray/bin/xray x25519 | awk '{ print $3 }' | tr '\n' ','"
   register: keypair
-  when: (public_key_file.stat.exists and private_key_file.stat.exists) != true
 
 - name: "set private key as var"
   ansible.builtin.set_fact:
-    public_key: "{{ (keypair.stdout | split(',')).0 }}"
-    private_key: "{{ (keypair.stdout | split(',')).1 }}"
-  when: (public_key_file.stat.exists and private_key_file.stat.exists) != true
-
-# - name: "create public key file"
-#   ansible.builtin.file:
-#     path: "/var/vpns/xray/public_key"
-#     state: file
+    private_key: "{{ (keypair.stdout | split(',')).0 }}"
+    public_key: "{{ (keypair.stdout | split(',')).1 }}"
 
 - name: "write public key to file"
   ansible.builtin.copy:
     content: "{{ public_key }}"
     dest: "/var/vpns/xray/public_key"
-  when: (public_key_file.stat.exists and private_key_file.stat.exists) != true
 
 - name: "write private key to file"
   ansible.builtin.copy:
     content: "{{ private_key }}"
     dest: "/var/vpns/xray/private_key"
-  when: (public_key_file.stat.exists and private_key_file.stat.exists) != true
 
 - name: "template out config and init script"
   ansible.builtin.template:

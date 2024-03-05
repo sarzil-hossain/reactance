@@ -1,3 +1,4 @@
+---
 - name: "create certificate dir"
   ansible.builtin.file:
     path: /var/vpns/ocserv/certs/

@@ -18,12 +18,13 @@
 - name: "Setup user expiry"
   include_tasks: user_expiry_setup.yaml
 
-- name: "template out sysctl.conf"
-  ansible.builtin.template:
-    src: sysctl.conf.j2
-    dest: /etc/sysctl.conf
-    owner: root
-    group: wheel
-    mode: '0644'
-  notify:
-    - restart_notification
+- name: "templating out ip forwarding rules in sysctl.conf"
+  ansible.builtin.blockinfile:
+    path: /etc/sysctl.conf
+    create: true
+    backup: true
+    marker: "### IP Forwarding - ANSIBLE ###"
+    insertafter: "EOF"
+    block: |
+      net.inet.ip.forwarding=1
+      net.inet6.ip6.forwarding=1

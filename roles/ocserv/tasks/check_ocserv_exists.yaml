@@ -3,11 +3,14 @@
   ansible.builtin.stat:
     path: /var/vpns/ocserv
   register: ocserv_directory
+
 - name: "Install ocserv if directory doesn't exist"
   ansible.builtin.include_tasks: install_ocserv.yaml
   when:  ocserv_directory.stat.exists == false
+
 - name: "Configure ocserv"
   ansible.builtin.include_tasks: configure_ocserv.yaml
   when: ocserv_directory.stat.exists == false
+
 - name: "Create ocserv users"
   ansible.builtin.include_tasks: create_users_ocserv.yaml
