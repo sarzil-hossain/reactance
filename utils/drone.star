@@ -13,7 +13,7 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	remote_image = 'https://registry.opviel.de:80/library/alpine_ansible/latest'
+	remote_image = 'http://registry.opviel.de:80/library/alpine_ansible/latest'
 	steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
