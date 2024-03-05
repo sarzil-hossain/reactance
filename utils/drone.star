@@ -18,7 +18,7 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			'busybox wget -S --spider {} && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
+			'busybox wget -S --spider {} &>/dev/null && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
 		]
 	})
 
