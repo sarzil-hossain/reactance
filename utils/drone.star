@@ -1,4 +1,5 @@
-def main():
+def main(ctx):
+
 	protocols = [
 		'xray',
 		'hysteria',
