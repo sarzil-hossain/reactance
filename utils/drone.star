@@ -13,7 +13,7 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	remote_image = 'http://registry.opviel.de:80/library/alpine_ansible/latest'
+	remote_image = 'http://registry.opviel.de:80/repositories/alpine_ansible'
 	steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
@@ -71,7 +71,7 @@ def pipeline_2(protocols):
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
-			"image": "alpine_ansible",
+			"image": "registry.opviel.de:80/alpine_ansible",
 			"commands": ["ansible-playbook utils/{}_setup.yaml".format(protocol)],
 			"depends_on": ["export_ssh_key"]
 		})
