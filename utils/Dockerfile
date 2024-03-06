@@ -1,3 +1,5 @@
 FROM alpine:latest
 
-CMD alpine add --no-cache ansible openssh-client
+RUN apk add --no-cache ansible openssh-client
+
+CMD ["/bin/sh"]
