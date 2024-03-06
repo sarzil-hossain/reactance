@@ -34,11 +34,12 @@ def pipeline_1():
 			"repo": "registry.opviel.de/alpine_ansible",
 			"dockerfile": "utils/Dockerfile",
 			"registry": "registry.opviel.de",
+			"tags": ["latest"]
 			"insecure": "true",
 			"purge": "true",
 			"compress": "true",
-			"context": "./utils",
-			"mtu": "1400"
+			"mtu": "1400",
+			"force_tag": true
 		}
 	})
 
@@ -73,8 +74,8 @@ def pipeline_2(protocols):
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
-			"image": "registry.opviel.de:80/alpine_ansible",
-			"commands": ["ansible-playbook utils/{}_setup.yaml".format(protocol)],
+			"image": "registry.opviel.de:80/alpine_ansible:latest",
+			"commands": ["/usr/bin/ansible-playbook utils/{}_setup.yaml".format(protocol)],
 			"depends_on": ["export_ssh_key"]
 		})
 
