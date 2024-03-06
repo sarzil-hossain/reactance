@@ -54,12 +54,12 @@ def pipeline_1():
 
 def pipeline_2(protocols):
 
-	# "SSH_PRIVATE_KEY": {
-	# 	"from_secret": "ssh_key"
-	# }
 
 	environment_vars = {
 		"ANSIBLE_CONFIG": "utils/ansible_drone.cfg",
+		"SSH_PRIVATE_KEY": {
+			"from_secret": "ssh_key"
+		}
 	}
 
 	steps = []
