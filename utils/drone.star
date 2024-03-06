@@ -19,7 +19,7 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			'busybox wget -S --spider {} | grep 'ansible_alpine' &>/dev/null && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
+			'busybox wget -S --spider {} | grep -q "ansible_alpine" && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
 		],
 		"failure": "ignore",
 		"branch": "master"
@@ -84,7 +84,7 @@ def pipeline_2(protocols):
 		"type": "docker",
 		"name": "Execute Playbook",
 		"platform": { "arch": "arm64" },
-		"environments": environment_vars,
+		"environment": environment_vars,
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
 		"branch": "master"
