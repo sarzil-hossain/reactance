@@ -15,7 +15,7 @@ def pipeline_1():
 
 	# step 1: check if image exists on remote registry
 	remote_image = 'http://registry.opviel.de:80/_catalog'
-	steps.append({
+	# steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
@@ -39,7 +39,7 @@ def pipeline_1():
 			"purge": "true",
 			"compress": "true",
 			"mtu": "1400",
-			"force_tag": "true"
+			"force_tag": "false"
 		}
 	})
 
@@ -68,7 +68,7 @@ def pipeline_2(protocols):
 	steps.append({
 		"name": "export_ssh_key",
 		"image": "alpine",
-		"commands": ["echo $SSH_PRIVATE_KEY > utils/.ssh_private_key"]
+		"commands": ['echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key']
 	})
 	
 	# step 2: run pipeline
