@@ -6,6 +6,7 @@ def main(ctx):
 		'ocserv',
 		'sshvpn'
 	]
+
 	pipelines = [pipeline_1(), pipeline_2(protocols)]
 	return pipelines
 
@@ -13,14 +14,15 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	remote_image = 'http://registry.opviel.de:80/repositories/alpine_ansible'
+	remote_image = 'http://registry.opviel.de:80/alpine_ansible'
 	steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
 			'busybox wget -S --spider {} && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
 		],
-		"failure": "ignore"
+		"failure": "ignore",
+		"branch": "master"
 	})
 
 	# step 2: if doesn't exist, build and publish image to registry
@@ -83,5 +85,6 @@ def pipeline_2(protocols):
 		"platform": { "arch": "arm64" },
 		"environments": environment_vars,
 		"steps": steps,
-		"depends_on": ["Build and Publish Image"]
+		"depends_on": ["Build and Publish Image"],
+		"branch": "master"
 	}
