@@ -39,7 +39,7 @@ def pipeline_1():
 			"purge": "true",
 			"compress": "true",
 			"mtu": "1400",
-			"force_tag": true
+			"force_tag": "true"
 		}
 	})
 
