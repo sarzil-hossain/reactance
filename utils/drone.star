@@ -14,12 +14,12 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	remote_image = 'http://registry.opviel.de:80/alpine_ansible'
+	remote_image = 'http://registry.opviel.de:80/_catalog'
 	steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			'busybox wget -S --spider {} && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
+			'busybox wget -S --spider {} | grep 'ansible_alpine' &>/dev/null && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
 		],
 		"failure": "ignore",
 		"branch": "master"
