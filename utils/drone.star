@@ -34,7 +34,7 @@ def pipeline_1():
 			"repo": "registry.opviel.de/alpine_ansible",
 			"dockerfile": "utils/Dockerfile",
 			"registry": "registry.opviel.de",
-			"tags": ["latest"]
+			"tags": ["latest"],
 			"insecure": "true",
 			"purge": "true",
 			"compress": "true",
