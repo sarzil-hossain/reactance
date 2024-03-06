@@ -76,6 +76,7 @@ def pipeline_2(protocols):
 		steps.append({
 			"name": "setup_{}".format(protocol),
 			"image": "registry.opviel.de:80/alpine_ansible:latest",
+			"environment": environment_vars,
 			"commands": ["/usr/bin/ansible-playbook utils/{}_setup.yaml".format(protocol)],
 			"depends_on": ["export_ssh_key"]
 		})
@@ -85,7 +86,6 @@ def pipeline_2(protocols):
 		"type": "docker",
 		"name": "Execute Playbook",
 		"platform": { "arch": "arm64" },
-		"environment": environment_vars,
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
 		"branch": "master"
