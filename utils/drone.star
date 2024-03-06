@@ -7,7 +7,7 @@ def main(ctx):
 		'sshvpn'
 	]
 
-	pipelines = [pipeline_1(), pipeline_2(protocols)]
+	pipelines = [pipeline_2(protocols)]
 	return pipelines
 
 def pipeline_1():
@@ -67,7 +67,7 @@ def pipeline_2(protocols):
 	steps.append({
 		"name": "export_ssh_key",
 		"image": "alpine",
-		"commands": ['echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key']
+		"commands": ['echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key && chmod 600 utils/.ssh_private_key']
 	})
 	
 	# step 2: run pipeline
