@@ -1,5 +1,5 @@
-# Project VPN - User Manual
-VPN Setup automation for bypassing government censorship
+# Reactance - User Manual
+Censorship resistant VPN automation and user management for servers and cloud services that is scalable.
 
 ## Table of Contents
   - [Goals](#goals)
@@ -16,12 +16,14 @@ VPN Setup automation for bypassing government censorship
 - Easy to set up and manage
 
 ### Protocols:
-1. OpenConnect AnyConnect (ocserv) + Self Signed TLS Cert
-2. Trojan + XTLS Vision
-3. VLESS + XTLS Vision
-4. VMESS + XTLS Vision
-5. SSH VPN
-6. Hysteria + Self Signed TLS Cert
+Protocols are sorted on specific order. Protocols upper in the list are more preferable for usage.
+
+|Protocol|Server|Authentication Method|Server Verification Method|
+|Cisco AnyConnect|OpenConnect|Certificate|TBD|
+|Trojan|Xray core|Password only|XTLS Vision|
+|VLESS|Xray core|UUID|XTLS Vision|
+|VMESS|Xray core|UUID|XTLS Vision|
+|Hysteria v2|Hysteria v2|Username & Password, Obfuscation|TBD|
 
 ### TO DO
 Read [CONTRIBUTING.md](./CONTRIBUTING.md)
@@ -47,4 +49,4 @@ Supported groups: `all_vpns`, `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, 
 Users are defined as group variables. Please read the [README.md](group_vars/README.md) file in group_vars directory.
 
 ### Playbook Execution
-To execute the playbook, simply run `ansible-playbook --become-method=doas --become -i inventory.ini project_vpns_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
+To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.

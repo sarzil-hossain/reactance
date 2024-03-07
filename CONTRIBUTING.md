@@ -1,4 +1,4 @@
-# Project VPN - Developer Manual
+# Reactance - Developer Manual
 
 ### Table of Contents
 - [The Idea](#the-idea)
@@ -7,7 +7,7 @@
 - [To Do](#todo)
 
 ### The Idea
-Project VPN is a collection of ansible roles that would setup numerous VPN protocols on your server. At the moment, you can do single server setup. But in future, support for multiple servers with a centralized database would be added.
+Reactance is a collection of ansible roles that would setup numerous VPN protocols on your server. At the moment, you can do single server setup. But in future, support for multiple servers with a centralized database would be added.
 
 ### Developer Setup
 You need `python3` installed. Make a virtual environment and install ansible module in it.

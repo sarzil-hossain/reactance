@@ -47,3 +47,8 @@
 
 - name: "install init script"
   ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/vpns/ocserv/ocserv.rc"
+
+- name: "remove /etc/ocserv (we are using /var/vpns/ocserv)"
+  ansible.builtin.file:
+    path: /etc/ocserv
+    state: absent
