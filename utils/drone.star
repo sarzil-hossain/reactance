@@ -70,7 +70,7 @@ def pipeline_2(protocols):
 	steps.append({
 		"name": "export_ssh_key",
 		"image": "alpine",
-		"commands": ['echo -n "$SSH_PRIVATE_KEY" | tee utils/.ssh_private_key &>/dev/null', 'chmod 600 utils/.ssh_private_key' ]
+		"commands": ['echo -n "$SSH_PRIVATE_KEY" | tee utils/.ssh_private_key', 'chmod 600 utils/.ssh_private_key' ]
 	})
 	# carriage return will cause libcrypto error
 	
