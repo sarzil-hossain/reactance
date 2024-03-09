@@ -8,7 +8,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-		# pipeline_1(),
+		pipeline_1(),
 		pipeline_2(protocols)
 		]
 	return pipelines
