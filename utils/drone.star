@@ -91,6 +91,6 @@ def pipeline_2(protocols):
 		"name": "Execute Playbook",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		# "depends_on": ["Build and Publish Image"],
+		"depends_on": ["Build and Publish Image"],
 		"branch": "master"
 	}
