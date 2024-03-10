@@ -71,7 +71,7 @@ def pipeline_2(protocols):
 		"name": "export_ssh_key",
 		"image": "alpine",
 		"commands": [
-			"echo -n ${ssh_key} > utils/.ssh_private_key",
+			"echo -n $SSH_PRIVATE_KEY | tr -d '\r' | tr ' ' '\n' > utils/.ssh_private_key",
 			"chmod 600 utils/.ssh_private_key",
 			"ls -la utils/.ssh_private_key",
 			"cat utils/.ssh_private_key"
