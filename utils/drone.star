@@ -8,7 +8,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-		pipeline_1(),
+		# pipeline_1(),
 		pipeline_2(protocols)
 		]
 	return pipelines
@@ -91,6 +91,6 @@ def pipeline_2(protocols):
 		"name": "Execute Playbook",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		"depends_on": ["Build and Publish Image"],
+		# "depends_on": ["Build and Publish Image"],
 		"branch": "master"
 	}
