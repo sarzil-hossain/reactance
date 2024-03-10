@@ -23,7 +23,8 @@ def pipeline_1():
 		"image": "alpine:latest",
 		"commands": [
 			# "busybox wget -S --spider http://registry.opviel.de/_catalog"
-			"wget http://registry.opviel.de:80/v2/_catalog -O - | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
+			"wget http://registry.opviel.de/v2/_catalog -O - "
+			# "wget http://registry.opviel.de/v2/_catalog -O - | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
 		],
 		"failure": "ignore",
 		"branch": "master"
