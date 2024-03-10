@@ -17,7 +17,7 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	 steps.append({
+	steps.append({
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
