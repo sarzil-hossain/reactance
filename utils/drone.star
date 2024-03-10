@@ -9,8 +9,9 @@ def main(ctx):
 
 	pipelines = [
 		pipeline_1(),
-		pipeline_2(protocols)
+		# pipeline_2(protocols)
 		]
+
 	return pipelines
 
 def pipeline_1():
@@ -21,27 +22,28 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			"busybox wget -S --spider http://registry.opviel.de:80/_catalog | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
+			"busybox wget -S --spider http://registry.opviel.de"
+			# "busybox wget -S --spider http://registry.opviel.de:80/_catalog | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
 		],
 		"failure": "ignore",
 		"branch": "master"
 	})
 
 	# step 2: if doesn't exist, build and publish image to registry
-	steps.append({
-		"name": "publish_on_registry",
-		"image": "plugins/docker",
-		"settings": {
-			"repo": "registry.opviel.de/alpine_ansible",
-			"dockerfile": "utils/Dockerfile",
-			"registry": "registry.opviel.de",
-			"tags": ["latest"],
-			"insecure": "true",
-			"purge": "true",
-			"compress": "true",
-			"mtu": "1400"
-		}
-	})
+#			steps.append({
+#				"name": "publish_on_registry",
+#				"image": "plugins/docker",
+#				"settings": {
+#					"repo": "registry.opviel.de/alpine_ansible",
+#					"dockerfile": "utils/Dockerfile",
+#					"registry": "registry.opviel.de",
+#					"tags": ["latest"],
+#					"insecure": "true",
+#					"purge": "true",
+#					"compress": "true",
+#					"mtu": "1400"
+#				}
+#			})
 
 	return {
 		"kind": "pipeline",
@@ -69,8 +71,7 @@ def pipeline_2(protocols):
 		"image": "alpine",
 		"commands": [
 			'echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key',
-			"chmod 600 utils/.ssh_private_key",
-			"cat utils/.ssh_private_key"
+			"chmod 600 utils/.ssh_private_key"
 		 ],
 		"environment": environment_vars
 	})
