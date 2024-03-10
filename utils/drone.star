@@ -29,20 +29,20 @@ def pipeline_1():
 	})
 
 	 step 2: if doesn't exist, build and publish image to registry
-			steps.append({
-				"name": "publish_on_registry",
-				"image": "plugins/docker",
-				"settings": {
-					"repo": "registry.opviel.de/alpine_ansible",
-					"dockerfile": "utils/Dockerfile",
-					"registry": "registry.opviel.de",
-					"tags": ["latest"],
-					"insecure": "true",
-					"purge": "true",
-					"compress": "true",
-					"mtu": "1400"
-				}
-			})
+	#		steps.append({
+	#			"name": "publish_on_registry",
+	#			"image": "plugins/docker",
+	#			"settings": {
+	#				"repo": "registry.opviel.de/alpine_ansible",
+	#				"dockerfile": "utils/Dockerfile",
+	#				"registry": "registry.opviel.de",
+	#				"tags": ["latest"],
+	#				"insecure": "true",
+	#				"purge": "true",
+	#				"compress": "true",
+	#				"mtu": "1400"
+	#			}
+	#		})
 
 	return {
 		"kind": "pipeline",
