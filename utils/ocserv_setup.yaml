@@ -1,9 +1,6 @@
 ---
 - name: "openbsd : setup ocserv vpn"
   hosts: all
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: base
     - role: ocserv

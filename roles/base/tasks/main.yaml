@@ -28,3 +28,9 @@
     block: |
       net.inet.ip.forwarding=1
       net.inet6.ip6.forwarding=1
+
+- name: "templating out sysctl.conf"
+  ansible.builtin.template:
+    src: syslog.conf.j2
+    dest: /etc/syslog.conf.j2
+    mode: '0644'

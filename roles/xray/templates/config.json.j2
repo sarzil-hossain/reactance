@@ -1,6 +1,6 @@
 {
   "log": {
-    "loglevel": "error",
+    "loglevel": "debug",
     "access": "/logs/xray-access.log",
     "error": "/logs/xray-error.log",
     "dnsLog": false
@@ -29,7 +29,7 @@
 {% if inventory_hostname in (groups['trojan']|default([])) + (groups['all_vpns']|default([])) %}
     {
       "listen": "0.0.0.0",
-      "port": 4436,
+      "port": {{ trojan_port|default(4436) }},
       "protocol": "trojan",
       "settings": {
         "clients": []
@@ -55,7 +55,7 @@
 {% if inventory_hostname in (groups['vless']|default([])) + (groups['all_vpns']|default([])) %}
     {
       "listen": "0.0.0.0",
-      "port": 4437,
+      "port": {{ vless_port|default(4437) }},
       "protocol": "vless",
       "settings": {
         "decryption": "none",
@@ -82,7 +82,7 @@
 {% if inventory_hostname in (groups['vmess']|default([])) + (groups['all_vpns']|default([])) %}
     {
       "listen": "0.0.0.0",
-      "port": 4438,
+      "port": {{ vmess_port|default(4438) }},
       "protocol": "vmess",
       "settings": {
         "clients": []
