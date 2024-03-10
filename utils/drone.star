@@ -60,7 +60,7 @@ def pipeline_2(protocols):
 	environment_vars = {
 		"ANSIBLE_CONFIG": "utils/ansible_drone.cfg",
 		"SSH_PRIVATE_KEY": {
-			"from_secret": "ssh_key"
+			"from_secret": "ssh_private_key"
 		}
 	}
 
@@ -71,7 +71,7 @@ def pipeline_2(protocols):
 		"name": "export_ssh_key",
 		"image": "alpine",
 		"commands": [
-			"echo -n $SSH_PRIVATE_KEY | tr -d '\r'  | tr ' ' '\n' > utils/.ssh_private_key",
+			"echo -n $SSH_PRIVATE_KEY | tr -d '\r' | tr ' ' '\n' > utils/.ssh_private_key",
 			"chmod 600 utils/.ssh_private_key",
 			"ls -la utils/.ssh_private_key",
 			"cat utils/.ssh_private_key"
