@@ -8,7 +8,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-		# pipeline_1(),
+		pipeline_1(),
 		pipeline_2(protocols)
 		]
 	return pipelines
@@ -17,16 +17,15 @@ def pipeline_1():
 	steps = []
 
 	# step 1: check if image exists on remote registry
-	remote_image = 'http://registry.opviel.de:80/_catalog'
-	#	 steps.append({
-	#		"name": "check_image",
-	#		"image": "alpine:latest",
-	#		"commands": [
-	#			'busybox wget -S --spider {} | grep -q "ansible_alpine" && echo -n "\nBUILD SKIPPED" && exit 0'.format(remote_image)
-	#		],
-	#		"failure": "ignore",
-	#		"branch": "master"
-	#	})
+	 steps.append({
+		"name": "check_image",
+		"image": "alpine:latest",
+		"commands": [
+			"busybox wget -S --spider http://registry.opviel.de:80/_catalog | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
+		],
+		"failure": "ignore",
+		"branch": "master"
+	})
 
 	# step 2: if doesn't exist, build and publish image to registry
 	steps.append({
@@ -40,8 +39,7 @@ def pipeline_1():
 			"insecure": "true",
 			"purge": "true",
 			"compress": "true",
-			"mtu": "1400",
-			"force_tag": "false"
+			"mtu": "1400"
 		}
 	})
 
@@ -55,7 +53,6 @@ def pipeline_1():
 
 
 def pipeline_2(protocols):
-
 
 	environment_vars = {
 		"ANSIBLE_CONFIG": "utils/ansible_drone.cfg",
@@ -94,6 +91,6 @@ def pipeline_2(protocols):
 		"name": "Execute Playbook",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		# "depends_on": ["Build and Publish Image"],
+		"depends_on": ["Build and Publish Image"],
 		"branch": "master"
 	}
