@@ -8,7 +8,7 @@
       - [hysteria.py](#hysteria.py)
 
 ## Description
-Custom modules for user management for different protcols  
+Custom modules for user management for different protcols. Each module takes a list of users as input, writes to configuration or password file, returns a list of usernames and passwords that are printed at the end of playbook run. 
 
  ## Protocols
 ### xray.py
@@ -28,6 +28,6 @@ Input Parameters:
 - users - all_users + hysteria_users
 
 ### sshvpn.py
-Description: USer management module for sshvpn
+Description: User management module for sshvpn
 Input Parameters:
 - users - all_users + sshvpn_users

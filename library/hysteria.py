@@ -8,6 +8,7 @@ import json, shlex, os
 from datetime import datetime
 
 HYSTERIA_CONFIG_FILE = "/var/vpns/hysteria/etc/config.json"
+SALAMANDER_PASSWD_FILE = "/var/vpns/hysteria/salamander_password"
 
 def exec_shell(cmd, module):
     rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
@@ -30,9 +31,13 @@ def hysteria_user_control(update_password, module):
             new_users_dict[user] = previous_users[user]
         else:
             new_users_dict[user] = exec_shell("openssl rand -base64 32", module)
+
     with open(HYSTERIA_CONFIG_FILE, "w") as f:
         hysteria_config_dict["auth"]["userpass"] = new_users_dict
         f.write(json.dumps(hysteria_config_dict, indent=1))
+    
+    with open(SALAMANDER_PASSWD_FILE, "r") as sf:
+        new_users_dict["[ARG] SALAMANDER_PASSWORD"] = sf.read()
 
     return new_users_dict
 

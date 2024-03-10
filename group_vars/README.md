@@ -11,6 +11,7 @@ The parameters for the user lists are:
 |user|username|string|None|required|
 |regen_pass|overwrite existing password|boolean|false|optional|
 |expire|user expiry date|string|None|optional|
+
 Supported user lists are: `all_users`, `sshvpn_users`, `vless_users`, `vmess_users`, `trojan_users`, `hysteria_users`, `ocserv_users`
 
 ## Configuration Example

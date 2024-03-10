@@ -8,6 +8,7 @@ import json, shlex, os
 from datetime import datetime
 
 XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
+VISION_PUBKEY_FILE = "/var/vpns/xray/public_key"
 
 def exec_shell(cmd, module):
     rc, stdout, stderr = module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
@@ -59,6 +60,10 @@ def xray_user_control(update_password, protocol, module):
 
     with open(XRAY_CONFIG_PATH, "w") as f:
         f.write(json.dumps(xray_config_dict, indent=1))
+
+    with open(VISION_PUBKEY_FILE, "r") as pf:
+        new_users_dict["[ARG] PUBLIC KEY"] = pf.read()
+
     return new_users_dict
 
 def run_module():
