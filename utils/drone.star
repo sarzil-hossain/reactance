@@ -28,7 +28,7 @@ def pipeline_1():
 		"branch": "master"
 	})
 
-	 step 2: if doesn't exist, build and publish image to registry
+	# step 2: if doesn't exist, build and publish image to registry
 	#		steps.append({
 	#			"name": "publish_on_registry",
 	#			"image": "plugins/docker",
