@@ -23,27 +23,27 @@ def pipeline_1():
 		"image": "alpine:latest",
 		"commands": [
 			# "busybox wget -S --spider http://registry.opviel.de/_catalog"
-			"wget http://registry.opviel.de:80/v2/_catalog -q -O - | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
+			"wget http://registry.opviel.de:80/v2/_catalog -O - | grep -q 'ansible_alpine' && echo -n '\nBUILD SKIPPED' && exit 0"
 		],
 		"failure": "ignore",
 		"branch": "master"
 	})
 
 	# step 2: if doesn't exist, build and publish image to registry
-	steps.append({
-		"name": "publish_on_registry",
-		"image": "plugins/docker",
-		"settings": {
-			"repo": "registry.opviel.de/alpine_ansible",
-			"dockerfile": "utils/Dockerfile",
-			"registry": "registry.opviel.de",
-			"tags": ["latest"],
-			"insecure": "true",
-			"purge": "true",
-			"compress": "true",
-			"mtu": "1400"
-		}
-	})
+	#		steps.append({
+	#			"name": "publish_on_registry",
+	#			"image": "plugins/docker",
+	#			"settings": {
+	#				"repo": "registry.opviel.de/alpine_ansible",
+	#				"dockerfile": "utils/Dockerfile",
+	#				"registry": "registry.opviel.de",
+	#				"tags": ["latest"],
+	#				"insecure": "true",
+	#				"purge": "true",
+	#				"compress": "true",
+	#				"mtu": "1400"
+	#			}
+	#		})
 
 	return {
 		"kind": "pipeline",
