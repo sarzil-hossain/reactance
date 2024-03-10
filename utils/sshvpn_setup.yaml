@@ -1,9 +1,6 @@
 ---
 - name: "openbsd : setup ocserv vpn"
   hosts: all
-  become: true
-  become_user: root
-  become_method: doas
   roles:
     - role: base
     - role: sshvpn

@@ -55,7 +55,6 @@ def pipeline_1():
 def pipeline_2(protocols):
 
 	environment_vars = {
-		"ANSIBLE_CONFIG": "utils/ansible_drone.cfg",
 		"SSH_PRIVATE_KEY": {
 			"from_secret": "ssh_private_key"
 		}
@@ -79,8 +78,10 @@ def pipeline_2(protocols):
 		steps.append({
 			"name": "setup_{}".format(protocol),
 			"image": "registry.opviel.de:80/alpine_ansible:latest",
-			"environment": environment_vars,
-			"commands": ["/usr/bin/ansible-playbook utils/{}_setup.yaml".format(protocol)],
+			"commands": [
+				"export ANSIBLE_CONFIG=utils/ansible_drone.cfg",
+				"/usr/bin/ansible-playbook utils/{}_setup.yaml".format(protocol)
+			],
 			"depends_on": ["export_ssh_key"]
 		})
 
