@@ -71,15 +71,12 @@ def pipeline_2(protocols):
 		"name": "export_ssh_key",
 		"image": "alpine",
 		"commands": [
-			"echo $SSH_PRIVATE_KEY > utils/.ssh_private_key",
+			'echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key',
 			"chmod 600 utils/.ssh_private_key",
-			"ls -la utils/.ssh_private_key",
 			"cat utils/.ssh_private_key"
-
 		 ],
 		"environment": environment_vars
 	})
-	# carriage return will cause libcrypto error
 	
 	# step 2: run pipeline
 	for protocol in protocols:
