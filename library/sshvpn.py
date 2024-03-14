@@ -28,7 +28,6 @@ def sshvpn_update_users(update_password, module):
         if user not in update_password.keys():
             os.remove(os.path.join(SSH_ROOT,f"{user}"))
             os.remove(os.path.join(SSH_ROOT,f"{user}.pub"))
-            exec_shell(f"pkill -u {user}", module)
 
     # Update keys for new users or regenerate keys for old users
     for user in update_password.keys():
@@ -42,6 +41,9 @@ def sshvpn_update_users(update_password, module):
             user_pubkey_file = os.path.join(SSH_ROOT, user_pubkey)
             with open(user_pubkey_file, "r") as pkey:
                 f.write(pkey.read())
+
+    # kill running sessions
+    exec_shell(f"pkill -u sshvpn", module)
 
 def run_module():
     module = AnsibleModule(
