@@ -9,6 +9,7 @@ Censorship resistant scalable VPN automation with user management for servers an
   - [Playbook Execution](#playbook-execution)
   - [Retrieving Credentials](#retrieving-credentials)
   - [Reading Logs](#reading-logs)
+  - [CI/CD Pipeline](#cicd-pipeline)
   - [Contributing](#contributing)
 
 ## Goals
@@ -63,7 +64,29 @@ All variables:
 |vmess_port|port number for vmess|4438|all_vpns, xray|
 
 ## User Definitions
-Users are defined as group variables in `group_vars/all.yaml`. Please refer to [README.md](group_vars/README.md) file in group_vars directory.
+Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on protocols, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).
+
+## Parameters
+The parameters for the user lists are:
+|Parameter Name|Description|Type|Default Value|Importance|
+|--|--|--|--|--|
+|user|username|string|None|required|
+|regen_pass|overwrite existing password|boolean|false|optional|
+|expire|user expiry date (format: yyyy-mm-dd)|string|None|optional|
+
+Supported user lists are: `all_users`, `sshvpn_users`, `vless_users`, `vmess_users`, `trojan_users`, `hysteria_users`, `ocserv_users`
+
+### Configuration Example
+```yaml
+# users set in all_users would be set up for every service
+all_users:
+    - user: foo
+    - user: bar
+vless_users:
+    - user: baz
+      regen_pass: true # will regenerate password
+      expires: 2025-10-13 # will remove user after yyyy-mm-dd
+```
 
 ## Playbook Execution
 To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
@@ -83,5 +106,9 @@ How to debug and fix errors with VPN protocols
 |sshvpn|/var/log/authlog|
 
 2. Reading system calls: You can use `ktrace` and `kdump` to read system calls of processes to see if any errors appear.
+
+## CI/CD pipeline
+You can test and deploy vpn services on your server using CI/CD pipelines. As of now, Reactance only supports DroneCI, the config file of which is stored in `utils/` directory.
+
 ## Contributing
 To contribute to the project, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md)

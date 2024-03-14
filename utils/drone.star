@@ -67,8 +67,8 @@ def pipeline_2(protocols):
 		"name": "export_ssh_key",
 		"image": "alpine",
 		"commands": [
-			'echo "$SSH_PRIVATE_KEY" > utils/.ssh_private_key',
-			"chmod 600 utils/.ssh_private_key"
+			'echo "$SSH_PRIVATE_KEY" > .ssh_private_key',
+			"chmod 600 .ssh_private_key"
 		 ],
 		"environment": environment_vars
 	})
@@ -79,8 +79,7 @@ def pipeline_2(protocols):
 			"name": "setup_{}".format(protocol),
 			"image": "registry.opviel.de:80/alpine_ansible:latest",
 			"commands": [
-				"export ANSIBLE_CONFIG=utils/ansible_drone.cfg",
-				"/usr/bin/ansible-playbook utils/{}_setup.yaml".format(protocol)
+				"/usr/bin/ansible-playbook reactance.yaml -t '{}'".format(protocol)
 			],
 			"depends_on": ["export_ssh_key"]
 		})

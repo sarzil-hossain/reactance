@@ -1,0 +1,3 @@
+.venv
+.ssh_private_key
+filter_plugins/__pycache__

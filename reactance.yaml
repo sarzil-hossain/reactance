@@ -1,0 +1,53 @@
+---
+- name: "openbsd : apply base role to all"
+  hosts: all
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: base
+  tags:
+    - xray
+    - ocserv
+    - sshvpn
+    - hysteria
+
+- name: "openbsd : setup ocserv"
+  hosts: ocserv, all_vpns
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: ocserv
+  tags:
+    - ocserv
+
+- name: "openbsd : setup xray vpn"
+  hosts: vless, vmess, trojan, all_vpns
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: xray
+  tags:
+    - xray
+
+- name: "openbsd : setup sshvpn"
+  hosts: sshvpn, all_vpns
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: sshvpn
+  tags:
+    - sshvpn
+
+- name: "openbsd : setup sshvpn"
+  hosts: hysteria, all_vpns
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: hysteria
+  tags:
+    - hysteria

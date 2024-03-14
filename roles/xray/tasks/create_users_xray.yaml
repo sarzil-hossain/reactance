@@ -33,4 +33,9 @@
 
 - name: "add xray user password pair to list"
   set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [vless_user_pass_dict['msg']|default([])] + [vmess_user_pass_dict['msg']|default([])] + [trojan_user_pass_dict['msg']|default([])] }}"
+    user_pass_list: "{{ user_pass_list|default([]) + [item] }}"
+  when: item|length > 0
+  loop:
+    - "{{ vless_user_pass_dict['msg']|default({}) }}"
+    - "{{ vmess_user_pass_dict['msg']|default({}) }}"
+    - "{{ trojan_user_pass_dict['msg']|default({}) }}"
