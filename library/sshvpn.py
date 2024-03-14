@@ -43,7 +43,7 @@ def sshvpn_update_users(update_password, module):
                 f.write(pkey.read())
 
     # kill running sessions
-    exec_shell(f"pkill -u sshvpn", module)
+    exec_shell(f"pkill -u sshvpn &>/dev/null", module)
 
 def run_module():
     module = AnsibleModule(
