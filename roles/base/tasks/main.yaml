@@ -23,7 +23,7 @@
     path: /etc/sysctl.conf
     create: true
     backup: true
-    marker: "### IP Forwarding - ANSIBLE ###"
+    marker: "### {mark} - IP Forwarding - ANSIBLE ###"
     insertafter: "EOF"
     block: |
       net.inet.ip.forwarding=1

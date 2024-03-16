@@ -9,7 +9,7 @@
     path: /etc/pf.conf
     create: true
     backup: true
-    marker: "### OCSERV - ANSIBLE ###"
+    marker: "### {mark} - OCSERV - ANSIBLE ###"
     insertafter: "EOF"
     block: |
       # openconnect
