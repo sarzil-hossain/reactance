@@ -1,26 +1,30 @@
 # Reactance - User Manual
-Censorship resistant scalable VPN automation with user management for servers and cloud services (WIP).
+Censorship resistant scalable VPN automation with user management for servers and cloud services (WIP) on OpenBSD.
 
 ## Table of Contents
-  - [Goals](#goals)
+  - [Description](#description)
   - [Protocols](#protocols)
   - [Server Definitions](#server-definitions)
   - [User Definitions](#user-definitions)
   - [Playbook Execution](#playbook-execution)
   - [Retrieving Credentials](#retrieving-credentials)
   - [Reading Logs](#reading-logs)
-  - [CI/CD Pipeline](#cicd-pipeline)
+  - [CI/CD Pipelines](#cicd-pipelines)
   - [Contributing](#contributing)
 
-## Goals
-- Automatically sets up a wide range of up-to-date secure VPN protocols
+## Description
+Reactance is a complete automation to handle installation, user management, credential distribution of censorship-resistant VPN protocols on your openbsd server/cloud service(s) of choice. The server configuration is done through setting inventory variables. User configuration is done through using host and group variables. Read [Server Definitions](#server-definitions) and [User Definitions](#user-definitions) for more info.
+
+It is also possible to test and deploy the VPN automation through using CI/CD pipelines. Please read [CI/CD Pipelines](#cicd-pipelines) for more info.
+
+The goals of this project are:
+- Automatically setting up up a wide range of up-to-date secure VPN protocols on OpenBSD
 - Automated User Management and Expiry
-- Bypasses Censorship
+- Bypassing Censorship
 - Easy to set up and manage
-- Easy to 
 
 ## Protocols
-Protocols are sorted on specific order. Protocols upper in the list are more preferable for usage.
+These are the protocols currently supported by Reactance. Protocols upper in the list are more preferable for usage because of security and performance.
 
 |Protocol|Server|Authentication Method|Server Verification Method|
 |--|--|--|--|
@@ -66,8 +70,7 @@ All variables:
 ## User Definitions
 Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on protocols, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).
 
-## Parameters
-The parameters for the user lists are:
+The parameters for the user definitions are:
 |Parameter Name|Description|Type|Default Value|Importance|
 |--|--|--|--|--|
 |user|username|string|None|required|
@@ -91,8 +94,11 @@ vless_users:
 ## Playbook Execution
 To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
 
+You can set up specific VPN services by using tags.
+Supported tags: `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
+
 ## Retrieving Credentials
-The credentials for each protocols are shown at the end of drone run.
+The credentials for each protocols are shown at the end of drone run. In future, connection packages would be added with a web UI for users to download credentials and use them.
 
 ## Reading Logs
 How to debug and fix errors with VPN protocols
@@ -108,7 +114,8 @@ How to debug and fix errors with VPN protocols
 2. Reading system calls: You can use `ktrace` and `kdump` to read system calls of processes to see if any errors appear.
 
 ## CI/CD pipeline
-You can test and deploy vpn services on your server using CI/CD pipelines. As of now, Reactance only supports DroneCI, the config file of which is stored in `utils/` directory.
+You can test and deploy vpn services on your server using CI/CD pipelines. As of now, only DroneCI is supported because of its simplicity, flexibility and ease of use. A `utils` folder can be found that contains a Dockerfile and drone starlark configuration for running the drone pipeline. Starlark is used instead of YAML, to make it easier to add/remove protocols.
+You need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
 
 ## Contributing
 To contribute to the project, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md)

@@ -1,3 +1,6 @@
+# starlark is used instead of more readable YAML because protocols will be added/removed in future.
+# you need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
+
 def main(ctx):
 
 	protocols = [
@@ -10,7 +13,7 @@ def main(ctx):
 	pipelines = [
 		pipeline_1(),
 		pipeline_2(protocols)
-		]
+	]
 
 	return pipelines
 
