@@ -92,6 +92,7 @@ vless_users:
 ```
 
 ## Playbook Execution
+You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible`
 To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
 
 You can set up specific VPN services by using tags.

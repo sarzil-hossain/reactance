@@ -16,7 +16,7 @@ Roles are used for installing, configuring services. Custom ansible modules are 
 3. Adding user expiration support through custom python script ran on a daily cronjob
 
 ## Development Environment Setup
-You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate pip3 install ansible`
+You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible`
 
 ## Developing Service Roles
 Each role should have the following tasks:
