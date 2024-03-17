@@ -1,5 +1,5 @@
 # Reactance - User Manual
-Censorship resistant scalable VPN automation with user management for servers and cloud services (WIP) on OpenBSD.
+Censorship resistant scalable VPN/Proxy automation for OpenBSD with user management for servers and cloud services.
 
 ## Table of Contents
   - [Description](#description)
@@ -18,7 +18,7 @@ Reactance is a complete automation to handle installation, user management, cred
 It is also possible to test and deploy the VPN automation through using CI/CD pipelines. Please read [CI/CD Pipelines](#cicd-pipelines) for more info.
 
 The goals of this project are:
-- Automatically setting up up a wide range of up-to-date secure VPN protocols on OpenBSD
+- Automatically setting up up a wide range of up-to-date secure VPN services  on OpenBSD
 - Automated User Management and Expiry
 - Bypassing Censorship
 - Easy to set up and manage
@@ -26,16 +26,16 @@ The goals of this project are:
 ## Protocols
 These are the protocols currently supported by Reactance. Protocols upper in the list are more preferable for usage because of security and performance.
 
-|Protocol|Server|Authentication Method|Server Verification Method|
-|--|--|--|--|
-|Cisco AnyConnect|OpenConnect|Certificate|TBD|
-|Trojan|Xray core|Password only|XTLS Vision|
-|VLESS|Xray core|UUID|XTLS Vision|
-|VMESS|Xray core|UUID|XTLS Vision|
-|Hysteria v2|Hysteria v2|Username & Password, Obfuscation|TBD|
+|Protocol|Service|Authentication Method|Server Verification Method|Proxying DNS|
+|--|--|--|--|--|
+|Cisco AnyConnect|OpenConnect|Certificate|TBD|Yes|
+|Trojan|Xray core|Password only|XTLS Vision|Yes|
+|VLESS|Xray core|UUID|XTLS Vision|Yes|
+|VMESS|Xray core|UUID|XTLS Vision|Yes|
+|Hysteria v2|Hysteria v2|Username & Password, Obfuscation|TBD|No|
 
 ## Server Definitions
-Servers are defined in inventory.yaml file. There are different groups for different protocols.
+Servers are defined in inventory.yaml file. There are different groups for different services.
 Supported groups: `all_vpns`, `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
 
 Example: The following config will setup all vpn servers on box1, only ocserv on box2 and box3
@@ -68,7 +68,7 @@ All variables:
 |vmess_port|port number for vmess|4438|all_vpns, xray|
 
 ## User Definitions
-Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on protocols, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).
+Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on services, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).
 
 The parameters for the user definitions are:
 |Parameter Name|Description|Type|Default Value|Importance|
@@ -99,10 +99,10 @@ You can set up specific VPN services by using tags.
 Supported tags: `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
 
 ## Retrieving Credentials
-The credentials for each protocols are shown at the end of drone run. In future, connection packages would be added with a web UI for users to download credentials and use them.
+The credentials for each service are shown at the end of drone run. In future, connection packages would be added with a web UI for users to download credentials and use them.
 
 ## Reading Logs
-How to debug and fix errors with VPN protocols
+How to debug and fix errors with VPN services
 1. Reading logs
 
 |Protocol|Log File|
@@ -115,7 +115,7 @@ How to debug and fix errors with VPN protocols
 2. Reading system calls: You can use `ktrace` and `kdump` to read system calls of processes to see if any errors appear.
 
 ## CI/CD pipeline
-You can test and deploy vpn services on your server using CI/CD pipelines. As of now, only DroneCI is supported because of its simplicity, flexibility and ease of use. A `utils` folder can be found that contains a Dockerfile and drone starlark configuration for running the drone pipeline. Starlark is used instead of YAML, to make it easier to add/remove protocols.
+You can test and deploy vpn services on your server using CI/CD pipelines. As of now, only DroneCI is supported because of its simplicity, flexibility and ease of use. A `utils` folder can be found that contains a Dockerfile and drone starlark configuration for running the drone pipeline. Starlark is used instead of YAML, to make it easier to add/remove services.
 You need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
 
 ## Contributing

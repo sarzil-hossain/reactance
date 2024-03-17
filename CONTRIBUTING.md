@@ -31,10 +31,18 @@ For each protocol, you need to write a custom module for performing user managem
 
 1. input: each module takes a list of user definitions as input. The list is comprised of `all_users` and `service_users`
 2. user management: the module would then run the necessary functions to perform the user management. For example, reading and updating configuration files or password files.
-3. output: each module should return the list of username:password pairs as output or a message (as in sshvpn) in the following format: `{ "protocol": { "user1": "password1", "user2": "password2" }}`
+3. output: each module should return the list of username:password pairs as output or a message (as in sshvpn) in the following format:
+```json
+{ 
+    "service name": {
+        "user1": "password1",
+        "user2": "password2"
+    }
+}
+```
 
 ## Adding User Expiration Functionality
-All protocols do not support automatic expiration of users, which is a very needed feature. Reactance however accomplishes that through running a python script as a daily cronjob. The user expiry control script is a part of the base role and templated out during ansible run. The [user_expiry_control.py script](roles/base/templates/user_expiry_control.py.j2) is stored in `roles/base/templates` directory. 
+All services do not support automatic expiration of users, which is a very needed feature. Reactance however accomplishes that through running a python script as a daily cronjob. The user expiry control script is a part of the base role and templated out during ansible run. The [user_expiry_control.py script](roles/base/templates/user_expiry_control.py.j2) is stored in `roles/base/templates` directory. 
 
 The user expiration information is stored in a json file that has the following format:
 ```json
@@ -50,7 +58,7 @@ The user expiration information is stored in a json file that has the following 
 }
 
 ```
-The date is compared with current date, and if it's less than the list of users associated to it is added to the list of users to remove. The list is then passed to functions that retrieve the list of previous users, remove users from provided list, saves the final list in configuration/password files.
+The unix date time is compared with current date, and if it's less than the current date time, the list of users associated to it is added to the list of users to remove. The list is then passed to functions that retrieve the list of previous users, remove users from provided list, saves the final list in configuration/password files.
 
 ## To-Do
 - [X] single server support
