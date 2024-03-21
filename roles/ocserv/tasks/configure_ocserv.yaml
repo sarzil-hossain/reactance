@@ -12,8 +12,6 @@
     marker: "### {mark} - OCSERV - ANSIBLE ###"
     insertafter: "EOF"
     block: |
-      # openconnect
-      
       match out on {{ ansible_default_ipv4.interface }} from {{ ocserv_network | default("172.16.16.0/24") }} to any nat-to ({{ ansible_default_ipv4.interface }})
       match in on {{ ansible_default_ipv4.interface }} from any to {{ ocserv_network | default("172.16.16.0/24") }} nat-to ({{ ansible_default_ipv4.interface }})
       

@@ -18,20 +18,21 @@ Reactance is a complete automation to handle installation, user management, cred
 It is also possible to test and deploy the VPN automation through using CI/CD pipelines. Please read [CI/CD Pipelines](#cicd-pipelines) for more info.
 
 The goals of this project are:
-- Automatically setting up up a wide range of up-to-date secure VPN services  on OpenBSD
-- Automated User Management and Expiry
+- Automatically setting up a wide range of up-to-date secure VPN services  on OpenBSD
+- Automated User Management and Expiration
 - Bypassing Censorship
 - Easy to set up and manage
 
 ## Protocols
 These are the protocols currently supported by Reactance. Protocols upper in the list are more preferable for usage because of security and performance.
 
-|Protocol|Service|Authentication Method|Server Verification Method|Proxying DNS|
+|Protocol|Service|Authentication Method|Server Verification Method|Auto DNS Proxying|
 |--|--|--|--|--|
 |Cisco AnyConnect|OpenConnect|Certificate|TBD|Yes|
 |Trojan|Xray core|Password only|XTLS Vision|Yes|
 |VLESS|Xray core|UUID|XTLS Vision|Yes|
 |VMESS|Xray core|UUID|XTLS Vision|Yes|
+|SOCKS|SSH|private key|matching keypairs|No|
 |Hysteria v2|Hysteria v2|Username & Password, Obfuscation|TBD|No|
 
 ## Server Definitions

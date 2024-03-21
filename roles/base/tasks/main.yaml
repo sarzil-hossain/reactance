@@ -32,5 +32,5 @@
 - name: "templating out sysctl.conf"
   ansible.builtin.template:
     src: syslog.conf.j2
-    dest: /etc/syslog.conf.j2
+    dest: /etc/syslog.conf
     mode: '0644'
