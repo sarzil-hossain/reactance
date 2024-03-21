@@ -30,7 +30,7 @@ def hysteria_user_control(update_password, module):
         if user in previous_users and not update_password[user]:
             new_users_dict[user] = previous_users[user]
         else:
-            new_users_dict[user] = exec_shell("openssl rand -base64 32", module)
+            new_users_dict[user] = exec_shell("openssl rand -hex 32", module)
 
     with open(HYSTERIA_CONFIG_FILE, "w") as f:
         hysteria_config_dict["auth"]["userpass"] = new_users_dict

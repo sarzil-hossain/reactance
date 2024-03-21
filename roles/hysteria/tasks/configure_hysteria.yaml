@@ -7,7 +7,7 @@
 
 # generate salamander password
 - name: "generate salamander password for obfuscation "
-  ansible.builtin.shell: "openssl rand -base64 32"
+  ansible.builtin.shell: "openssl rand -hex 32"
   register: random_string
   when: salamander_password_file.stat.exists != true
 

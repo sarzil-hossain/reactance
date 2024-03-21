@@ -34,3 +34,4 @@
     src: syslog.conf.j2
     dest: /etc/syslog.conf
     mode: '0644'
+  notify: syslogd_restart

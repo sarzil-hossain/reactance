@@ -36,7 +36,7 @@ def ocserv_user_control(update_password, module):
     # Add new users or update password of existing users
     for user in selected_users:
         if user not in previous_users or update_password[user]:
-            ocserv_password = exec_shell("openssl rand -base64 32", module)
+            ocserv_password = exec_shell("openssl rand -hex 32", module)
             exec_shell(f"echo '{ocserv_password}' | ocpasswd -c {OCSERV_CONFIG_PATH} {user}", module)
             user_pass_dict[user] = ocserv_password
 
