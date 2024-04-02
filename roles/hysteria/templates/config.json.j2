@@ -22,7 +22,7 @@
   "resolver": {
     "type": "udp",
     "udp": {
-      "addr": "127.0.0.1:53"
+      "addr": "{{ dns | default("1.1.1.1") }}"
     }
   },
   "outbounds": [{

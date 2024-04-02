@@ -44,6 +44,7 @@
     remote_src: true
     src: /usr/local/sbin/ocserv-worker
     dest: /var/vpns/ocserv/ocserv-worker
+    mode: 0770
 
 - name: "install init script"
   ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/vpns/ocserv/ocserv.rc"

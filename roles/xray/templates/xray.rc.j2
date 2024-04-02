@@ -6,7 +6,7 @@ chroot_dir=/var/vpns/xray
 chroot_user=_vpn
 daemon_class=daemon
 daemon=/bin/xray
-daemon_flags="-c /etc/config.json"
+daemon_flags="run -c /etc/config.json"
 daemon_user=root
 
 . /etc/rc.d/rc.subr
