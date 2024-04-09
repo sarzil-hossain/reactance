@@ -1,8 +1,27 @@
 ---
 - name: "template out config"
   ansible.builtin.template:
-    src: ocserv.conf.j2
-    dest: /var/vpns/ocserv/ocserv.conf
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - src: ocserv.conf.j2
+      dest: /var/vpns/ocserv/ocserv.conf 
+    - src: ca.tmpl.j2 
+      dest: /var/vpns/ocserv/certs/ca.tmpl
+    - src: server.tmpl.j2
+      dest: /var/vpns/ocserv/certs/server.tmpl
+    - src: crl.tmpl.j2
+      dest: /var/vpns/ocserv/certs/crl.tmpl
+
+# generate ca, server certs, crl file
+- name: "generate ca, server certs"
+  ansible.builtin.shell: "{{ item }}"
+  loop:
+    - "certtool --generate-privkey --outfile /var/vpns/ocserv/certs/ca-key.pem"
+    - "certtool --generate-self-signed --load-privkey /var/vpns/ocserv/certs/ca-key.pem --template /var/vpns/ocserv/certs/ca.tmpl --outfile /var/vpns/ocserv/certs/ca-cert.pem"
+    - "certtool --generate-privkey --outfile /var/vpns/ocserv/certs/server-key.pem"
+    - "certtool --generate-certificate --load-privkey /var/vpns/ocserv/certs/server-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --template /var/vpns/ocserv/certs/server.tmpl --outfile /var/vpns/ocserv/certs/server-cert.pem"
+    - "certtool --generate-crl --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --template /var/vpns/ocserv/certs/crl.tmpl --outfile /var/vpns/ocserv/certs/crl.pem"
 
 - name: "template out nat rules in pf.conf"
   ansible.builtin.blockinfile:
@@ -12,8 +31,9 @@
     marker: "### {mark} - OCSERV - ANSIBLE ###"
     insertafter: "EOF"
     block: |
-      match out on {{ ansible_default_ipv4.interface }} from {{ ocserv_network | default("172.16.16.0/24") }} to any nat-to ({{ ansible_default_ipv4.interface }})
-      match in on {{ ansible_default_ipv4.interface }} from any to {{ ocserv_network | default("172.16.16.0/24") }} nat-to ({{ ansible_default_ipv4.interface }})
+      match out on {{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }} from {{ ocserv_network | default("172.16.16.0/24") }} to any nat-to ({{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }})
+      match in on {{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }} from any to {{ ocserv_network | default("172.16.16.0/24") }} nat-to ({{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }})
+# default(ansible_all_ipv4_addresses[0]) is added, in case a default route doesn't exist
       
 - name: "generate public, private key pair"
   ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/vpns/ocserv/certs/server-key.pem -out /var/vpns/ocserv/certs/server-cert.pem -sha256 -days 3650 -nodes -subj /CN=example &>/dev/null"
