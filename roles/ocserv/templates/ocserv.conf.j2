@@ -1,13 +1,17 @@
 chroot-dir = /var/vpns/ocserv
-auth = "plain[passwd=/var/vpns/ocserv/ocserv.passwd]"
+auth = "certificate"
 tcp-port = {{ ocserv_port | default("4430") }}
 run-as-user = _vpn
 run-as-group = _vpn
+
 socket-file = run/ocserv-socket
 server-cert = /var/vpns/ocserv/certs/server-cert.pem
 server-key = /var/vpns/ocserv/certs/server-key.pem
-banner = "Hallo. You are connected to the Server."
-max-clients = 16
+ca-cert = /var/vpns/ocserv/certs/ca-cert.pem
+crl = /var/vpns/ocserv/certs/crl.pem
+
+banner = "Hello. You are connected to the Server."
+max-clients = 1000
 max-same-clients = 2
 rate-limit-ms = 100
 server-stats-reset-time = 604800
@@ -38,5 +42,5 @@ dns = {{ dns | default("1.1.1.1") }}
 ping-leases = false
 route = default
 cisco-client-compat = true
-dtls-legacy = true
+dtls-legacy = false
 

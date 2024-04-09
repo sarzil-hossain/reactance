@@ -7,8 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-OCSERV_CONFIG_PATH = "/var/vpns/ocserv/ocserv.passwd"
-
+OCSERV_CONFIG_PATH = "/var/vpns/ocserv/"
 def exec_shell(cmd, module):
     rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
@@ -26,21 +25,30 @@ def ocserv_get_users():
 def ocserv_user_control(update_password, module):
     previous_users, previous_user_password = ocserv_get_users()
     selected_users = set(update_password.keys())
-    user_pass_dict = {}
 
     # Remove users not in group_vars
     for user in previous_users:
         if user not in selected_users:
-            exec_shell(f"ocpasswd -d {user} -c {OCSERV_CONFIG_PATH}", module)
+            # new code goes here - remove user, update crl
+            exec_shell(f"cat /var/vpns/ocserv/certs/{user}-cert.pem >> /var/vpns/ocserv/certs/revoked.pem", module)
+            exec_shell(f"certtool --generate-crl --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --load-certificate /var/vpns/ocserv/certs/revoked.pem --template /var/vpns/ocserv/certs/crl.tmpl --outfile /var/vpns/ocserv/certs/crl.pem", module)
+            exec_shell("rcctl reload ocserv", module)
 
     # Add new users or update password of existing users
     for user in selected_users:
         if user not in previous_users or update_password[user]:
-            ocserv_password = exec_shell("openssl rand -hex 32", module)
-            exec_shell(f"echo '{ocserv_password}' | ocpasswd -c {OCSERV_CONFIG_PATH} {user}", module)
-            user_pass_dict[user] = ocserv_password
-
-    return user_pass_dict
+            # new code goes here - generate template, certs
+            user_template_contents = f"""
+dn = "cn={user},UID={user}"
+expiration_days = 3650
+signing_key
+tls_www_client
+            """
+            user_template_fpath = os.path.join(OCSERV_CONFIG_PATH, "certs", f"{user}.tmpl")
+            with open(user_template_fpath, "w") as f:
+                f.write(user_template_contents)
+            exec_shell(f"certtool --generate-privkey --outfile /var/vpns/ocserv/certs/{user}-key.pem", module)
+            exec_shell(f"certtool --generate-certificate --load-privkey /var/vpns/ocserv/certs/{user}-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --template /var/vpns/ocserv/certs/{user}.tmpl --outfile /var/vpns/ocserv/certs/{user}-cert.pem", module)
         
 def run_module():
     module = AnsibleModule(
@@ -58,8 +66,9 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    user_pass_dict = ocserv_user_control(update_password, module)
-    module.exit_json(changed=True, msg={"ocserv": user_pass_dict})
+    ocserv_user_control(update_password, module)
+    msg = {"ocserv":{"retrieve keys from": os.path.join(OCSERV_CONFIG_PATH, "certs")}}
+    module.exit_json(changed=True, msg=msg)
 
 def main():
     run_module()
