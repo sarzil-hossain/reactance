@@ -1,7 +1,7 @@
 ---
 - name: restart_notification
   ansible.builtin.debug:
-    msg: "Restart your box for sysctl.conf to have effect"
+    msg: "Restart your box for sysctl.conf and syslog.conf to take effect"
 
 - name: syslogd_restart
   ansible.builtin.service:

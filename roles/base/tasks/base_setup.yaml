@@ -1,0 +1,35 @@
+---
+- name: "Create vpns user"
+  ansible.builtin.user:
+    name: _vpn
+    create_home: no
+    comment: Project VPN user
+    state: present
+    shell: /sbin/nologin
+  notify: restart_notification
+
+- name: "Create root directory of vpn services"
+  ansible.builtin.file:
+    path: /var/vpns/
+    state: directory
+    owner: _vpn
+    group: nogroup
+    mode:  0755
+
+- name: "templating out ip forwarding rules in sysctl.conf"
+  ansible.builtin.blockinfile:
+    path: /etc/sysctl.conf
+    create: true
+    backup: true
+    marker: "### REACTANCE - IP Forwarding - {mark} ###"
+    insertafter: "EOF"
+    block: |
+      net.inet.ip.forwarding=1
+      net.inet6.ip6.forwarding=1
+
+- name: "templating out sysctl.conf"
+  ansible.builtin.template:
+    src: syslog.conf.j2
+    dest: /etc/syslog.conf
+    mode: '0644'
+  notify: syslogd_restart

@@ -26,6 +26,8 @@ The goals of this project are:
 ## Protocols
 These are the protocols currently supported by Reactance. Protocols upper in the list are more preferable for usage because of security and performance.
 
+**NOTE: Hysteria2 is disabled by default. Because the sing-box clients available on the different platforms do not have any mechanism for verifying the proxy server's identity thus there's possibility of MITM attacks. Even if you include Hysteria in your configuration, it would be ignored**
+
 |Protocol|Service|Authentication Method|Server Verification Method|Auto DNS Proxying|
 |--|--|--|--|--|
 |Cisco AnyConnect|OpenConnect|Certificate|TBD|Yes|
@@ -61,12 +63,14 @@ All variables:
 |Name|Description|Default Value|Used Under|
 |--|--|--|--|
 |ocserv_network|network address for ocserv|172.16.16.1/24|all_vpns, ocserv|
-|dns|dns resolver for ocserv|1.1.1.1|all_vpns, ocserv|
+|dns|dns resolver for clients to use|1.1.1.1 if `disable_dns`=`true`|all_vpns, ocserv|
 |ocserv_port|port number for openconnect server|4430|all_vpns, ocserv|
 |hysteria_port|port number for hysteria|4435|all_vpns, hysteria|
 |trojan_port|port number for trojan|4436|all_vpns, xray|
 |vless_port|port number for vless|4437|all_vpns, xray|
 |vmess_port|port number for vmess|4438|all_vpns, xray|
+|disable_webui|disable web interface for clients|false|all|
+|disable_dns|disable dns and adblock setup|false|all|
 
 ## User Definitions
 Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on services, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).
@@ -75,8 +79,8 @@ The parameters for the user definitions are:
 |Parameter Name|Description|Type|Default Value|Importance|
 |--|--|--|--|--|
 |user|username|string|None|required|
-|regen_pass|overwrite existing password|boolean|false|optional|
-|expire|user expiry date (format: yyyy-mm-dd)|string|None|optional|
+|regen|overwrite existing password|boolean|false|optional|
+|expire|user expiration date (format: yyyy-mm-dd)|string|None|optional|
 
 Supported user lists are: `all_users`, `sshvpn_users`, `vless_users`, `vmess_users`, `trojan_users`, `hysteria_users`, `ocserv_users`
 
@@ -88,12 +92,12 @@ all_users:
     - user: bar
 vless_users:
     - user: baz
-      regen_pass: true # will regenerate password
+      regen: true # will regenerate password
       expires: 2025-10-13 # will remove user after yyyy-mm-dd
 ```
 
 ## Playbook Execution
-You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible`
+You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible netaddr`
 To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
 
 You can set up specific VPN services by using tags.

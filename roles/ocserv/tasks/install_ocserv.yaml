@@ -18,6 +18,13 @@
     - /var/vpns/ocserv/run
     - /var/vpns/ocserv/certs
 
+- name: "create log file"
+  ansible.builtin.file:
+    path: /var/log/ocserv.log
+    state: touch
+    mode: "0600"
+  changed_when: false
+
 - name: "create temporary directory"
   ansible.builtin.tempfile:
     state: directory

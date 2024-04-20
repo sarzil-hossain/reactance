@@ -11,6 +11,7 @@
     - ocserv
     - sshvpn
     - hysteria
+    - dns
 
 - name: "openbsd : setup ocserv"
   hosts: ocserv, all_vpns
@@ -51,3 +52,29 @@
     - role: hysteria
   tags:
     - hysteria
+
+- name: "openbsd : setup dns resolver with adblock and web interface"
+  hosts: all
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: dns
+#    - role: web
+  tags:
+    - xray
+    - ocserv
+    - sshvpn
+    - hysteria
+    - dns
+
+#  - name: "openbsd : setup web interface for vpn clients"
+#    hosts: all
+#    become: true
+#    become_method: doas
+#    become_user: root
+#    roles:
+#      - role: web
+#    tags:
+#      - web
+#

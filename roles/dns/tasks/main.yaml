@@ -1,0 +1,3 @@
+---
+- name: "check dns resolver setup"
+  ansible.builtin.include_tasks: check_dns_setup.yaml

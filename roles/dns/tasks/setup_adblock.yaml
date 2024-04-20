@@ -1,0 +1,63 @@
+---
+- name: "activate unbound control"
+  ansible.builtin.command: unbound-control-setup
+  changed_when: false
+
+- name: "fetch unbound filter script"
+  ansible.builtin.get_url:
+    url: https://geoghegan.ca/pub/unbound-adblock/latest/unbound-adblock.sh
+    dest: /usr/local/bin/unbound-adblock
+    group: bin
+    mode: 755
+  register: adblock_changed
+  # DL fails from time to time, so we retry a couple times
+  until: adblock_changed.state == "file"
+  retries: 10
+  delay: 2
+  ignore_errors: yes
+  notify:
+    - restart_unbound
+
+- name: "create adblock user"
+  ansible.builtin.user:
+    name: _adblock
+    shell: nologin
+    home: /var/empty
+    create_home: false
+
+- name: "add _adblock doas privileges"
+  ansible.builtin.blockinfile:
+    path: /etc/doas.conf
+    create: true
+    backup: true
+    marker: "### REACTANCE - Unbound Adblock - {mark} ###"
+    insertafter: "EOF"
+    block: |
+      permit nopass _adblock cmd /usr/sbin/unbound-control args -q status
+      permit nopass _adblock cmd /usr/sbin/unbound-control args -q flush_zone unbound-adblock
+      permit nopass _adblock cmd /usr/sbin/unbound-control args -q auth_zone_reload unbound-adblock
+
+- name: "tune unbound performance"
+  community.general.openbsd_pkg:
+    name: ripgrep
+    state: present
+
+- name: "create binaries for adblock"
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - install -m 644 -o _adblock -g wheel /dev/null /var/unbound/db/adblock.rpz
+    - install -d -o root -g wheel -m 755 /var/log/unbound-adblock
+    - install -o _adblock -g wheel -m 640 /dev/null /var/log/unbound-adblock/unbound-adblock.log
+    - install -o _adblock -g wheel -m 640 /dev/null /var/log/unbound-adblock/unbound-adblock.log.0.gz
+  changed_when: false
+  notify: restart_unbound
+
+- name: "restarting adblock (as separate task otherwise cant create rule)"
+  ansible.builtin.service:
+    name: unbound
+    state: restarted
+    enabled: true
+
+- name: "create first ruleset"
+  ansible.builtin.command: "doas -u _adblock /usr/local/bin/unbound-adblock -O openbsd"
+  changed_when: false

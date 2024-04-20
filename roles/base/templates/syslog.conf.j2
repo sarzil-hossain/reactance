@@ -7,12 +7,12 @@ authpriv.debug						/var/log/secure
 cron.info						/var/cron/log
 {% if inventory_hostname in (groups['ocserv']|default([])) + (groups['all_vpns']|default([])) %}
 !!ocserv
-daemon.*                        /var/vpns/ocserv/ocserv.log
+daemon.*                        /var/log/ocserv.log
 !*
 {% endif %}
 {% if inventory_hostname in (groups['hysteria']|default([])) + (groups['all_vpns']|default([])) %}
 !!hysteria
-daemon.*                        /var/vpns/hysteria/hysteria.log
+daemon.*                        /var/log/hysteria.log
 !*
 {% endif %}
 daemon.info						/var/log/daemon

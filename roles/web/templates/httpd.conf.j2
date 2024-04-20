@@ -1,0 +1,13 @@
+server "default" {
+        listen on * port 80
+        location "/" {
+                block drop
+        }
+{{ for user in ...
+        location match "/sugma_balls" {
+                root "/reactance/sugma_balls"
+                request rewrite "/index.html"
+                authenticate with "/reactance/sugma_balls/.htpasswd"
+        }
+}}
+}

@@ -1,11 +1,11 @@
 ---
 all_users:
   - user: example_user
-    regen_pass: true
+    regen: true
     expire: '2025-5-25'
 
 vmess_users:
   - user: vmess_only_user
-    regen_pass: false
+    regen: false
     expire: '2025-5-25'
 

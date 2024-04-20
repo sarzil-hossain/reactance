@@ -26,8 +26,7 @@ def sshvpn_update_users(update_password, module):
     # Remove users not in new group_vars
     for user in previous_users:
         if user not in update_password.keys():
-            os.remove(os.path.join(SSH_ROOT,f"{user}"))
-            os.remove(os.path.join(SSH_ROOT,f"{user}.pub"))
+            exec_shell(f"rm {user} {user}.pub", module)
 
     # Update keys for new users or regenerate keys for old users
     for user in update_password.keys():
@@ -56,7 +55,7 @@ def run_module():
     update_password = {}
 
     for user in users:
-        if 'regen_pass' in user.keys() and user['regen_pass']:
+        if 'regen' in user.keys() and user['regen']:
             update_password[user['user']] = True
         else:
             update_password[user['user']] = False

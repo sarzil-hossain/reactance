@@ -11,7 +11,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-		pipeline_1(),
+#		pipeline_1(),
 		pipeline_2(protocols)
 	]
 
@@ -51,7 +51,9 @@ def pipeline_1():
 		"type": "docker",
 		"name": "Build and Publish Image",
 		"platform": { "arch": "arm64" },
-		"steps": steps
+		"steps": steps,
+		"branch": "master",
+		"trigger": {"event": ["pull_request", "push"]}
 	}
 
 
@@ -94,5 +96,6 @@ def pipeline_2(protocols):
 		"platform": { "arch": "arm64" },
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
-		"branch": "master"
+		"branch": "master",
+		"trigger": {"event": ["pull_request", "push"]}
 	}

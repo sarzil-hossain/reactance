@@ -28,7 +28,7 @@
     path: /etc/pf.conf
     create: true
     backup: true
-    marker: "### {mark} - OCSERV - ANSIBLE ###"
+    marker: "### REACTANCE - Ocserv NAT - {mark} ###"
     insertafter: "EOF"
     block: |
       match out on {{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }} from {{ ocserv_network | default("172.16.16.0/24") }} to any nat-to ({{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }})

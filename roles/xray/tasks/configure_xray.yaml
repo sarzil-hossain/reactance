@@ -23,3 +23,29 @@
   ansible.builtin.template:
     src: config.json.j2
     dest: "/var/vpns/xray/etc/config.json"
+
+- name: "touch xray log files"
+  ansible.builtin.file:
+    path: " {{ item }} "
+    mode: "0600"
+    owner: _vpn
+    group: wheel
+  loop:
+    - /var/vpns/xray/logs/xray-access.log
+    - /var/vpns/xray/logs/xray-error.log
+
+# purely for convenience
+- name: "link log files to /var/log"
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    mode: "0600"
+    owner: root
+    group: wheel
+  loop:
+    - src: /var/vpns/xray/logs/xray-access.log
+      dest: /var/log/xray-access.log
+    - src: /var/vpns/xray/logs/xray-error.log
+      dest: /var/log/xray-error.log
+    

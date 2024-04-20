@@ -1,5 +1,5 @@
 ---
-- name: "Template out user expiry script and daily.local"
+- name: "Template out user expiration script and daily.local"
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -10,11 +10,11 @@
       dest: /etc/daily.local
       mode: "0644"
       owner: root
-    - src: user_expiry_control.py.j2
-      dest: /var/vpns/.user_expiry_control.py
+    - src: user_expiration_control.py.j2
+      dest: /var/vpns/.user_expiration_control.py
       mode: "0700"
       owner: _vpn
 
-- name: "write user expiry information to file"
-  user_expiry:
+- name: "write user expiration information to file"
+  user_expiration:
     users: "{{ all_users|default([]) + ocserv_users|default([]) + vless_users|default([]) + vmess_users|default([]) + trojan_users|default([]) + sshvpn_users|default([]) + hysteria_users|default([]) }}"

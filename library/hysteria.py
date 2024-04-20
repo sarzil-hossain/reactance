@@ -52,7 +52,7 @@ def run_module():
     update_password = {}
 
     for user in users:
-        if 'regen_pass' in user.keys() and user['regen_pass']:
+        if 'regen' in user.keys() and user['regen']:
             update_password[user['user']] = True
         else:
             update_password[user['user']] = False

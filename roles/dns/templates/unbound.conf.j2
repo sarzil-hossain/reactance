@@ -1,0 +1,37 @@
+server:
+    interface: 127.0.0.1
+    interface: {{ (ocserv_network|default("172.16.16.0/24"))|ansible.utils.nthhost(1) }}
+    do-ip6: no
+
+    access-control: 0.0.0.0/0 refuse
+    access-control: 127.0.0.0/8 allow
+    access-control: {{ ocserv_network|default("172.16.16.0/24") }} allow
+
+    hide-identity: yes
+    hide-version: yes
+
+    auto-trust-anchor-file: "/var/unbound/db/root.key"
+    val-log-level: 2
+    qname-minimisation: yes
+
+    aggressive-nsec: yes
+    verbosity: 1
+    log-queries: yes
+    use-caps-for-id: yes
+
+    cache-min-ttl: 3600
+    cache-max-ttl: 86400
+    prefetch: yes
+    unwanted-reply-threshold: 10000
+    do-not-query-localhost: yes
+    val-clean-additional: yes
+    module-config: "respip validator iterator"
+
+remote-control:
+    control-enable: yes
+
+rpz:
+    name: "unbound-adblock"
+    zonefile: "/var/unbound/db/adblock.rpz"
+    rpz-log: yes
+    rpz-log-name: "unbound-adblock"

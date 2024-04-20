@@ -12,6 +12,13 @@
     - "/var/vpns/hysteria/etc"
     - "/var/vpns/hysteria/certs"
 
+- name: "setup log file"
+	ansible.builtin.file:
+		path: /var/log/hysteria.log
+		state: touch
+		mode: "0600"
+	changed_when: false
+
 - name: "install necessary utils"
   community.general.openbsd_pkg:
     name:

@@ -1,0 +1,11 @@
+---
+- name: "pre execution test : check os"
+  ansible.builtin.fail:
+    msg: "Reactance can only be ran on OpenBSD"
+  when: ansible_facts["os_family"]|lower == "openbsd"
+
+- name: "pre execution test : looking for invalid usernames"
+  ansible.builtin.fail:
+    msg: "Username cannot be 'server' or 'ca'"
+  when: item.user in ["server", "ca"]
+  loop: "{{ all_users|default([]) + ocserv_users|default([]) + vless_users|default([]) + vmess_users|default([]) + trojan_users|default([]) + sshvpn_users|default([]) + hysteria_users|default([]) }}"

@@ -1,0 +1,36 @@
+---
+- name: "template out config"
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - src: unbound.conf.j2
+      dest: /var/unbound/etc/unbound.conf
+    - src: resolv.conf.j2
+      dest: /etc/resolv.conf.j2
+
+- name: "setup log file"
+  ansible.builtin.file:
+    path: /var/log/unbound.log
+    state: touch
+    mode: "0600"
+
+# pure convenience
+- name: "obsd : dns : symlink it to /etc"
+  ansible.builtin.file:
+    src: /var/unbound/etc/unbound.conf
+    dest: /etc/unbound.conf
+    state: link
+
+- name: "obsd : dns : not exists. generate..."
+  ansible.builtin.command: /usr/sbin/unbound-anchor -a /var/unbound/db/root.key
+  args:
+    creates: /var/unbound/db/root.key
+  failed_when: false
+
+- name: "obsd : dns : get root hints"
+  ansible.builtin.command: ftp -o /var/unbound/etc/root.hints https://www.internic.net/domain/named.root
+  args:
+    creates: /var/unbound/db/root.key
+  notify:
+    - restart_unbound

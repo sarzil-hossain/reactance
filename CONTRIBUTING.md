@@ -42,7 +42,7 @@ For each protocol, you need to write a custom module for performing user managem
 ```
 
 ## Adding User Expiration Functionality
-All services do not support automatic expiration of users, which is a very needed feature. Reactance however accomplishes that through running a python script as a daily cronjob. The user expiry control script is a part of the base role and templated out during ansible run. The [user_expiry_control.py script](roles/base/templates/user_expiry_control.py.j2) is stored in `roles/base/templates` directory. 
+All services do not support automatic expiration of users, which is a very needed feature. Reactance however accomplishes that through running a python script as a daily cronjob. The user expiry control script is a part of the base role and templated out during ansible run. The [user_expiration_control.py script](roles/base/templates/user_expiration_control.py.j2) is stored in `roles/base/templates` directory. 
 
 The user expiration information is stored in a json file that has the following format:
 ```json

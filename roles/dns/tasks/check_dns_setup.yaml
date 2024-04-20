@@ -1,0 +1,13 @@
+---
+- name: "check if adblock.rpz exists"
+  ansible.builtin.stat:
+    path: /var/unbound/db/adblock.rpz
+  register: adblock_rpz
+
+- name: "setup dns resolver (unbound)"
+  ansible.builtin.include_tasks: setup_unbound.yaml
+  when: adblock_rpz.stat.exists
+
+- name: "setup adblocking"
+  ansible.builtin.include_tasks: setup_adblock.yaml
+  when: adblock_rpz.stat.exists
