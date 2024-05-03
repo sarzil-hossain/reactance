@@ -1,7 +1,7 @@
 ---
 - name: "Check if ocserv is already installed"
   ansible.builtin.stat:
-    path: /var/vpns/ocserv
+    path: /var/reactance/ocserv
   register: ocserv_directory
 
 - name: "Install ocserv if directory doesn't exist"

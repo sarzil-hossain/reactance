@@ -61,12 +61,12 @@
   roles:
     - role: dns
 #    - role: web
-  tags:
-    - xray
-    - ocserv
-    - sshvpn
-    - hysteria
-    - dns
+#  tags:
+#    - xray
+#    - ocserv
+#    - sshvpn
+#    - hysteria
+#    - dns
 
 #  - name: "openbsd : setup web interface for vpn clients"
 #    hosts: all

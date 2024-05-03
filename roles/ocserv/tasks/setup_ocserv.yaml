@@ -1,8 +1,8 @@
 ---
 - name: "generate server cert and key"
-  ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/vpns/ocserv/certs/server-key.pem -out /var/vpns/ocserv/certs/server-cert.pem -sha256 -days 3650 -nodes -subj '/CN=JohnDane'"
+  ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/reactance/ocserv/certs/server-key.pem -out /var/reactance/ocserv/certs/server-cert.pem -sha256 -days 3650 -nodes -subj '/CN=JohnDane'"
 
 - name: "template out ocserv config"
   ansible.builtin.template:
     src: ocserv.conf.j2
-    dest: /var/vpns/ocserv/ocserv.conf
+    dest: /var/reactance/ocserv/ocserv.conf

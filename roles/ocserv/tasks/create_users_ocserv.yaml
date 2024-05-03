@@ -2,11 +2,13 @@
 - name: "ocserv user management"
   ocserv:
     users: "{{ all_users|default([]) + ocserv_users|default([]) }}"
-  register: ocserv_user_pass_dict
   notify:
     - debug_passwords
     - restart_ocserv
+  no_log: true
+  register: ocserv_changed_users
 
-- name: "add ocserv user password pair to list"
+- name: "add xray usernames to list"
   set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [ocserv_user_pass_dict['msg']] }}"
+    user_pass_list: "{{ user_pass_list|default([]) + ocserv_changed_users }}"
+  no_log: true

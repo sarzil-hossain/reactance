@@ -1,5 +1,6 @@
 # starlark is used instead of more readable YAML because protocols will be added/removed in future.
 # you need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
+# run custom build with force_rebuild parameter set to true to rebuild and override images on registry
 
 def main(ctx):
 
@@ -11,7 +12,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-#		pipeline_1(),
+		pipeline_1(),
 		pipeline_2(protocols)
 	]
 
@@ -25,7 +26,7 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			"wget http://registry.opviel.de/v2/_catalog -O - | grep -q 'alpine_ansible' && echo -n '\nBUILD SKIPPED' && exit 78 || exit 0"
+			' wget http://registry.opviel.de/v2/_catalog -O - | grep -q "alpine_ansible" && [ "$force_rebuild" != "true" ] && echo -n "\nBUILD SKIPPED" && exit 78 || exit 0'
 		],
 		"branch": "master"
 	})
@@ -36,13 +37,26 @@ def pipeline_1():
 		"image": "plugins/docker",
 		"settings": {
 			"repo": "registry.opviel.de/alpine_ansible",
-			"dockerfile": "utils/Dockerfile",
+			"dockerfile": "utils/dockerfiles/Dockerfile.alpine_ansible",
 			"registry": "registry.opviel.de",
 			"tags": ["latest"],
 			"insecure": "true",
 			"purge": "true",
-			"compress": "true",
-			"mtu": "1400"
+			"compress": "true"
+		}
+	})
+
+	steps.append({
+		"name": "publish_on_registry",
+		"image": "plugins/docker",
+		"settings": {
+			"repo": "registry.opviel.de/alpine_hugo",
+			"dockerfile": "utils/dockerfiles/Dockerfile.alpine_hugo",
+			"registry": "registry.opviel.de",
+			"tags": ["latest"],
+			"insecure": "true",
+			"purge": "true",
+			"compress": "true"
 		}
 	})
 
@@ -52,8 +66,7 @@ def pipeline_1():
 		"name": "Build and Publish Image",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		"branch": "master",
-		"trigger": {"event": ["pull_request", "push"]}
+		"branch": "master"
 	}
 
 
@@ -77,8 +90,20 @@ def pipeline_2(protocols):
 		 ],
 		"environment": environment_vars
 	})
-	
-	# step 2: run pipeline
+
+	step 2: build hugo site
+	steps.append({
+		"name": "build_hugo",
+		"image": "alpine_hugo:latest",
+		"commands": [
+				"cd utils/web && hugo" 
+				"mv utils/web/public/images roles/web/templates/images",
+				"find utils/web/public -type f -name '*.html' -exec sed -i -e 's/<p>{%/{%/g' -e 's/%}<\/p>/%}/g' {} \;"
+				"mv utils/web/public roles/web/templates/site",
+		 ]
+	})
+
+	# step 3: run pipeline
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
@@ -86,7 +111,7 @@ def pipeline_2(protocols):
 			"commands": [
 				"/usr/bin/ansible-playbook reactance.yaml -t '{}'".format(protocol)
 			],
-			"depends_on": ["export_ssh_key"]
+			"depends_on": ["export_ssh_key", "build_hugo"]
 		})
 
 	return {
@@ -96,6 +121,5 @@ def pipeline_2(protocols):
 		"platform": { "arch": "arm64" },
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
-		"branch": "master",
-		"trigger": {"event": ["pull_request", "push"]}
+		"branch": "master"
 	}

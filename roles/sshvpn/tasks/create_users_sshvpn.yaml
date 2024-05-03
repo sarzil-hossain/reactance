@@ -3,9 +3,12 @@
   sshvpn:
     users: "{{ all_users|default([]) + sshvpn_users|default([]) }}"
   register: sshvpn_user_pass_dict
+  no_log: true
   notify:
     - debug_passwords
+  register: sshvpn_changed_users
 
-- name: "add sshvpn user password pair to list"
+- name: "add xray usernames to list"
   set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [sshvpn_user_pass_dict['msg']] }}"
+    user_pass_list: "{{ user_pass_list|default([]) + sshvpn_changed_users }}"
+  no_log: true

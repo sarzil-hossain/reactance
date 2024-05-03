@@ -11,7 +11,7 @@
       mode: "0644"
       owner: root
     - src: user_expiration_control.py.j2
-      dest: /var/vpns/.user_expiration_control.py
+      dest: /var/reactance/.user_expiration_control.py
       mode: "0700"
       owner: _vpn
 

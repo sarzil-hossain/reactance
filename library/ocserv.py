@@ -11,7 +11,7 @@ OCSERV_ROOT_DIR = "/var/vpns/ocserv"
 OCSERV_CERTS_DIR = os.path.join(OCSERV_ROOT_DIR, "certs")
 
 def exec_shell(cmd, module):
-    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
+    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'})
     if rc != 0:
         module.fail_json(stderr)
     return stdout.rstrip()
@@ -23,6 +23,7 @@ def ocserv_get_users():
 def ocserv_user_control(update_password, module):
     previous_users = ocserv_get_users()
     selected_users = set(update_password.keys())
+    changed_users = []
 
     # Remove users not in group_vars
     for user in previous_users:
@@ -31,7 +32,6 @@ def ocserv_user_control(update_password, module):
             exec_shell(f"cat { OCSERV_CERTS_DIR }/{user}-cert.pem >> { OCSERV_CERTS_DIR }/revoked.pem", module)
             exec_shell(f"certtool --generate-crl --load-ca-privkey { OCSERV_CERTS_DIR }/ca-key.pem --load-ca-certificate { OCSERV_CERTS_DIR }/ca-cert.pem --load-certificate { OCSERV_CERTS_DIR }/revoked.pem --template { OCSERV_CERTS_DIR }/crl.tmpl --outfile { OCSERV_CERTS_DIR }/crl.pem", module)
             exec_shell("rm {OCSERV_CERTS_DIR}/{user}-cert.pem {OCSERV_CERTS_DIR}/{user}-key.pem", module)
-            exec_shell("rcctl reload ocserv", module)
 
     # Add new users or update password of existing users
     for user in selected_users:
@@ -39,7 +39,7 @@ def ocserv_user_control(update_password, module):
             # new code goes here - generate template, certs
             user_template_contents = f"""
 dn = "cn={user},UID={user}"
-expiration_days = 3650
+expiration_days = -1
 signing_key
 tls_www_client
             """
@@ -49,7 +49,10 @@ tls_www_client
             exec_shell(f"certtool --generate-privkey --outfile { OCSERV_CERTS_DIR }/{user}-key.pem", module)
             exec_shell(f"certtool --generate-certificate --load-privkey { OCSERV_CERTS_DIR }/{user}-key.pem --load-ca-certificate { OCSERV_CERTS_DIR }/ca-cert.pem --load-ca-privkey { OCSERV_CERTS_DIR }/ca-key.pem --template { OCSERV_CERTS_DIR }/{user}.tmpl --outfile { OCSERV_CERTS_DIR }/{user}-cert.pem", module)
             exec_shell(f"rm {user_template_file}", module)
-        
+            changed_users.append(user)
+            
+            return changed_users            
+       
 def run_module():
     module = AnsibleModule(
         argument_spec=dict(
@@ -66,9 +69,8 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    ocserv_user_control(update_password, module)
-    msg = {"ocserv":{"retrieve keys from": os.path.join(OCSERV_ROOT_DIR, "certs")}}
-    module.exit_json(changed=True, msg=msg)
+    changed_users = ocserv_user_control(update_password, module)
+    module.exit_json(changed=True, msg=changed_users)
 
 def main():
     run_module()

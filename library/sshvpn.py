@@ -11,6 +11,7 @@ SSH_ROOT = "/home/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def exec_shell(cmd, module):
+    # use_unsafe_shell=True so ansible doesn't remove |
     rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
         module.fail_json(stderr)
@@ -22,6 +23,7 @@ def sshvpn_get_users():
 
 def sshvpn_update_users(update_password, module):
     previous_users = sshvpn_get_users()
+    changed_users = []
 
     # Remove users not in new group_vars
     for user in previous_users:
@@ -32,8 +34,9 @@ def sshvpn_update_users(update_password, module):
     for user in update_password.keys():
         if user not in previous_users or update_password[user]:
             exec_shell(f"yes | ssh-keygen -q -t rsa -b 4096 -C {user} -N \'\' -f \'{SSH_ROOT}/{user}\'", module)
+            changed_users.append(user)
 
-    # Overwrite existing authorized_key file
+    # Overwrite existing authorized_keys file
     users_pubkeys = [i for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]
     with open(AUTHORIZED_KEYS, "w") as f:
         for user_pubkey in users_pubkeys:
@@ -43,6 +46,8 @@ def sshvpn_update_users(update_password, module):
 
     # kill running sessions
     exec_shell(f"pkill -u sshvpn &>/dev/null", module)
+
+    return changed_users
 
 def run_module():
     module = AnsibleModule(
@@ -60,9 +65,8 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    sshvpn_update_users(update_password, module)
-    msg = {"sshvpn":{"retrieve keys from": SSH_ROOT}}
-    module.exit_json(changed=True, msg=msg)
+    changed_users = sshvpn_update_users(update_password, module)
+    module.exit_json(changed=True, msg=changed_users)
 
 def main():
     run_module()

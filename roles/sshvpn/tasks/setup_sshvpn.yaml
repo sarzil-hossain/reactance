@@ -3,11 +3,11 @@
   ansible.builtin.user:
     name: sshvpn
     shell: /sbin/nologin
-    home: /home/sshvpn
+    home: /var/reactance/sshvpn
 
 - name: "Create .ssh directory (if not exists)"
   ansible.builtin.file:
-    path: /home/sshvpn/.ssh
+    path: /var/reactance/sshvpn/.ssh
     owner: sshvpn
     group: sshvpn
     mode: 0700

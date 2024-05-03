@@ -1,0 +1,12 @@
+---
+- name: "copy ocserv certs"
+  ansible.posix.synchronize:
+    src: "/var/reactance/ocserv/certs/{{ item }}*"
+    dest:  "/var/www/reactance/{{ item }}/"
+  loop: ocserv_changed_users
+
+- name: "copy sshvpn certs"
+  ansible.posix.synchronize:
+    src: "/var/reactance/sshvpn/.ssh/{{ item }}"
+    dest:  "/var/www/reactance/{{ item }}/"
+  loop: sshvpn_changed_users

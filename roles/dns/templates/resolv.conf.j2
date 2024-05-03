@@ -1,2 +1,5 @@
+{% if not disable_dns|default(false) %}
 nameserver 127.0.0.1
+{% endif %}
+nameserver 1.1.1.1
 lookup file bind

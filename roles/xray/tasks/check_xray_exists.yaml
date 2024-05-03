@@ -1,12 +1,12 @@
 ---
 - name: "Check if xray is already installed"
   ansible.builtin.stat:
-    path: /var/vpns/xray
+    path: /var/reactance/xray
   register: xray_directory
 
 - name: "Check if xray is configured"
   ansible.builtin.stat:
-    path: /var/vpns/xray/etc/config.json
+    path: /var/reactance/xray/etc/config.json
   register: xray_config
 
 - name: "Install xray if directory doesn't exist"

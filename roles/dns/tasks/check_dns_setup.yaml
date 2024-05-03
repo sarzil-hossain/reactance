@@ -6,8 +6,8 @@
 
 - name: "setup dns resolver (unbound)"
   ansible.builtin.include_tasks: setup_unbound.yaml
-  when: adblock_rpz.stat.exists
+  when: not adblock_rpz.stat.exists
 
 - name: "setup adblocking"
   ansible.builtin.include_tasks: setup_adblock.yaml
-  when: adblock_rpz.stat.exists
+  when: not adblock_rpz.stat.exists

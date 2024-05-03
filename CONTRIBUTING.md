@@ -60,6 +60,19 @@ The user expiration information is stored in a json file that has the following 
 ```
 The unix date time is compared with current date, and if it's less than the current date time, the list of users associated to it is added to the list of users to remove. The list is then passed to functions that retrieve the list of previous users, remove users from provided list, saves the final list in configuration/password files.
 
+## Client Website
+At first, install hugo and git on your host machine. Hugo can be installed with `pip3 install hugo`. Follow your OS's documentations on installing git.
+
+The base website is located in `utils/web`. For reactance, we are using a Hugo theme called `Book`. To add/modify contents of the pages, update the markdown files in `utils/web/content`. You can build the site locally by adding the theme as a submodule by running the following commands:
+
+```sh
+git submodule add https://github.com/alex-shpak/hugo-book themes/hugo-book utils/web/themes/hugo-book
+hugo server # for testing
+hugo # for building
+```
+
+Build site would be stored in `utils/web/public` directory. In production, the site would be built by Drone.
+
 ## To-Do
 - [X] single server support
 - [x] user expiration support

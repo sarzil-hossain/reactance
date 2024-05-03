@@ -1,0 +1,61 @@
+---
+- name: "make temporary directory on localhost"
+  delegate_to: localhost
+  ansible.builin.tempfile:
+    prefix: reactance
+    state: directory
+  register: hugo_tmp
+
+- name: "copy specific folders to hugo_tmp for each user"
+  delegate_to: localhost
+  ansible.posix.synchronize:
+    src: utils/web
+    dest: "{{ hugo_tmp }}/{{ item.key }}"
+  rsync_opts:
+    - "{{ '--exclude=utils/web/content/docs/ocserv' if 'ocserv' in {{item}} }}"
+    - "{{ '--exclude=utils/web/content/docs/xray' if 'xray' in {{item}} }}"
+    - "{{ '--exclude=utils/web/content/docs/sshvpn' if 'sshvpn' in {{item}} }}"
+  loop: user_pass_dict
+
+- name: "template out anyconnect.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/android/anyconnect.md"
+  loop: ocserv_user_list # instead of user_pass_dict to reduce iterations
+
+- name: "template out openconnect.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/windows/openconnect.md"
+  loop: ocserv_user_list
+
+- name: "template out nekobox.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/android/nekobox.md"
+  loop: xray_user_pass_dict
+  vars:
+    xray_user: "{{ item }}"
+  
+- name: "template out nekoray.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/windows/nekoray.md"
+  loop: xray_user_pass_dict
+  vars:
+    xray_user: "{{ item }}"
+  
+- name: "copy hugo_build.sh to temp dir"
+  delegate_to: localhost
+  ansible.builtin.copy:
+    src: utils/hugo_build.sh
+    dest: "{{ hugo_tmp }}/hugo_build.sh"
+
+- name: "build hugo sites"
+  delegate_to: localhost
+  ansible.builtin.shell: "cd {{ hugo_tmp }} && sh ./hugo_build.sh"
+
+- name: "copy sites"
+  ansible.posix.synchronize:
+    src: "{{ hugo_tmp }}/" # this will only copy contents
+    dest: "/var/www/reactance/"

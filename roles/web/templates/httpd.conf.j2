@@ -3,11 +3,16 @@ server "default" {
         location "/" {
                 block drop
         }
-{{ for user in ...
-        location match "/sugma_balls" {
-                root "/reactance/sugma_balls"
+				location "/image/*"
+							root "/reactance/images"
+							request strip 1
+				}
+			
+{% for uname in all_users_list %}
+        location "/{{ uname }}/*" {
+                root "/reactance/{{ uname }}"
                 request rewrite "/index.html"
-                authenticate with "/reactance/sugma_balls/.htpasswd"
+                authenticate with "/reactance/{{ uname }}/.htpasswd"
         }
-}}
+{% endfor %}
 }

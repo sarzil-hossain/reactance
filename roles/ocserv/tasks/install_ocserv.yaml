@@ -14,9 +14,9 @@
     group: _vpn
     mode: 0700
   loop:
-    - /var/vpns/ocserv
-    - /var/vpns/ocserv/run
-    - /var/vpns/ocserv/certs
+    - /var/reactance/ocserv
+    - /var/reactance/ocserv/run
+    - /var/reactance/ocserv/certs
 
 - name: "create log file"
   ansible.builtin.file:
@@ -36,7 +36,7 @@
 - name: "template out config"
   ansible.builtin.template:
     src: ocserv.conf.j2
-    dest: /var/vpns/ocserv/ocserv.conf
+    dest: /var/reactance/ocserv/ocserv.conf
 
 - name: "template out init script"
   ansible.builtin.template:
@@ -50,13 +50,13 @@
     group: _vpn
     remote_src: true
     src: /usr/local/sbin/ocserv-worker
-    dest: /var/vpns/ocserv/ocserv-worker
+    dest: /var/reactance/ocserv/ocserv-worker
     mode: 0770
 
 - name: "install init script"
-  ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/vpns/ocserv/ocserv.rc"
+  ansible.builtin.shell: "install -m 755 -g bin {{ ocserv_tempdir.path }}/ocserv.rc /etc/rc.d/ocserv && rm -rf /var/reactance/ocserv/ocserv.rc"
 
-- name: "remove /etc/ocserv (we are using /var/vpns/ocserv)"
+- name: "remove /etc/ocserv (we are using /var/reactance/ocserv)"
   ansible.builtin.file:
     path: /etc/ocserv
     state: absent

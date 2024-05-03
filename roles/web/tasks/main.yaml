@@ -1,0 +1,12 @@
+---
+# image files are large, so we don't want them to be copied multiple times
+- name: "copy images directory to root"
+  ansible.posix.synchronize:
+    src: utils/web/static/images
+    dest: /var/www/reactance/images
+
+- name: "build and copy sites"
+  ansible.builtin.include_tasks: build_hugo_sites.yaml
+
+- name: "copy certificates and keys"
+  ansible.builtin.include_tasks: copy_certs.yaml

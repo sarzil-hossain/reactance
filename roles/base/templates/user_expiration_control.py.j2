@@ -3,11 +3,11 @@
 import json, os, subprocess
 from datetime import datetime
 
-EXPIRE_USER_JSON_PATH = "/var/vpns/.user_expiration.json"
-OCSERV_CONFIG_PATH = "/var/vpns/ocserv/etc/ocserv.passwd"
-HYSTERIA_CONFIG_FILE = "/var/vpns/hysteria/etc/config.json"
-XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
-SSH_ROOT = "/var/vpns/sshvpn/.ssh"
+EXPIRE_USER_JSON_PATH = "/var/reactance/.user_expiration.json"
+OCSERV_CONFIG_PATH = "/var/reactance/ocserv/etc/ocserv.passwd"
+HYSTERIA_CONFIG_FILE = "/var/reactance/hysteria/etc/config.json"
+XRAY_CONFIG_PATH = "/var/reactance/xray/etc/config.json"
+SSH_ROOT = "/var/reactance/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def ocserv_get_users():
