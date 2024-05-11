@@ -27,21 +27,24 @@
 # xray is chrooted and has their own mechanism for logging, which is why it needs to be separatly linked later
 - name: "touch xray log files"
   ansible.builtin.file:
-    path: " {{ item }} "
+    path: "{{ item }}"
     state: touch
-    mode: "0600"
+    mode: "0700"
     owner: _vpn
-    group: wheel
+    group: _vpn
   loop:
-    - /var/reactance/xray/logs/xray-access.log
-    - /var/reactance/xray/logs/xray-error.log
+    - "/var/reactance/xray/logs/xray-access.log"
+    - "/var/reactance/xray/logs/xray-error.log"
 
 # purely for convenience
-- name: "link log files to /var/log"
+- name: "link log files to /var/log/xray"
   ansible.builtin.file:
-    src: /var/reactance/xray/logs/
-    dest: /var/log/xray/
+    src: "/var/reactance/xray/logs/{{ item }}"
+    dest: "/var/log/xray/{{ item }}"
     state: link
     mode: "0700"
-    owner: root
-    group: wheel
+    owner: _vpn
+    group: _vpn
+  loop:
+    - xray-access.log
+    - xray-error.log

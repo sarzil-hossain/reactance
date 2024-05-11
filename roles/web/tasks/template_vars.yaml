@@ -1,0 +1,6 @@
+---
+- name: "template out anyconnect.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ hugo_tmp }}/{{ item.key }}/{{ content_dir }}/docs/credentials.md"
+  loop: ocserv_user_list # instead of user_pass_dict to reduce iterations

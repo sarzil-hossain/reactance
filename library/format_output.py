@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-EXPIRE_USER_JSON_PATH = "/var/vpns/.user_expiration.json"
+EXPIRE_USER_JSON_PATH = "/var/reactance/.user_expiration.json"
         
 def run_module():
     changed = False

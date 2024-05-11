@@ -5,12 +5,13 @@
     state: directory
     owner: _vpn
     group: _vpn
-    mode: 0755
+    mode: 0700
   loop:
     - "/var/reactance/xray"
     - "/var/reactance/xray/bin"
     - "/var/reactance/xray/etc"
     - "/var/reactance/xray/logs"
+    - "/var/log/xray"
 
 - name: "install necessary utils"
   community.general.openbsd_pkg:

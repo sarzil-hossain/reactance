@@ -7,8 +7,8 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
-VISION_PUBKEY_FILE = "/var/vpns/xray/public_key"
+XRAY_CONFIG_PATH = "/var/reactance/xray/etc/config.json"
+VISION_PUBKEY_FILE = "/var/reactance/xray/public_key"
 
 def exec_shell(cmd, module):
     rc, stdout, stderr = module.run_command(cmd, environ_update={'TERM': 'dumb'})
@@ -17,7 +17,7 @@ def exec_shell(cmd, module):
     return stdout.rstrip()
 def xray_gen_password(protocol, module):
     login_method = {'vmess': 'id', 'vless': 'id', 'trojan': 'password'}[protocol]
-    return login_method, exec_shell({'trojan': 'openssl rand -hex 32', 'vless': '/var/vpns/xray/bin/xray uuid', 'vmess': '/var/vpns/xray/bin/xray uuid'}[protocol], module)
+    return login_method, exec_shell({'trojan': 'openssl rand -hex 32', 'vless': '/var/reactance/xray/bin/xray uuid', 'vmess': '/var/reactance/xray/bin/xray uuid'}[protocol], module)
 
 def xray_get_users(protocol):
     with open(XRAY_CONFIG_PATH, "r") as f:
@@ -32,6 +32,7 @@ def xray_get_users(protocol):
 def xray_user_control(update_password, protocol, module):
     previous_users, xray_config_dict = xray_get_users(protocol)
     user_pass_list = []
+    all_users_dict = {}
     new_users_dict = {}
 
     # search through all inbound protocools
@@ -45,13 +46,16 @@ def xray_user_control(update_password, protocol, module):
             for user in previous_users_dict:
                 if user['email'] in selected_users and not update_password[user['email']]:
                     user_pass_list.append(user)
+                    all_users_dict[user['email']] = user[{'vmess': 'id', 'vless': 'id', 'trojan': 'password'}[protocol]]
+
 
             # generate new passwords
             for user in selected_users:
-                if user not in new_users_dict.keys():
+                if user not in all_users_dict.keys():
                     login_method, xray_password = xray_gen_password(protocol, module)
                     new_user = { 'email': user, login_method: xray_password }
                     new_users_dict[user] = {protocol: xray_password}
+                    all_users_dict[user] = {protocol: xray_password}
                     if protocol in ["vless", "vmess"]:
                         new_user["flow"] = "xtls-rprx-vision"
                     user_pass_list.append(new_user)

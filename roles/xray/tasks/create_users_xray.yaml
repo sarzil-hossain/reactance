@@ -9,7 +9,6 @@
   register: vless_user_pass_dict
   no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
 - name: "vmess user management"
@@ -20,7 +19,6 @@
   register: vmess_user_pass_dict
   no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
 - name: "trojan user management"
@@ -31,15 +29,14 @@
   register: trojan_user_pass_dict
   no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
-- name: "add xray user password pair to dict"
-  set_fact:
-    xray_user_pass_dict: "{{ user_pass_dict|default({}) | combine(trojan_user_pass_dict['msg']|default({}), vmess_user_pass_dict['msg']|default({}), vless_user_pass_dict['msg']|default({}), recursive=true, list_merge='append') }}" 
-  no_log: true
+- name: "read from user pass file"
+  ansible.builtin.slurp:
+    src: /var/reactance/.user_pass_dict
+  register: user_pass_dict_contents
 
-- name: "add xray usernames to list"
-  set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + trojan_user_pass_dict['msg'].keys()|default([]) + vmess_user_pass_dict['msg'].keys()|default([]) + vless_user_pass_dict['msg'].keys()|default([]) }}" 
-  no_log: true
+- name: "add ocserv user password pair to dict"
+  ansible.builtin.copy:
+    content: "{{ (user_pass_dict_contents.content|b64decode|from_json | combine(trojan_user_pass_dict['msg']|default({}), vmess_user_pass_dict['msg']|default({}), vless_user_pass_dict['msg']|default({}), recursive=true, list_merge='append')) | to_json }}"
+    dest: /var/reactance/.user_pass_dict

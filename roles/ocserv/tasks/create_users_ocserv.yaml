@@ -3,12 +3,16 @@
   ocserv:
     users: "{{ all_users|default([]) + ocserv_users|default([]) }}"
   notify:
-    - debug_passwords
     - restart_ocserv
-  no_log: true
-  register: ocserv_changed_users
+#  no_log: true
+  register: ocserv_user_pass_dict
 
-- name: "add xray usernames to list"
-  set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + ocserv_changed_users }}"
-  no_log: true
+- name: "read from user pass file"
+  ansible.builtin.slurp:
+    src: /var/reactance/.user_pass_dict
+  register: user_pass_dict_contents
+
+- name: "add ocserv user password pair to dict"
+  ansible.builtin.copy:
+    content: "{{ (user_pass_dict_contents.content|b64decode|from_json | combine(ocserv_user_pass_dict['msg']|default({}), recursive=true, list_merge='append')) | to_json }}"
+    dest: /var/reactance/.user_pass_dict

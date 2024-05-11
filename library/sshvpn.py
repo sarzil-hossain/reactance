@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-SSH_ROOT = "/home/sshvpn/.ssh"
+SSH_ROOT = "/var/reactance/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def exec_shell(cmd, module):
@@ -23,7 +23,7 @@ def sshvpn_get_users():
 
 def sshvpn_update_users(update_password, module):
     previous_users = sshvpn_get_users()
-    changed_users = []
+    new_users_dict = {}
 
     # Remove users not in new group_vars
     for user in previous_users:
@@ -34,7 +34,7 @@ def sshvpn_update_users(update_password, module):
     for user in update_password.keys():
         if user not in previous_users or update_password[user]:
             exec_shell(f"yes | ssh-keygen -q -t rsa -b 4096 -C {user} -N \'\' -f \'{SSH_ROOT}/{user}\'", module)
-            changed_users.append(user)
+            new_users_dict[user] = "sshvpn"
 
     # Overwrite existing authorized_keys file
     users_pubkeys = [i for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]
@@ -47,7 +47,7 @@ def sshvpn_update_users(update_password, module):
     # kill running sessions
     exec_shell(f"pkill -u sshvpn &>/dev/null", module)
 
-    return changed_users
+    return new_users_dict
 
 def run_module():
     module = AnsibleModule(
@@ -65,8 +65,8 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    changed_users = sshvpn_update_users(update_password, module)
-    module.exit_json(changed=True, msg=changed_users)
+    new_users_dict = sshvpn_update_users(update_password, module)
+    module.exit_json(changed=True, msg=new_users_dict)
 
 def main():
     run_module()

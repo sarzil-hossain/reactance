@@ -5,6 +5,15 @@
     src: utils/web/static/images
     dest: /var/www/reactance/images
 
+- name: "get user pass dict"
+  ansible.builtin.slurp:
+    path: /var/reactance/.user_pass_dict
+  register: user_pass_dict_contents
+
+- name: "convert to dict"
+  ansible.builtin.set_fact:
+    user_pass_dict: "{{ user_pass_dict_contents.content|b64decode|from_json }}"
+
 - name: "build and copy sites"
   ansible.builtin.include_tasks: build_hugo_sites.yaml
 

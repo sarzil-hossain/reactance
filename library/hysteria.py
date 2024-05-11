@@ -7,8 +7,8 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-HYSTERIA_CONFIG_FILE = "/var/vpns/hysteria/etc/config.json"
-SALAMANDER_PASSWD_FILE = "/var/vpns/hysteria/salamander_password"
+HYSTERIA_CONFIG_FILE = "/var/reactance/hysteria/etc/config.json"
+SALAMANDER_PASSWD_FILE = "/var/reactance/hysteria/salamander_password"
 
 def exec_shell(cmd, module):
     rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'})

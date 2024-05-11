@@ -10,6 +10,6 @@
     path: "{{ xray_tempdir.path }}"
     state: absent
 
-- name: debug_passwords
-  ansible.builtin.debug:
-    msg: "{{ user_pass_list | format_userpass_output }}"
+#- name: debug_passwords
+#  ansible.builtin.debug:
+#    msg: "{{ user_pass_list | format_userpass_output }}"

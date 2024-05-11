@@ -20,15 +20,6 @@
       }
     }
   },
-  "dns": {
-    "servers": [
-{% if lookup('vars', 'disable_dns', default=false) %}
-{# xray server makes dns queries on behalf of clients #}
-		"127.0.0.1"
-{% endif %}
-		"1.1.1.1"
-    ]
-  },
   "inbounds": [
 {% if inventory_hostname in (groups['trojan']|default([])) + (groups['all_vpns']|default([])) %}
     {

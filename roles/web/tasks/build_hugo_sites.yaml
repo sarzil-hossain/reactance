@@ -17,34 +17,14 @@
     - "{{ '--exclude=utils/web/content/docs/sshvpn' if 'sshvpn' in {{item}} }}"
   loop: user_pass_dict
 
-- name: "template out anyconnect.md"
-  delegate_to: localhost
-  ansible.builtin.template:
-    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/android/anyconnect.md"
-  loop: ocserv_user_list # instead of user_pass_dict to reduce iterations
-
-- name: "template out openconnect.md"
-  delegate_to: localhost
-  ansible.builtin.template:
-    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/windows/openconnect.md"
-  loop: ocserv_user_list
-
-- name: "template out nekobox.md"
-  delegate_to: localhost
-  ansible.builtin.template:
-    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/android/nekobox.md"
-  loop: xray_user_pass_dict
+- name: "template out files for different languages"
+  ansible.builtin.include_tasks: template_files.yaml
   vars:
-    xray_user: "{{ item }}"
-  
-- name: "template out nekoray.md"
-  delegate_to: localhost
-  ansible.builtin.template:
-    src: "{{ hugo_tmp }}/{{ item.key }}/content/docs/windows/nekoray.md"
-  loop: xray_user_pass_dict
-  vars:
-    xray_user: "{{ item }}"
-  
+    - content_dir: "{{ item }}"
+  loop:
+    - 'content.en'
+    - 'content.ligma'
+
 - name: "copy hugo_build.sh to temp dir"
   delegate_to: localhost
   ansible.builtin.copy:

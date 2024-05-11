@@ -5,7 +5,6 @@
   register: hysteria_user_pass_dict
   no_log: true
   notify:
-    - debug_passwords
     - restart_hysteria
 
 - name: "add hysteria user password pair to dict"

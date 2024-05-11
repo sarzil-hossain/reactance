@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>/docs/android/</loc>
-  </url><url>
-    <loc>/docs/android/anyconnect/</loc>
-  </url><url>
-    <loc>/docs/android/nekobox/</loc>
-  </url><url>
-    <loc>/docs/windows/nekoray/</loc>
-  </url><url>
-    <loc>/docs/windows/openconnect/</loc>
-  </url><url>
-    <loc>/docs/windows/</loc>
-  </url><url>
-    <loc>/categories/</loc>
-  </url><url>
-    <loc>/docs/</loc>
-  </url><url>
-    <loc>/</loc>
-  </url><url>
-    <loc>/tags/</loc>
-  </url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <sitemap>
+    <loc>//localhost:1313/en/sitemap.xml</loc>
+    
+  </sitemap>
+  
+  <sitemap>
+    <loc>//localhost:1313/bn/sitemap.xml</loc>
+    
+  </sitemap>
+  
+  <sitemap>
+    <loc>//localhost:1313/de/sitemap.xml</loc>
+    
+  </sitemap>
+  
+</sitemapindex>

@@ -114,9 +114,9 @@ How to debug and fix errors with VPN services
 
 |Protocol|Log File|
 |--|--|
-|ocserv|/var/vpns/ocserv/ocserv.log|
-|hysteria|/var/vpns/hysteria/hysteria.log|
-|xray|/var/vpns/xray/logs/{xray_access.log, xray_error.log}|
+|ocserv|/var/reactance/ocserv/ocserv.log|
+|hysteria|/var/reactance/hysteria/hysteria.log|
+|xray|/var/reactance/xray/logs/{xray_access.log, xray_error.log}|
 |sshvpn|/var/log/authlog|
 
 2. Reading system calls: You can use `ktrace` and `kdump` to read system calls of processes to see if any errors appear.

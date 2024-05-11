@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-<head>
+<html lang="en" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="How to connect # Here&rsquo;s a beautiful image, to calm you down before you shit your pants as you&rsquo;re about to witness the mechanism for setting up the VPN settings. Windows Client # lorem ipsum dolor sit amet
-Android Client # lorem ipsum dolor sit amet
-Credentials # Here are the VPN credentials for connecting to the server:
-Shared Credentials # Server: {{ server_address }} SNI: {{ SNI }} Reality Public key: {{ reality_pubkey }}">
+<meta name="description" content="Credentials # {% if user.trojan is defined %} Trojan URL: trojan://{{ xray_user.trojan }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vrojan_port|default(4436)}}?security=reality&amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;fp=chrome&amp;type=tcp&amp;pbk={{ xray_public_key }}#trojan_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}
+{% if user.vless is defined %} VLESS URL: vless://{{ xray_user.vless }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vless_port|default(4437)}}?security=reality&amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;fp=chrome&amp;flow=xtls-rprx-vision&amp;type=tcp&amp;pbk={{ xray_public_key }}#vless_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}
+{% if user.vmess is defined %} VMESS URL: VLESS URL: vmess://{{ xray_user.vmess }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vmess_port|default(4438)}}?security=reality&amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;fp=chrome&amp;flow=xtls-rprx-vision&amp;type=tcp&amp;pbk={{ xray_public_key }}#vmess_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="/docs/android/nekobox/">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="//localhost:1313/docs/android/nekobox/">
   <meta property="og:site_name" content="Reactance">
   <meta property="og:title" content="Nekobox">
-  <meta property="og:description" content="How to connect # Here&amp;rsquo;s a beautiful image, to calm you down before you shit your pants as you&amp;rsquo;re about to witness the mechanism for setting up the VPN settings. Windows Client # lorem ipsum dolor sit amet
-Android Client # lorem ipsum dolor sit amet
-Credentials # Here are the VPN credentials for connecting to the server:
-Shared Credentials # Server: {{ server_address }} SNI: {{ SNI }} Reality Public key: {{ reality_pubkey }}">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="Credentials # {% if user.trojan is defined %} Trojan URL: trojan://{{ xray_user.trojan }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vrojan_port|default(4436)}}?security=reality&amp;amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;amp;fp=chrome&amp;amp;type=tcp&amp;amp;pbk={{ xray_public_key }}#trojan_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}
+{% if user.vless is defined %} VLESS URL: vless://{{ xray_user.vless }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vless_port|default(4437)}}?security=reality&amp;amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;amp;fp=chrome&amp;amp;flow=xtls-rprx-vision&amp;amp;type=tcp&amp;amp;pbk={{ xray_public_key }}#vless_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}
+{% if user.vmess is defined %} VMESS URL: VLESS URL: vmess://{{ xray_user.vmess }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vmess_port|default(4438)}}?security=reality&amp;amp;sni={{reality_sni|default(&#39;behindthename.com&#39;)}}&amp;amp;fp=chrome&amp;amp;flow=xtls-rprx-vision&amp;amp;type=tcp&amp;amp;pbk={{ xray_public_key }}#vmess_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }} {% endif %}">
+  <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
   <meta property="article:section" content="docs">
 <title>Nekobox | Reactance</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" >
-<link rel="canonical" href="/docs/android/nekobox/">
-<link rel="stylesheet" href="/book.min.309b7ed028807cdb68d8d61e26d609f48369c098dbf5e4d8c0dcf4cdf49feafc.css" >
+<link rel="canonical" href="//localhost:1313/docs/android/nekobox/">
+  <link rel="alternate" hreflang="bn" href="//localhost:1313/bn/docs/android/nekobox/" title="Nekobox">
+  <link rel="alternate" hreflang="de" href="//localhost:1313/de/docs/android/nekobox/" title="Nekobox">
+<link rel="stylesheet" href="/book.min.309b7ed028807cdb68d8d61e26d609f48369c098dbf5e4d8c0dcf4cdf49feafc.css" integrity="sha256-MJt&#43;0CiAfNto2NYeJtYJ9INpwJjb9eTYwNz0zfSf6vw=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.571bda4ac250e12660d5964a57f2c1cac2f13f99312716813b0764fdd9777cbe.js" ></script>
+  <script defer src="/en.search.min.d5334fd05bd4ed9e74dded19316c153ec44122e56237b3219a35c9f1140bb9fa.js" integrity="sha256-1TNP0FvU7Z503e0ZMWwVPsRBIuViN7MhmjXJ8RQLufo=" crossorigin="anonymous"></script>
 
   
 
@@ -57,6 +57,51 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+  
+
+
+
+  
+    
+  
+    
+  
+
+
+  
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex justify-between">
+      <a role="button" class="flex align-center">
+        <img src="/svg/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="//localhost:1313/bn/docs/android/nekobox/">
+          Bengali
+        </a>
+      </li>
+      
+      <li>
+        <a href="//localhost:1313/de/docs/android/nekobox/">
+          German
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
 
 
 
@@ -72,6 +117,19 @@ https://github.com/alex-shpak/hugo-book
 
   
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/credentials/" class="">Credentials</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -173,6 +231,18 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/sarzilhossain"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
 
 
 
@@ -213,12 +283,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#how-to-connect">How to connect</a></li>
-        <li><a href="#credentials">Credentials</a></li>
-      </ul>
-    </li>
+    <li><a href="#credentials">Credentials</a></li>
   </ul>
 </nav>
 
@@ -231,57 +296,18 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown book-article"><h3 id="how-to-connect">
-  How to connect
-  <a class="anchor" href="#how-to-connect">#</a>
-</h3>
-<p>Here&rsquo;s a beautiful image, to calm you down before you shit your pants as you&rsquo;re about to witness the mechanism for setting up the VPN settings.
-<img src="/images/xray/1.png" alt="targets" /></p>
-<h4 id="windows-client">
-  Windows Client
-  <a class="anchor" href="#windows-client">#</a>
-</h4>
-<p>lorem ipsum dolor sit amet</p>
-<h4 id="android-client">
-  Android Client
-  <a class="anchor" href="#android-client">#</a>
-</h4>
-<p>lorem ipsum dolor sit amet</p>
-<h3 id="credentials">
+  <article class="markdown book-article"><h2 id="credentials">
   Credentials
   <a class="anchor" href="#credentials">#</a>
-</h3>
-<p>Here are the VPN credentials for connecting to the server:</p>
-<h4 id="shared-credentials">
-  Shared Credentials
-  <a class="anchor" href="#shared-credentials">#</a>
-</h4>
-<p>Server: <code>{{ server_address }}</code>
-SNI: <code>{{ SNI }}</code>
-Reality Public key: <code>{{ reality_pubkey }}</code></p>
-<p>{% if user.trojan is defined %}</p>
-<h4 id="trojan-credentials">
-  Trojan Credentials
-  <a class="anchor" href="#trojan-credentials">#</a>
-</h4>
-<p>Port: <code>{{ trojan_port|default(4436) }}</code>
-Password: <code>{{ user.trojan }}</code>
+</h2>
+<p>{% if user.trojan is defined %}
+Trojan URL: <code>trojan://{{ xray_user.trojan }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vrojan_port|default(4436)}}?security=reality&amp;sni={{reality_sni|default('behindthename.com')}}&amp;fp=chrome&amp;type=tcp&amp;pbk={{ xray_public_key }}#trojan_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }}</code>
 {% endif %}</p>
-<p>{% if user.vless is defined %}</p>
-<h4 id="vless-credentials">
-  VLESS Credentials
-  <a class="anchor" href="#vless-credentials">#</a>
-</h4>
-<p>Port: <code>{{ vless_port|default(4436) }}</code>
-Password: <code>{{ user.vless }}</code>
+<p>{% if user.vless is defined %}
+VLESS URL: <code>vless://{{ xray_user.vless }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vless_port|default(4437)}}?security=reality&amp;sni={{reality_sni|default('behindthename.com')}}&amp;fp=chrome&amp;flow=xtls-rprx-vision&amp;type=tcp&amp;pbk={{ xray_public_key }}#vless_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }}</code>
 {% endif %}</p>
-<p>{% if user.vmess is defined %}</p>
-<h4 id="vmess-credentials">
-  VMESS Credentials
-  <a class="anchor" href="#vmess-credentials">#</a>
-</h4>
-<p>Port: <code>{{ vmess_port|default(4436) }}</code>
-Password: <code>{{ user.vmess }}</code>
+<p>{% if user.vmess is defined %}
+VMESS URL: VLESS URL: <code>vmess://{{ xray_user.vmess }}@{{ ansible_all_ipv4_addresses[0] }}:{{ vmess_port|default(4438)}}?security=reality&amp;sni={{reality_sni|default('behindthename.com')}}&amp;fp=chrome&amp;flow=xtls-rprx-vision&amp;type=tcp&amp;pbk={{ xray_public_key }}#vmess_{{ xray_user.key }}_{{ ansible_all_ipv4_addresses[0] }}</code>
 {% endif %}</p>
 </article>
  
@@ -324,12 +350,7 @@ Password: <code>{{ user.vmess }}</code>
   
 <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#how-to-connect">How to connect</a></li>
-        <li><a href="#credentials">Credentials</a></li>
-      </ul>
-    </li>
+    <li><a href="#credentials">Credentials</a></li>
   </ul>
 </nav>
 

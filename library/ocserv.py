@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-OCSERV_ROOT_DIR = "/var/vpns/ocserv"
+OCSERV_ROOT_DIR = "/var/reactance/ocserv"
 OCSERV_CERTS_DIR = os.path.join(OCSERV_ROOT_DIR, "certs")
 
 def exec_shell(cmd, module):
@@ -23,14 +23,14 @@ def ocserv_get_users():
 def ocserv_user_control(update_password, module):
     previous_users = ocserv_get_users()
     selected_users = set(update_password.keys())
-    changed_users = []
+    new_users_dict = {}
 
     # Remove users not in group_vars
     for user in previous_users:
         if user not in selected_users:
             # new code goes here - remove user, update crl
-            exec_shell(f"cat { OCSERV_CERTS_DIR }/{user}-cert.pem >> { OCSERV_CERTS_DIR }/revoked.pem", module)
-            exec_shell(f"certtool --generate-crl --load-ca-privkey { OCSERV_CERTS_DIR }/ca-key.pem --load-ca-certificate { OCSERV_CERTS_DIR }/ca-cert.pem --load-certificate { OCSERV_CERTS_DIR }/revoked.pem --template { OCSERV_CERTS_DIR }/crl.tmpl --outfile { OCSERV_CERTS_DIR }/crl.pem", module)
+            exec_shell(f"cat {OCSERV_CERTS_DIR}/{user}-cert.pem >> {OCSERV_CERTS_DIR}/revoked.pem", module)
+            exec_shell(f"certtool --generate-crl --load-ca-privkey {OCSERV_CERTS_DIR}/ca-key.pem --load-ca-certificate {OCSERV_CERTS_DIR}/ca-cert.pem --load-certificate {OCSERV_CERTS_DIR}/revoked.pem --template {OCSERV_CERTS_DIR}/crl.tmpl --outfile {OCSERV_CERTS_DIR}/crl.pem", module)
             exec_shell("rm {OCSERV_CERTS_DIR}/{user}-cert.pem {OCSERV_CERTS_DIR}/{user}-key.pem", module)
 
     # Add new users or update password of existing users
@@ -46,12 +46,13 @@ tls_www_client
             user_template_file = os.path.join(OCSERV_CERTS_DIR, f"{user}.tmpl")
             with open(user_template_file, "w") as f:
                 f.write(user_template_contents)
-            exec_shell(f"certtool --generate-privkey --outfile { OCSERV_CERTS_DIR }/{user}-key.pem", module)
-            exec_shell(f"certtool --generate-certificate --load-privkey { OCSERV_CERTS_DIR }/{user}-key.pem --load-ca-certificate { OCSERV_CERTS_DIR }/ca-cert.pem --load-ca-privkey { OCSERV_CERTS_DIR }/ca-key.pem --template { OCSERV_CERTS_DIR }/{user}.tmpl --outfile { OCSERV_CERTS_DIR }/{user}-cert.pem", module)
+            exec_shell(f"certtool --generate-privkey --outfile {OCSERV_CERTS_DIR}/{user}-key.pem", module)
+            exec_shell(f"certtool --generate-certificate --load-privkey {OCSERV_CERTS_DIR}/{user}-key.pem --load-ca-certificate {OCSERV_CERTS_DIR}/ca-cert.pem --load-ca-privkey {OCSERV_CERTS_DIR}/ca-key.pem --template {OCSERV_CERTS_DIR}/{user}.tmpl --outfile {OCSERV_CERTS_DIR}/{user}-cert.pem", module)
+            exec_shell(f"certtool --to-p12 --load-privkey {OCSERV_CERTS_DIR}/{user}-key.pem --pkcs-cipher 3des-pkcs12 --load-certificate {OCSERV_CERTS_DIR}/{user}-cert.pem --outfile {OCSERV_CERTS_DIR}/{user}.p12 --password {user} --p12-name {user} --outder", module)
             exec_shell(f"rm {user_template_file}", module)
-            changed_users.append(user)
+            new_users_dict[user] = "ocserv"
             
-            return changed_users            
+            return new_users_dict 
        
 def run_module():
     module = AnsibleModule(
@@ -69,8 +70,8 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    changed_users = ocserv_user_control(update_password, module)
-    module.exit_json(changed=True, msg=changed_users)
+    new_users_dict = ocserv_user_control(update_password, module)
+    module.exit_json(changed=True, msg=new_users_dict)
 
 def main():
     run_module()

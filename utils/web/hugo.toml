@@ -2,3 +2,31 @@ baseURL = '/'
 languageCode = 'en-us'
 title = 'Reactance'
 theme = 'hugo-book'
+
+[params]
+  # (Optional, default light) Sets color theme: light, dark or auto.
+  # Theme 'auto' switches between dark and light modes based on browser/os preferences
+  BookTheme = 'light'
+	BookRepo = 'https://github.com/sarzilhossain'
+
+[languages]
+[languages.en]
+  languageName = 'English'
+  contentDir = 'content.en'
+  weight = 1
+
+[languages.bn]
+  languageName = 'Bengali'
+  contentDir = 'content.en'
+  weight = 2
+
+
+[languages.de]
+  languageName = 'German'
+  contentDir = 'content.en'
+  weight = 2
+
+[menu]
+[[menu.after]]
+	name = "Github"
+	url = "https://github.com/sarzilhossain"

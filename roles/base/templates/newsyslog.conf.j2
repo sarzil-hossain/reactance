@@ -24,8 +24,8 @@
 /var/log/unbound.log		600  5     *    $W0   Z "pkill -HUP -u root -U root -x syslogd"
 {% endif %}
 {% if inventory_hostname in (groups['ocserv']|default([])) + (groups['all_vpns']|default([])) %}
-/var/log/ocserv.log			600  5     512    *   Z "pkill -HUP -u root -U root -x syslogd"
+/var/log/ocserv.log			600  5     128000    *   Z "pkill -HUP -u root -U root -x syslogd"
 {% endif %}
-{% if inventory_hostname in (groups['trojan']|default([]))  + groups['vless']|default([])) + groups['vmess']|default([])) + (groups['all_vpns']|default([])) %}
+{% if inventory_hostname in (groups['trojan']|default([]))  + (groups['vless']|default([])) + (groups['vmess']|default([])) + (groups['all_vpns']|default([])) %}
 /var/log/relayd.log         600  5     512    *   Z "pkill -HUP -u root -U root -x syslogd"
 {% endif %}
