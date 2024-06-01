@@ -89,7 +89,7 @@ def pipeline_2(protocols):
 	})
 
 	# step 3: run pipeline
-	web_deps = ["export_ssh_key", "build_hugo", "git_add_theme"]
+	web_deps = ["export_ssh_key", "git_add_theme"]
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
@@ -97,7 +97,7 @@ def pipeline_2(protocols):
 			"commands": [
 				"/usr/bin/ansible-playbook reactance.yaml -t {}".format(protocol)
 			],
-			"depends_on": ["export_ssh_key", "build_hugo"]
+			"depends_on": ["export_ssh_key"]
 		})
 
 		web_deps.append("setup_{}".format(protocol))
@@ -107,7 +107,7 @@ def pipeline_2(protocols):
 		"commands": [
 			"/usr/bin/ansible-playbook reactance.yaml -t dns"
 		],
-		"depends_on": ["export_ssh_key", "build_hugo"]
+		"depends_on": ["export_ssh_key"]
 	})
 
 	steps.append({
