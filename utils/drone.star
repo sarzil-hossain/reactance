@@ -82,7 +82,6 @@ def pipeline_2(protocols):
 		"name": "git_add_theme",
 		"image": "alpine/git",
 		"commands": [
-			"git submodule add https://github.com/alex-shpak/hugo-book web/themes/hugo-book",
 			"git submodule update --recursive"
 		 ],
 		"environment": environment_vars
