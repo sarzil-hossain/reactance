@@ -1,0 +1,22 @@
+---
+title: "Anyconnect"
+weight: 1
+# bookFlatSection: false
+# bookToc: true
+# bookHidden: false
+# bookCollapseSection: false
+# bookComments: false
+# bookSearchExclude: false
+---
+
+Hello World
+
+### Credentials
+
+Here are the VPN credentials for connecting to the server:
+Server: `{{ ansible_all_ipv4_addresses[0] }}`
+Port: `{{ ocserv_port | default(4430) }}`
+
+Client Key: [Click to download Client Key](/{{item}}-User-Certificate.pem)
+Client Certificate: [Click to download Client Certificate](/{{item}}-User-Key.pem)
+Client P12 file: [Click to download client P12 file](/{{item}}-Certificate-Android.p12)

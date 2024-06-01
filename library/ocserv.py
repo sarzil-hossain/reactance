@@ -50,7 +50,7 @@ tls_www_client
             exec_shell(f"certtool --generate-certificate --load-privkey {OCSERV_CERTS_DIR}/{user}-key.pem --load-ca-certificate {OCSERV_CERTS_DIR}/ca-cert.pem --load-ca-privkey {OCSERV_CERTS_DIR}/ca-key.pem --template {OCSERV_CERTS_DIR}/{user}.tmpl --outfile {OCSERV_CERTS_DIR}/{user}-cert.pem", module)
             exec_shell(f"certtool --to-p12 --load-privkey {OCSERV_CERTS_DIR}/{user}-key.pem --pkcs-cipher 3des-pkcs12 --load-certificate {OCSERV_CERTS_DIR}/{user}-cert.pem --outfile {OCSERV_CERTS_DIR}/{user}.p12 --password {user} --p12-name {user} --outder", module)
             exec_shell(f"rm {user_template_file}", module)
-            new_users_dict[user] = "ocserv"
+            new_users_dict[user] = {"ocserv": []} # a hack
             
             return new_users_dict 
        

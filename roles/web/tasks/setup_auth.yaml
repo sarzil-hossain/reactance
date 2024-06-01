@@ -1,2 +1,16 @@
 ---
-- name: ""
+- name: "generate arbitrary passwords for htpasswd"
+  ansible.builtin.set_fact:
+    htpasswd_passwords: "{{ htpasswd_passwords|default({}) | combine({ item: lookup('community.general.random_string', length=14, base64=true) }) }}"
+  loop: "{{ user_pass_dict.keys() }}"
+
+- name: "generate htpasswd"
+  community.general.htpasswd:
+    path: "/var/www/reactance/{{ item }}/.htpasswd"
+    name: "{{ item }}"
+    owner: www
+    password: "{{ htpasswd_passwords[item] }}"
+    hash_scheme: "bcrypt"
+  loop: "{{ user_pass_dict.keys() }}"
+  notify:
+    - show_htpasswd_passwords

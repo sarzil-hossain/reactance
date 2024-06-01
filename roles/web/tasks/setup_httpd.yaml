@@ -1,16 +1,14 @@
 ---
 - name: "template out httpd.conf"
-	ansible.builtin.template:
-		src: httpd.conf.j2
-		dest: /etc/httpd.conf
-	notify:
-		- restart_httpd
+  ansible.builtin.template:
+    src: httpd.conf.j2
+    dest: /etc/httpd.conf
+  notify:
+    - restart_httpd
 
 - name: "move images directory"
-	ansible.builtin.copy:
-		src: images
-		dest: /var/www/reactance/images
-		owner: www
-		group: daemon
-
-# user management ...
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/web/static/images"
+    dest: /var/www/reactance/images
+    owner: www
+    group: daemon

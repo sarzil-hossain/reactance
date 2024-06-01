@@ -15,14 +15,6 @@
     owner: _vpn
     group: _vpn
     mode:  0755
-    
-- name: "Create root directory of client websites"
-  ansible.builtin.file:
-    path: /var/www/reactance/
-    state: directory
-    owner: www
-    group: daemon
-    mode:  0755
 
 - name: "templating out ip forwarding rules in sysctl.conf"
   ansible.builtin.blockinfile:

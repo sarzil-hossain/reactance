@@ -60,21 +60,15 @@
   become_user: root
   roles:
     - role: dns
-#    - role: web
-#  tags:
-#    - xray
-#    - ocserv
-#    - sshvpn
-#    - hysteria
-#    - dns
+  tags:
+    - dns
 
-#  - name: "openbsd : setup web interface for vpn clients"
-#    hosts: all
-#    become: true
-#    become_method: doas
-#    become_user: root
-#    roles:
-#      - role: web
-#    tags:
-#      - web
-#
+- name: "openbsd : setup web interface for vpn clients"
+  hosts: all
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: web
+  tags:
+    - web

@@ -1,21 +1,74 @@
 ---
+
 # image files are large, so we don't want them to be copied multiple times
 - name: "copy images directory to root"
-  ansible.posix.synchronize:
-    src: utils/web/static/images
+  ansible.builtin.copy:
+    src: web/static/images
     dest: /var/www/reactance/images
 
-- name: "get user pass dict"
-  ansible.builtin.slurp:
-    path: /var/reactance/.user_pass_dict
-  register: user_pass_dict_contents
+- name: "check if files exist"
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  register: check_pass_stats
+  loop:
+    - /var/reactance/.temp/ocserv_user_pass_dict
+    - /var/reactance/.temp/xray_user_pass_dict
+    - /var/reactance/.temp/sshvpn_user_pass_dict
 
-- name: "convert to dict"
+- name: "slurp ocserv creds"
+  ansible.builtin.slurp:
+    src: /var/reactance/.temp/ocserv_user_pass_dict
+  register: ocserv_user_pass_dict_contents
+  when:  check_pass_stats.results[0].stat.exists
+
+- name: "slurp xray creds"
+  ansible.builtin.slurp:
+    src: /var/reactance/.temp/xray_user_pass_dict
+  register: xray_user_pass_dict_contents
+  when:  check_pass_stats.results[1].stat.exists
+
+- name: "slurp sshvpn creds"
+  ansible.builtin.slurp:
+    src: /var/reactance/.temp/sshvpn_user_pass_dict
+  register: sshvpn_user_pass_dict_contents
+  when:  check_pass_stats.results[2].stat.exists
+
+- name: "hi"
+  debug:
+    msg: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)}}"
+- name: "combine dicts"
   ansible.builtin.set_fact:
-    user_pass_dict: "{{ user_pass_dict_contents.content|b64decode|from_json }}"
+    user_pass_dict: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)|combine(xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, recursive=true, list_merge='append') }}"
+
+- name: "get salamander public key"
+  ansible.builtin.slurp:
+    path: "/var/reactance/xray/xray_public_key"
+  register: xray_pub_key_b64e
+  when:  check_pass_stats.results[1].stat.exists
+
+- name: "register salamander public key"
+  ansible.builtin.set_fact:
+    xray_public_key: "{{ xray_pub_key_b64e.content|b64decode }}"
+  when:  check_pass_stats.results[1].stat.exists
 
 - name: "build and copy sites"
   ansible.builtin.include_tasks: build_hugo_sites.yaml
 
 - name: "copy certificates and keys"
   ansible.builtin.include_tasks: copy_certs.yaml
+
+- name: "setup httpd"
+  ansible.builtin.include_tasks: setup_httpd.yaml
+
+- name: "setup htpasswd auth"
+  ansible.builtin.include_tasks: setup_auth.yaml
+
+- name: "store web expiration date"
+  ansible.builtin.set_fact:
+    web_exp_dict: "{{ web_exp_dict|default({}) | combine({item: ansible_facts.date_time.epoch|int + 86400 }) }}"
+  loop: "{{ user_pass_dict.keys() }}"
+
+- name: "write it to file"
+  ansible.builtin.copy:
+    content: "{{ web_exp_dict | to_json }}"
+    dest: /var/reactance/.web_expiration.json

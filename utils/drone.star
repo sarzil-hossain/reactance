@@ -26,7 +26,7 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			' wget http://registry.opviel.de/v2/_catalog -O - | grep -q "alpine_ansible" && [ "$force_rebuild" != "true" ] && echo -n "\nBUILD SKIPPED" && exit 78 || exit 0'
+			' wget http://registry.opviel.de/v2/_catalog -O - | grep -q "alpine_ansible_hugo" && [ "$force_rebuild" != "true" ] && echo -n "\nBUILD SKIPPED" && exit 78 || exit 0'
 		],
 		"branch": "master"
 	})
@@ -36,8 +36,8 @@ def pipeline_1():
 		"name": "publish_on_registry",
 		"image": "plugins/docker",
 		"settings": {
-			"repo": "registry.opviel.de/alpine_ansible",
-			"dockerfile": "utils/dockerfiles/Dockerfile.alpine_ansible",
+			"repo": "registry.opviel.de/alpine_ansible_hugo",
+			"dockerfile": "utils/Dockerfile",
 			"registry": "registry.opviel.de",
 			"tags": ["latest"],
 			"insecure": "true",
@@ -51,7 +51,7 @@ def pipeline_1():
 		"image": "plugins/docker",
 		"settings": {
 			"repo": "registry.opviel.de/alpine_hugo",
-			"dockerfile": "utils/dockerfiles/Dockerfile.alpine_hugo",
+			"dockerfile": "utils/Dockerfile",
 			"registry": "registry.opviel.de",
 			"tags": ["latest"],
 			"insecure": "true",
@@ -91,28 +91,47 @@ def pipeline_2(protocols):
 		"environment": environment_vars
 	})
 
-	step 2: build hugo site
+	# step 2: add theme
 	steps.append({
-		"name": "build_hugo",
-		"image": "alpine_hugo:latest",
+		"name": "git_add_theme",
+		"image": "alpine/git",
 		"commands": [
-				"cd utils/web && hugo" 
-				"mv utils/web/public/images roles/web/templates/images",
-				"find utils/web/public -type f -name '*.html' -exec sed -i -e 's/<p>{%/{%/g' -e 's/%}<\/p>/%}/g' {} \;"
-				"mv utils/web/public roles/web/templates/site",
-		 ]
+			"git submodule add https://github.com/alex-shpak/hugo-book web/themes/hugo-book",
+			"git submodule update --recursive"
+		 ],
+		"environment": environment_vars
 	})
 
 	# step 3: run pipeline
+	web_deps = ["export_ssh_key", "build_hugo"]
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
-			"image": "registry.opviel.de:80/alpine_ansible:latest",
+			"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
 			"commands": [
-				"/usr/bin/ansible-playbook reactance.yaml -t '{}'".format(protocol)
+				"/usr/bin/ansible-playbook reactance.yaml -t {}".format(protocol)
 			],
 			"depends_on": ["export_ssh_key", "build_hugo"]
 		})
+
+		web_deps.append("setup_{}".format(protocol))
+	steps.append({
+		"name": "setup_dns",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+		],
+		"depends_on": ["export_ssh_key", "build_hugo"]
+	})
+
+	steps.append({
+		"name": "setup_web",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t web"
+		],
+		"depends_on": web_deps
+	})
 
 	return {
 		"kind": "pipeline",

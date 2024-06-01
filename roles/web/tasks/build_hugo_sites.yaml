@@ -1,41 +1,69 @@
 ---
-- name: "make temporary directory on localhost"
+- name: "make build directory"
   delegate_to: localhost
-  ansible.builin.tempfile:
+  become: false
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory 
+  loop:
+    - "{{ inventory_dir }}/.hugo_sites_build"
+    - "{{ inventory_dir }}/.built_sites"
+
+- name: "copy specific folders to hugo_tmp for each user"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.shell: "rsync -avz {{ inventory_dir }}/web/ {{ inventory_dir }}/.hugo_sites_build/{{ item }} {{ '--exclude=anyconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=openconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=nekobox.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }} {{'--exclude=nekoray.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }}"
+  loop: "{{ user_pass_dict.keys() }}"
+
+- name: "template out hugo.toml"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/hugo.toml.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/hugo.toml"
+  loop: "{{ user_pass_dict.keys() }}"
+
+- name: "template out vars"
+  ansible.builtin.include_tasks: template_vars.yaml
+  loop:
+    - content.en
+  loop_control:
+    loop_var: content_dir
+
+- name: "copy hugo_build.sh to temp dir"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.copy:
+    src: "{{ inventory_dir }}/utils/hugo_build.sh"
+    dest: ".hugo_sites_build/hugo_build.sh"
+
+- name: "build hugo sites"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.shell: "bash {{ inventory_dir }}/.hugo_sites_build/hugo_build.sh"
+
+- name: "make temporary directory to copy built sites"
+  become: false # rsync wont run as root user
+  ansible.builtin.tempfile:
     prefix: reactance
     state: directory
   register: hugo_tmp
 
-- name: "copy specific folders to hugo_tmp for each user"
-  delegate_to: localhost
-  ansible.posix.synchronize:
-    src: utils/web
-    dest: "{{ hugo_tmp }}/{{ item.key }}"
-  rsync_opts:
-    - "{{ '--exclude=utils/web/content/docs/ocserv' if 'ocserv' in {{item}} }}"
-    - "{{ '--exclude=utils/web/content/docs/xray' if 'xray' in {{item}} }}"
-    - "{{ '--exclude=utils/web/content/docs/sshvpn' if 'sshvpn' in {{item}} }}"
-  loop: user_pass_dict
-
-- name: "template out files for different languages"
-  ansible.builtin.include_tasks: template_files.yaml
-  vars:
-    - content_dir: "{{ item }}"
-  loop:
-    - 'content.en'
-    - 'content.ligma'
-
-- name: "copy hugo_build.sh to temp dir"
-  delegate_to: localhost
-  ansible.builtin.copy:
-    src: utils/hugo_build.sh
-    dest: "{{ hugo_tmp }}/hugo_build.sh"
-
-- name: "build hugo sites"
-  delegate_to: localhost
-  ansible.builtin.shell: "cd {{ hugo_tmp }} && sh ./hugo_build.sh"
-
 - name: "copy sites"
   ansible.posix.synchronize:
-    src: "{{ hugo_tmp }}/" # this will only copy contents
-    dest: "/var/www/reactance/"
+    src: "{{ inventory_dir }}/.built_sites/" # this will only copy contents
+    dest: "{{ hugo_tmp.path }}"
+
+- name: "remove build directory"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ inventory_dir }}/.hugo_sites_build"
+    - "{{ inventory_dir }}/.built_sites"
+
+- name: "move temp dir to /var/www/reactance"
+  ansible.builtin.shell: "rm -r /var/www/reactance && mv {{ hugo_tmp.path }} /var/www/reactance && chown -R www:daemon /var/www/reactance"
+

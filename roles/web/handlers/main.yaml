@@ -2,9 +2,13 @@
 - name: restart_httpd
   ansible.builtin.service:
     name: httpd
-		state: restarted
-		enabled: true
+    state: restarted
+    enabled: true
 
 - name: notification_restart
   ansible.builtin.debug:
     msg: "Restart your box once reactance run is complete"
+
+- name: show_htpasswd_passwords
+  ansible.builtin.debug:
+    msg: "{{ htpasswd_passwords | format_userpass_output }}"

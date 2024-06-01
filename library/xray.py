@@ -29,7 +29,7 @@ def xray_get_users(protocol):
             protos_users[inbound['protocol']] = [j['email'] for j in inbound['settings']['clients']]
     return protos_users, xray_config_dict
 
-def xray_user_control(update_password, protocol, module):
+def xray_user_control(update_password, protocol, address, service_port, public_key, module):
     previous_users, xray_config_dict = xray_get_users(protocol)
     user_pass_list = []
     all_users_dict = {}
@@ -48,17 +48,20 @@ def xray_user_control(update_password, protocol, module):
                     user_pass_list.append(user)
                     all_users_dict[user['email']] = user[{'vmess': 'id', 'vless': 'id', 'trojan': 'password'}[protocol]]
 
-
             # generate new passwords
             for user in selected_users:
                 if user not in all_users_dict.keys():
                     login_method, xray_password = xray_gen_password(protocol, module)
                     new_user = { 'email': user, login_method: xray_password }
-                    new_users_dict[user] = {protocol: xray_password}
+                    xray_url = f"{protocol}://{ xray_password }@{ address }:{ service_port }?security=reality&sni=behindthename.com&fp=chrome&pbk={ public_key }"
                     all_users_dict[user] = {protocol: xray_password}
                     if protocol in ["vless", "vmess"]:
                         new_user["flow"] = "xtls-rprx-vision"
+                        xray_url += "&flow=xtls-rprx-vision"
+                    xray_url += f"#{protocol}_{user}"
                     user_pass_list.append(new_user)
+                    new_users_dict[user] = {protocol: xray_url}
+		
             xray_config_dict['inbounds'][i]['settings']['clients'] = user_pass_list
 
     with open(XRAY_CONFIG_PATH, "w") as f:
@@ -70,14 +73,19 @@ def run_module():
     module = AnsibleModule(
         argument_spec=dict(
             users = dict(type='list', required=True),
-            protocol = dict(type='str', required=True)
+            protocol = dict(type='str', required=True),
+	        address = dict(type='str', required=True),
+            service_port = dict(type='int', required=True),
+	        public_key = dict(type='str', required=True)
         ),
         supports_check_mode=True
     )
 
     users = module.params["users"]
     protocol = module.params["protocol"]
-    
+    address = module.params["address"]
+    service_port = module.params["service_port"]
+    public_key = module.params["public_key"]
     update_password = {}
 
     for user in users:
@@ -86,7 +94,7 @@ def run_module():
         else:
             update_password[user['user']] = False
 
-    new_users_dict = xray_user_control(update_password, protocol, module)
+    new_users_dict = xray_user_control(update_password, protocol, address, service_port, public_key, module)
     module.exit_json(changed=True, msg=new_users_dict)
 
 def main():

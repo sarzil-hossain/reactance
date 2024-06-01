@@ -3,15 +3,15 @@ server "default" {
         location "/" {
                 block drop
         }
-				location "/image/*"
-							root "/reactance/images"
-							request strip 1
-				}
+	location "/image/*" {
+		root "/reactance/images"
+		request strip 1
+	}
 			
-{% for uname in all_users_list %}
+{% for uname in user_pass_dict.keys() %}
         location "/{{ uname }}/*" {
                 root "/reactance/{{ uname }}"
-                request rewrite "/index.html"
+		request strip 1
                 authenticate with "/reactance/{{ uname }}/.htpasswd"
         }
 {% endfor %}
