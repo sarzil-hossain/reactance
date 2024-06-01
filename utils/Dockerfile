@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache  python3 py3-pip openssh-client
-RUN pip3 install ansible netaddr hugo
+RUN apk add --no-cache ansible py3-netaddr
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community hugo
 
 CMD ["ansible-playbook", "--version"]
