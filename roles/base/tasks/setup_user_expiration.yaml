@@ -22,7 +22,7 @@
 - name: "touch temporary user password json file"
   ansible.builtin.copy:
     content: "{}"
-    dest: /var/reactance/.user_pass_dict
-    owner: _vpn
-    group: _vpn
-    mode: 0600
+    dest: /root/.user_pass_dict
+    owner: root
+    group: root
+    mode: 0400
