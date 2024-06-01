@@ -46,20 +46,6 @@ def pipeline_1():
 		}
 	})
 
-	steps.append({
-		"name": "publish_on_registry",
-		"image": "plugins/docker",
-		"settings": {
-			"repo": "registry.opviel.de/alpine_hugo",
-			"dockerfile": "utils/Dockerfile",
-			"registry": "registry.opviel.de",
-			"tags": ["latest"],
-			"insecure": "true",
-			"purge": "true",
-			"compress": "true"
-		}
-	})
-
 	return {
 		"kind": "pipeline",
 		"type": "docker",
@@ -103,7 +89,7 @@ def pipeline_2(protocols):
 	})
 
 	# step 3: run pipeline
-	web_deps = ["export_ssh_key", "build_hugo"]
+	web_deps = ["export_ssh_key", "build_hugo", "git_add_theme"]
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
