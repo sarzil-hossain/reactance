@@ -40,7 +40,7 @@
 - name: "build hugo sites"
   delegate_to: localhost
   become: false
-  ansible.builtin.shell: "bash {{ inventory_dir }}/.hugo_sites_build/hugo_build.sh"
+  ansible.builtin.shell: "sh {{ inventory_dir }}/.hugo_sites_build/hugo_build.sh"
 
 - name: "make temporary directory to copy built sites"
   become: false # rsync wont run as root user
