@@ -1,6 +1,6 @@
 baseURL = 'http://{{ ansible_all_ipv4_addresses[0] }}/{{ item }}'
 languageCode = 'en-us'
-title = 'Reactance'
+title = 'Reactance VPN'
 theme = 'hugo-book'
 
 [params]
@@ -11,20 +11,23 @@ theme = 'hugo-book'
 
 [languages]
 [languages.en]
-  languageName = 'English'
-  contentDir = 'content.en'
-  weight = 1
+    contentDir = 'content/en'
+    disabled = false
+    languageCode = 'en-US'
+    languageDirection = 'ltr'
+    languageName = 'English'
+    title = 'Reactance VPN'
+    weight = 1
 
 [languages.bn]
-  languageName = 'Bengali'
-  contentDir = 'content.en'
-  weight = 2
-
-
-[languages.de]
-  languageName = 'German'
-  contentDir = 'content.en'
-  weight = 2
+  [languages.fa]
+    contentDir = 'content/fa'
+    disabled = false
+    languageCode = 'fa-IR'
+    languageDirection = 'rtl'
+    languageName = 'فارسی'
+    title = 'راکتانس وی پی ان'
+    weight = 2
 
 [menu]
 [[menu.after]]
