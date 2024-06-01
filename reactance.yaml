@@ -7,11 +7,7 @@
   roles:
     - role: base
   tags:
-    - xray
-    - ocserv
-    - sshvpn
-    - hysteria
-    - dns
+    - base
 
 - name: "openbsd : setup ocserv"
   hosts: ocserv, all_vpns
