@@ -28,7 +28,7 @@ def sshvpn_update_users(update_password, module):
     # Remove users not in new group_vars
     for user in previous_users:
         if user not in update_password.keys():
-            exec_shell(f"rm {user} {user}.pub", module)
+            exec_shell(f"rm {user} {user}.pub 2>/dev/null", module)
 
     # Update keys for new users or regenerate keys for old users
     for user in update_password.keys():
