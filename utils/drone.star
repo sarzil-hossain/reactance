@@ -82,13 +82,22 @@ def pipeline_2(protocols):
 		"name": "git_add_theme",
 		"image": "alpine/git",
 		"commands": [
-			"git submodule update --recursive"
+			"git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-book"
 		 ],
 		"environment": environment_vars
 	})
 
+	steps.append({
+		"name": "setup_base",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+		],
+		"depends_on": ["export_ssh_key"]
+	})
+
 	# step 3: run pipeline
-	web_deps = ["export_ssh_key", "git_add_theme"]
+	web_deps = ["export_ssh_key", "setup_base", "git_add_theme"]
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
@@ -96,7 +105,7 @@ def pipeline_2(protocols):
 			"commands": [
 				"/usr/bin/ansible-playbook reactance.yaml -t {}".format(protocol)
 			],
-			"depends_on": ["export_ssh_key"]
+			"depends_on": ["export_ssh_key", "setup_base"]
 		})
 
 		web_deps.append("setup_{}".format(protocol))
@@ -106,7 +115,7 @@ def pipeline_2(protocols):
 		"commands": [
 			"/usr/bin/ansible-playbook reactance.yaml -t dns"
 		],
-		"depends_on": ["export_ssh_key"]
+		"depends_on": ["export_ssh_key", "setup_base"]
 	})
 
 	steps.append({
