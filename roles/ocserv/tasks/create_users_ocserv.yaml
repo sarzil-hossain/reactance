@@ -2,11 +2,17 @@
 - name: "ocserv user management"
   ocserv:
     users: "{{ all_users|default([]) + ocserv_users|default([]) }}"
-  register: ocserv_user_pass_dict
   notify:
-    - debug_passwords
     - restart_ocserv
+#  no_log: true
+  register: ocserv_user_pass_dict
 
-- name: "add ocserv user password pair to list"
-  set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [ocserv_user_pass_dict['msg']] }}"
+- name: "make temp dir"
+  ansible.builtin.file:
+    path: /var/reactance/.temp/
+    state: directory
+
+- name: "add ocserv user password pair to dict"
+  ansible.builtin.copy:
+    content: "{{ ocserv_user_pass_dict['msg']|default({}) | to_json }}"
+    dest: /var/reactance/.temp/ocserv_user_pass_dict

@@ -11,10 +11,18 @@
       mode: "0644"
       owner: root
     - src: user_expiration_control.py.j2
-      dest: /var/vpns/.user_expiration_control.py
+      dest: /var/reactance/.user_expiration_control.py
       mode: "0700"
       owner: _vpn
 
 - name: "write user expiration information to file"
   user_expiration:
     users: "{{ all_users|default([]) + ocserv_users|default([]) + vless_users|default([]) + vmess_users|default([]) + trojan_users|default([]) + sshvpn_users|default([]) + hysteria_users|default([]) }}"
+
+- name: "touch temporary user password json file"
+  ansible.builtin.copy:
+    content: "{}"
+    dest: /root/.user_pass_dict
+    owner: root
+    group: nogroup
+    mode: 0400

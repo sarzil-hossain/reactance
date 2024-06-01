@@ -10,10 +10,10 @@
 
 - name: "Create root directory of vpn services"
   ansible.builtin.file:
-    path: /var/vpns/
+    path: /var/reactance/
     state: directory
     owner: _vpn
-    group: nogroup
+    group: _vpn
     mode:  0755
 
 - name: "templating out ip forwarding rules in sysctl.conf"
@@ -29,7 +29,13 @@
 
 - name: "templating out sysctl.conf"
   ansible.builtin.template:
-    src: syslog.conf.j2
-    dest: /etc/syslog.conf
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     mode: '0644'
   notify: syslogd_restart
+  loop:
+    - src: syslog.conf.j2
+      dest: /etc/syslog.conf
+    - src: newsyslog.conf.j2
+      dest: /etc/newsyslog.conf
+    

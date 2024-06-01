@@ -1,5 +1,6 @@
 # starlark is used instead of more readable YAML because protocols will be added/removed in future.
 # you need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
+# run custom build with force_rebuild parameter set to true to rebuild and override images on registry
 
 def main(ctx):
 
@@ -11,7 +12,7 @@ def main(ctx):
 	]
 
 	pipelines = [
-#		pipeline_1(),
+		pipeline_1(),
 		pipeline_2(protocols)
 	]
 
@@ -25,7 +26,7 @@ def pipeline_1():
 		"name": "check_image",
 		"image": "alpine:latest",
 		"commands": [
-			"wget http://registry.opviel.de/v2/_catalog -O - | grep -q 'alpine_ansible' && echo -n '\nBUILD SKIPPED' && exit 78 || exit 0"
+			' wget http://registry.opviel.de/v2/_catalog -O - | grep -q "alpine_ansible_hugo" && [ "$force_rebuild" != "true" ] && echo -n "\nBUILD SKIPPED" && exit 78 || exit 0'
 		],
 		"branch": "master"
 	})
@@ -35,14 +36,13 @@ def pipeline_1():
 		"name": "publish_on_registry",
 		"image": "plugins/docker",
 		"settings": {
-			"repo": "registry.opviel.de/alpine_ansible",
+			"repo": "registry.opviel.de/alpine_ansible_hugo",
 			"dockerfile": "utils/Dockerfile",
 			"registry": "registry.opviel.de",
 			"tags": ["latest"],
 			"insecure": "true",
 			"purge": "true",
-			"compress": "true",
-			"mtu": "1400"
+			"compress": "true"
 		}
 	})
 
@@ -52,8 +52,7 @@ def pipeline_1():
 		"name": "Build and Publish Image",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		"branch": "master",
-		"trigger": {"event": ["pull_request", "push"]}
+		"branch": "master"
 	}
 
 
@@ -77,17 +76,56 @@ def pipeline_2(protocols):
 		 ],
 		"environment": environment_vars
 	})
-	
-	# step 2: run pipeline
+
+	# step 2: add theme
+	steps.append({
+		"name": "git_add_theme",
+		"image": "alpine/git",
+		"commands": [
+			"git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-book"
+		 ],
+		"environment": environment_vars
+	})
+
+	steps.append({
+		"name": "setup_base",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+		],
+		"depends_on": ["export_ssh_key"]
+	})
+
+	# step 3: run pipeline
+	web_deps = ["export_ssh_key", "setup_base", "git_add_theme"]
 	for protocol in protocols:
 		steps.append({
 			"name": "setup_{}".format(protocol),
-			"image": "registry.opviel.de:80/alpine_ansible:latest",
+			"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
 			"commands": [
-				"/usr/bin/ansible-playbook reactance.yaml -t '{}'".format(protocol)
+				"/usr/bin/ansible-playbook reactance.yaml -t {}".format(protocol)
 			],
-			"depends_on": ["export_ssh_key"]
+			"depends_on": ["export_ssh_key", "setup_base"]
 		})
+
+		web_deps.append("setup_{}".format(protocol))
+	steps.append({
+		"name": "setup_dns",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+		],
+		"depends_on": ["export_ssh_key", "setup_base"]
+	})
+
+	steps.append({
+		"name": "setup_web",
+		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
+		"commands": [
+			"/usr/bin/ansible-playbook reactance.yaml -t web"
+		],
+		"depends_on": web_deps
+	})
 
 	return {
 		"kind": "pipeline",
@@ -96,6 +134,5 @@ def pipeline_2(protocols):
 		"platform": { "arch": "arm64" },
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
-		"branch": "master",
-		"trigger": {"event": ["pull_request", "push"]}
+		"branch": "master"
 	}

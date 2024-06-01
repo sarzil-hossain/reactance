@@ -1,7 +1,7 @@
 ---
 - name: "ignore hysteria"
   ansible.builtin.debug:
-    msg: "Hysteria2 is prone to MITM attacks thus is commented out by default. Check README.md for more info."
+    msg: "Hysteria2 sing-box clients do not support any system for verifying server identity and thus Hysteria2 is prone to MITM attacks thus should not be used. The role may not be fully developed. Check README.md for more info."
 
 # - name: "setup hysteria"
 #  ansible.builtin.include_tasks: check_hysteria_exists.yaml

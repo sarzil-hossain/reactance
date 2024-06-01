@@ -6,15 +6,11 @@ class FilterModule(object):
             'format_userpass_output': self.format_userpass_output
         }
 
-    def format_userpass_output(self, user_pass_list):
+    def format_userpass_output(self, htpasswd_dict):
         msg = []
-        msg.append("##################################")
-        msg.append("#########  CHANGED USERS  ########")
-        for protocol in user_pass_list:
-            msg.append(f"# {next(iter(protocol.keys()))}")
-            iter_proto = iter(protocol.values())
-            while (x := next(iter_proto, None)) != None:
-                for y in x.keys():
-                    msg.append(f" - {y}: {x[y]}")
-        msg.append("##################################")
+        msg.append("#############################################")
+        msg.append("#########  CHANGED USERS - HTPASSWD  ########")
+        for user in htpasswd_dict.keys():
+            msg.append(f"{user}: {htpasswd_dict[user]}")
+        msg.append("#############################################")
         return '\n'.join(msg)

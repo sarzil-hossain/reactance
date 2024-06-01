@@ -1,0 +1,37 @@
+---
+- name: "template out anyconnect.md"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/anyconnect.md.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/anyconnect.md"
+  loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"
+
+- name: "template out openconnect.md"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/openconnect.md.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/openconnect.md"
+  loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys() }}"
+
+- name: "template out nekobox.md"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekobox.md.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekobox.md"
+  loop: "{{ users.keys() }}"
+  vars:
+    users: "{{ xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"
+
+
+- name: "template out nekoray.md"
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/nekoray.md.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/nekoray.md"
+  loop: "{{ users.keys() }}"
+  vars:
+    users: "{{ xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"

@@ -4,8 +4,3 @@
     name: sshd
     state: restarted
     enabled: yes
-    
-- name: debug_passwords
-  ansible.builtin.debug:
-    msg: "{{ user_pass_list | format_userpass_output }}"
-

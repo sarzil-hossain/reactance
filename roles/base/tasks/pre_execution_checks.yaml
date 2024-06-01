@@ -2,7 +2,7 @@
 - name: "pre execution test : check os"
   ansible.builtin.fail:
     msg: "Reactance can only be ran on OpenBSD"
-  when: ansible_facts["os_family"]|lower == "openbsd"
+  when: ansible_facts["os_family"]|lower != "openbsd"
 
 - name: "pre execution test : looking for invalid usernames"
   ansible.builtin.fail:

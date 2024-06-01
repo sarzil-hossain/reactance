@@ -5,23 +5,24 @@
     dest: "{{ item.dest }}"
   loop:
     - src: ocserv.conf.j2
-      dest: /var/vpns/ocserv/ocserv.conf 
+      dest: /var/reactance/ocserv/ocserv.conf 
     - src: ca.tmpl.j2 
-      dest: /var/vpns/ocserv/certs/ca.tmpl
+      dest: /var/reactance/ocserv/certs/ca.tmpl
     - src: server.tmpl.j2
-      dest: /var/vpns/ocserv/certs/server.tmpl
+      dest: /var/reactance/ocserv/certs/server.tmpl
     - src: crl.tmpl.j2
-      dest: /var/vpns/ocserv/certs/crl.tmpl
+      dest: /var/reactance/ocserv/certs/crl.tmpl
 
 # generate ca, server certs, crl file
 - name: "generate ca, server certs"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "certtool --generate-privkey --outfile /var/vpns/ocserv/certs/ca-key.pem"
-    - "certtool --generate-self-signed --load-privkey /var/vpns/ocserv/certs/ca-key.pem --template /var/vpns/ocserv/certs/ca.tmpl --outfile /var/vpns/ocserv/certs/ca-cert.pem"
-    - "certtool --generate-privkey --outfile /var/vpns/ocserv/certs/server-key.pem"
-    - "certtool --generate-certificate --load-privkey /var/vpns/ocserv/certs/server-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --template /var/vpns/ocserv/certs/server.tmpl --outfile /var/vpns/ocserv/certs/server-cert.pem"
-    - "certtool --generate-crl --load-ca-privkey /var/vpns/ocserv/certs/ca-key.pem --load-ca-certificate /var/vpns/ocserv/certs/ca-cert.pem --template /var/vpns/ocserv/certs/crl.tmpl --outfile /var/vpns/ocserv/certs/crl.pem"
+    - "certtool --generate-privkey --outfile /var/reactance/ocserv/certs/ca-key.pem"
+    - "certtool --generate-self-signed --load-privkey /var/reactance/ocserv/certs/ca-key.pem --template /var/reactance/ocserv/certs/ca.tmpl --outfile /var/reactance/ocserv/certs/ca-cert.pem"
+    - "certtool --generate-privkey --outfile /var/reactance/ocserv/certs/server-key.pem"
+    - "certtool --generate-certificate --load-privkey /var/reactance/ocserv/certs/server-key.pem --load-ca-certificate /var/reactance/ocserv/certs/ca-cert.pem --load-ca-privkey /var/reactance/ocserv/certs/ca-key.pem --template /var/reactance/ocserv/certs/server.tmpl --outfile /var/reactance/ocserv/certs/server-cert.pem"
+    - "certtool --generate-crl --load-ca-privkey /var/reactance/ocserv/certs/ca-key.pem --load-ca-certificate /var/reactance/ocserv/certs/ca-cert.pem --template /var/reactance/ocserv/certs/crl.tmpl --outfile /var/reactance/ocserv/certs/crl.pem"
+  no_log: true
 
 - name: "template out nat rules in pf.conf"
   ansible.builtin.blockinfile:
@@ -36,4 +37,4 @@
 # default(ansible_all_ipv4_addresses[0]) is added, in case a default route doesn't exist
       
 - name: "generate public, private key pair"
-  ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/vpns/ocserv/certs/server-key.pem -out /var/vpns/ocserv/certs/server-cert.pem -sha256 -days 3650 -nodes -subj /CN=example &>/dev/null"
+  ansible.builtin.shell: "openssl req -x509 -newkey rsa:4096 -keyout /var/reactance/ocserv/certs/server-key.pem -out /var/reactance/ocserv/certs/server-cert.pem -sha256 -days 3650 -nodes -subj /CN=example &>/dev/null"

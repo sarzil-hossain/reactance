@@ -1,6 +1,9 @@
 # Reactance - User Manual
 Censorship resistant scalable VPN/Proxy automation for OpenBSD with user management for servers and cloud services.
 
+Supported OpenBSD versions: 7.4 (Tested)
+Note: Please do not try to set up the automation on OpenBSD 7.5 as the xray server would fail because of x/sys library in golang. Check out [this issue on github](https://github.com/golang/go/issues/36435) for more info. Until the issue is resolved, the Xray server will not work on OpenBSD 7.5 .
+
 ## Table of Contents
   - [Description](#description)
   - [Protocols](#protocols)
@@ -63,7 +66,6 @@ All variables:
 |Name|Description|Default Value|Used Under|
 |--|--|--|--|
 |ocserv_network|network address for ocserv|172.16.16.1/24|all_vpns, ocserv|
-|dns|dns resolver for clients to use|1.1.1.1 if `disable_dns`=`true`|all_vpns, ocserv|
 |ocserv_port|port number for openconnect server|4430|all_vpns, ocserv|
 |hysteria_port|port number for hysteria|4435|all_vpns, hysteria|
 |trojan_port|port number for trojan|4436|all_vpns, xray|
@@ -112,9 +114,9 @@ How to debug and fix errors with VPN services
 
 |Protocol|Log File|
 |--|--|
-|ocserv|/var/vpns/ocserv/ocserv.log|
-|hysteria|/var/vpns/hysteria/hysteria.log|
-|xray|/var/vpns/xray/logs/{xray_access.log, xray_error.log}|
+|ocserv|/var/reactance/ocserv/ocserv.log|
+|hysteria|/var/reactance/hysteria/hysteria.log|
+|xray|/var/reactance/xray/logs/{xray_access.log, xray_error.log}|
 |sshvpn|/var/log/authlog|
 
 2. Reading system calls: You can use `ktrace` and `kdump` to read system calls of processes to see if any errors appear.
@@ -122,6 +124,11 @@ How to debug and fix errors with VPN services
 ## CI/CD pipeline
 You can test and deploy vpn services on your server using CI/CD pipelines. As of now, only DroneCI is supported because of its simplicity, flexibility and ease of use. A `utils` folder can be found that contains a Dockerfile and drone starlark configuration for running the drone pipeline. Starlark is used instead of YAML, to make it easier to add/remove services.
 You need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
+
+## Client Website
+
+The clients can retrieve the VPN credentials and read the docs from the client site that they can access from `http://x.x.x.x/client_name`. 
+The VPN credentials can be retrieved and the docs can be read from the client website. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) to know how to update the site.
 
 ## Contributing
 To contribute to the project, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md)

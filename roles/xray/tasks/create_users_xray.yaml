@@ -1,41 +1,55 @@
 ---
-# xray may be restarted multiple times. Is inefficient. But no simple way of going around it.
+
+- name: "get salamaner public key"
+  ansible.builtin.slurp:
+    path: "/var/reactance/xray/xray_public_key"
+  register: xray_pub_key_b64e
 
 - name: "vless user management"
   xray:
     users: "{{ all_users|default([]) + vless_users|default([]) }}"
     protocol: vless
+    address: "{{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }}"
+    service_port: "{{ vless_port|default(4437) }}"
+    public_key: "{{ xray_pub_key_b64e.content|b64decode }}"
   when: inventory_hostname in (groups['vless']|default([])) + (groups['all_vpns']|default([]))
   register: vless_user_pass_dict
+    #  no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
 - name: "vmess user management"
   xray:
     users: "{{ all_users|default([]) + vmess_users|default([]) }}"
     protocol: vmess
+    address: "{{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }}"
+    service_port: "{{ vless_port|default(4437) }}"
+    public_key: "{{ xray_pub_key_b64e.content|b64decode }}"
   when: inventory_hostname in (groups['vmess']|default([])) + (groups['all_vpns']|default([]))
   register: vmess_user_pass_dict
+  no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
 - name: "trojan user management"
   xray:
     users: "{{ all_users|default([]) + trojan_users|default([]) }}"
     protocol: trojan
+    address: "{{ ansible_default_ipv4.interface|default(ansible_all_ipv4_addresses[0]) }}"
+    service_port: "{{ vless_port|default(4437) }}"
+    public_key: "{{ xray_pub_key_b64e.content|b64decode }}"
   when: inventory_hostname in (groups['trojan']|default([])) + (groups['all_vpns']|default([]))
   register: trojan_user_pass_dict
+  no_log: true
   notify: 
-    - debug_passwords
     - restart_xray
 
-- name: "add xray user password pair to list"
-  set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [item] }}"
-  when: item|length > 0
-  loop:
-    - "{{ vless_user_pass_dict['msg']|default({}) }}"
-    - "{{ vmess_user_pass_dict['msg']|default({}) }}"
-    - "{{ trojan_user_pass_dict['msg']|default({}) }}"
+- name: "make temp dir"
+  ansible.builtin.file:
+    path: /var/reactance/.temp/
+    state: directory
+
+- name: "add ocserv user password pair to dict"
+  ansible.builtin.copy:
+    content: "{{ (trojan_user_pass_dict['msg']|default({}) | combine(vmess_user_pass_dict['msg']|default({}), vless_user_pass_dict['msg']|default({}), recursive=true, list_merge='append')) | to_json }}"
+    dest: /var/reactance/.temp/xray_user_pass_dict

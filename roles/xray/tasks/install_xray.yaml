@@ -5,12 +5,13 @@
     state: directory
     owner: _vpn
     group: _vpn
-    mode: 0755
+    mode: 0700
   loop:
-    - "/var/vpns/xray"
-    - "/var/vpns/xray/bin"
-    - "/var/vpns/xray/etc"
-    - "/var/vpns/xray/logs"
+    - "/var/reactance/xray"
+    - "/var/reactance/xray/bin"
+    - "/var/reactance/xray/etc"
+    - "/var/reactance/xray/logs"
+    - "/var/log/xray"
 
 - name: "install necessary utils"
   community.general.openbsd_pkg:
@@ -55,13 +56,13 @@
 - name: "install xray"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/xray /var/vpns/xray/bin/xray"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/xray /var/reactance/xray/bin/xray"
     - "install -m 755 -o _vpn -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray"
-    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geoip.dat /var/vpns/xray/bin/geoip.dat"
-    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geosite.dat /var/vpns/xray/bin/geosite.dat"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geoip.dat /var/reactance/xray/bin/geoip.dat"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geosite.dat /var/reactance/xray/bin/geosite.dat"
 
 - name: "copy chroot dependencies"
-  ansible.builtin.shell: "deps=$(ldd /var/vpns/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/vpns/xray; done"
+  ansible.builtin.shell: "deps=$(ldd /var/reactance/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/reactance/xray; done"
 
 # xray will fail without these two files 
 - name: "copy hosts and resolv.conf"
@@ -71,7 +72,7 @@
     dest: "{{ item.dest }}"
   loop:
     - src: /etc/hosts
-      dest: /var/vpns/xray/etc/hosts
+      dest: /var/reactance/xray/etc/hosts
     - src: /etc/resolv.conf
-      dest: /var/vpns/xray/etc/resolv.conf
+      dest: /var/reactance/xray/etc/resolv.conf
 

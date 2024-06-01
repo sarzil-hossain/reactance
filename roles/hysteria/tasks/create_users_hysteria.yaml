@@ -3,10 +3,11 @@
   hysteria:
     users: "{{ all_users|default([]) + hysteria_users|default([]) }}"
   register: hysteria_user_pass_dict
+  no_log: true
   notify:
-    - debug_passwords
     - restart_hysteria
 
-- name: "add hysteria user password pair to list"
+- name: "add hysteria user password pair to dict"
   set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [hysteria_user_pass_dict['msg']] }}"
+    user_pass_dict: "{{ user_pass_dict|default({}) | combine(hysteria_user_pass_dict['msg'], recursive=true, list_merge='append') }}"
+  no_log: true

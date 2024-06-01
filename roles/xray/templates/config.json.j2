@@ -20,11 +20,6 @@
       }
     }
   },
-  "dns": {
-    "servers": [
-        "1.1.1.1"
-    ]
-  },
   "inbounds": [
 {% if inventory_hostname in (groups['trojan']|default([])) + (groups['all_vpns']|default([])) %}
     {
@@ -45,7 +40,7 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ private_key }}",
+        "privateKey": "{{ xray_private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }
@@ -72,7 +67,7 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ private_key }}",
+        "privateKey": "{{ xray_private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }
@@ -98,7 +93,7 @@
             "www.behindthename.com"
         ],
         "xver": 0,
-        "privateKey": "{{ private_key }}",
+        "privateKey": "{{ xray_private_key }}",
         "maxTimeDiff": 0,
         "shortIds": [""]
         }

@@ -7,11 +7,7 @@
   roles:
     - role: base
   tags:
-    - xray
-    - ocserv
-    - sshvpn
-    - hysteria
-    - dns
+    - base
 
 - name: "openbsd : setup ocserv"
   hosts: ocserv, all_vpns
@@ -60,21 +56,15 @@
   become_user: root
   roles:
     - role: dns
-#    - role: web
   tags:
-    - xray
-    - ocserv
-    - sshvpn
-    - hysteria
     - dns
 
-#  - name: "openbsd : setup web interface for vpn clients"
-#    hosts: all
-#    become: true
-#    become_method: doas
-#    become_user: root
-#    roles:
-#      - role: web
-#    tags:
-#      - web
-#
+- name: "openbsd : setup web interface for vpn clients"
+  hosts: all
+  become: true
+  become_method: doas
+  become_user: root
+  roles:
+    - role: web
+  tags:
+    - web

@@ -1,0 +1,1 @@
+inet {{ (ocserv_network|default("172.16.16.0/24"))|ansible.utils.nthhost(2) }}/{{ (ocserv_network|default("172.16.16.0/24")|ipaddr('prefix')) }}

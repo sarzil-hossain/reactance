@@ -1,51 +1,50 @@
 ---
 # generate keypair, needed for config
 - name: "generate private, public keypair for xtls-reality"
-  ansible.builtin.shell: "/var/vpns/xray/bin/xray x25519 | awk '{ print $3 }' | tr '\n' ','"
+  ansible.builtin.shell: "/var/reactance/xray/bin/xray x25519 | awk '{ print $3 }' | tr '\n' ','"
   register: keypair
 
 - name: "set private key as var"
   ansible.builtin.set_fact:
-    private_key: "{{ (keypair.stdout | split(',')).0 }}"
-    public_key: "{{ (keypair.stdout | split(',')).1 }}"
+    xray_private_key: "{{ (keypair.stdout | split(',')).0 }}"
+    xray_public_key: "{{ (keypair.stdout | split(',')).1 }}"
 
 - name: "write public key to file"
   ansible.builtin.copy:
-    content: "{{ public_key }}"
-    dest: "/var/vpns/xray/public_key"
+    content: "{{ xray_public_key }}"
+    dest: "/var/reactance/xray/xray_public_key"
 
 - name: "write private key to file"
   ansible.builtin.copy:
-    content: "{{ private_key }}"
-    dest: "/var/vpns/xray/private_key"
+    content: "{{ xray_private_key }}"
+    dest: "/var/reactance/xray/xray_private_key"
 
 - name: "template out config and init script"
   ansible.builtin.template:
     src: config.json.j2
-    dest: "/var/vpns/xray/etc/config.json"
+    dest: "/var/reactance/xray/etc/config.json"
 
+# xray is chrooted and has their own mechanism for logging, which is why it needs to be separatly linked later
 - name: "touch xray log files"
   ansible.builtin.file:
-    path: " {{ item }} "
-    mode: "0600"
+    path: "{{ item }}"
+    state: touch
+    mode: "0700"
     owner: _vpn
-    group: wheel
+    group: _vpn
   loop:
-    - /var/vpns/xray/logs/xray-access.log
-    - /var/vpns/xray/logs/xray-error.log
+    - "/var/reactance/xray/logs/xray-access.log"
+    - "/var/reactance/xray/logs/xray-error.log"
 
 # purely for convenience
-- name: "link log files to /var/log"
+- name: "link log files to /var/log/xray"
   ansible.builtin.file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "/var/reactance/xray/logs/{{ item }}"
+    dest: "/var/log/xray/{{ item }}"
     state: link
-    mode: "0600"
-    owner: root
-    group: wheel
+    mode: "0700"
+    owner: _vpn
+    group: _vpn
   loop:
-    - src: /var/vpns/xray/logs/xray-access.log
-      dest: /var/log/xray-access.log
-    - src: /var/vpns/xray/logs/xray-error.log
-      dest: /var/log/xray-error.log
-    
+    - xray-access.log
+    - xray-error.log

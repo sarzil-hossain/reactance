@@ -1,11 +1,15 @@
 server:
     interface: 127.0.0.1
-    interface: {{ (ocserv_network|default("172.16.16.0/24"))|ansible.utils.nthhost(1) }}
+{% if inventory_hostname in (groups['ocserv']|default([])) + (groups['all_vpns']|default([])) %}
+    interface: {{ (ocserv_network|default("172.16.16.0/24"))|ansible.utils.nthhost(2) }}
+{% endif %}
     do-ip6: no
 
     access-control: 0.0.0.0/0 refuse
     access-control: 127.0.0.0/8 allow
+{% if inventory_hostname in (groups['ocserv']|default([])) + (groups['all_vpns']|default([])) %}
     access-control: {{ ocserv_network|default("172.16.16.0/24") }} allow
+{% endif %}
 
     hide-identity: yes
     hide-version: yes
@@ -16,7 +20,7 @@ server:
 
     aggressive-nsec: yes
     verbosity: 1
-    log-queries: yes
+    log-queries: no
     use-caps-for-id: yes
 
     cache-min-ttl: 3600
@@ -33,5 +37,5 @@ remote-control:
 rpz:
     name: "unbound-adblock"
     zonefile: "/var/unbound/db/adblock.rpz"
-    rpz-log: yes
+    rpz-log: no
     rpz-log-name: "unbound-adblock"

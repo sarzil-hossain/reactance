@@ -9,7 +9,3 @@
   ansible.builtin.file:
     path: "{{ ocserv_tempdir.path }}"
     state: absent
-
-- name: debug_passwords
-  ansible.builtin.debug:
-    msg: "{{ user_pass_list | format_userpass_output }}"

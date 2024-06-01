@@ -2,7 +2,7 @@
 # check if salamander password file exists
 - name: "check if obfuscation password file exists "
   ansible.builtin.stat:
-    path: "/var/vpns/hysteria/salamander_password"
+    path: "/var/reactance/hysteria/salamander_password"
   register: salamander_password_file
 
 # generate salamander password
@@ -17,7 +17,7 @@
   become: yes
   become_method: doas
   ansible.builtin.set_fact:
-    salamander_password: "{{ lookup('file', '/var/vpns/hysteria/salamander_password') }}"
+    salamander_password: "{{ lookup('file', '/var/reactance/hysteria/salamander_password') }}"
   when: salamander_password_file.stat.exists
 
 - name: "set salamander password as var"
@@ -28,7 +28,7 @@
 - name: "write obfuscation password to file"
   ansible.builtin.copy:
     content: "{{ salamander_password }}"
-    dest: "/var/vpns/hysteria/salamander_password"
+    dest: "/var/reactance/hysteria/salamander_password"
 
   when: salamander_password_file.stat.exists != true
 
@@ -38,17 +38,17 @@
     dest: "{{ item.dest }}"
   loop:
     - src: config.json.j2
-      dest: "/var/vpns/hysteria/etc/config.json"
+      dest: "/var/reactance/hysteria/etc/config.json"
     - src: ca.tmpl.j2 
-      dest: /var/vpns/hysteria/certs/ca.tmpl
+      dest: /var/reactance/hysteria/certs/ca.tmpl
     - src: server.tmpl.j2
-      dest: /var/vpns/hysteria/certs/server.tmpl
+      dest: /var/reactance/hysteria/certs/server.tmpl
 
 # generate ca, server certs, crl file
 - name: "generate ca, server certs"
   ansible.builtin.shell: "{{ item }}"
   loop:
-    - "certtool --generate-privkey --outfile /var/vpns/hysteria/certs/ca-key.pem"
-R   - "certtool --generate-self-signed --load-privkey /var/vpns/hysteria/certs/ca-key.pem --template /var/vpns/hysteria/certs/ca.tmpl --outfile /var/vpns/hysteria/certs/ca-cert.pem"
-    - "certtool --generate-privkey --outfile /var/vpns/hysteria/certs/server-key.pem"
-    - "certtool --generate-certificate --load-privkey /var/vpns/hysteria/certs/server-key.pem --load-ca-certificate /var/vpns/hysteria/certs/ca-cert.pem --load-ca-privkey /var/vpns/hysteria/certs/ca-key.pem --template /var/vpns/hysteria/certs/server.tmpl --outfile /var/vpns/hysteria/certs/server-cert.pem"
+    - "certtool --generate-privkey --outfile /var/reactance/hysteria/certs/ca-key.pem"
+R   - "certtool --generate-self-signed --load-privkey /var/reactance/hysteria/certs/ca-key.pem --template /var/reactance/hysteria/certs/ca.tmpl --outfile /var/reactance/hysteria/certs/ca-cert.pem"
+    - "certtool --generate-privkey --outfile /var/reactance/hysteria/certs/server-key.pem"
+    - "certtool --generate-certificate --load-privkey /var/reactance/hysteria/certs/server-key.pem --load-ca-certificate /var/reactance/hysteria/certs/ca-cert.pem --load-ca-privkey /var/reactance/hysteria/certs/ca-key.pem --template /var/reactance/hysteria/certs/server.tmpl --outfile /var/reactance/hysteria/certs/server-cert.pem"

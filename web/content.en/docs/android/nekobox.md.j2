@@ -1,0 +1,23 @@
+---
+title: "Nekobox"
+weight: 1
+# bookFlatSection: false
+# bookToc: true
+# bookHidden: false
+# bookCollapseSection: false
+# bookComments: false
+# bookSearchExclude: false
+---
+
+## Credentials 
+{% if users[item].trojan is defined %}
+Trojan URL: `{{ users[item].trojan }}`
+{% endif %}
+
+{% if users[item].vless is defined %}
+VLESS URL: `{{ users[item].vless }}`
+{% endif %}
+
+{% if users[item].vmess is defined %}
+VMESS URL: `{{ users[item].vmess }}`
+{% endif %}

@@ -3,9 +3,14 @@
   sshvpn:
     users: "{{ all_users|default([]) + sshvpn_users|default([]) }}"
   register: sshvpn_user_pass_dict
-  notify:
-    - debug_passwords
+  #no_log: true
 
-- name: "add sshvpn user password pair to list"
-  set_fact:
-    user_pass_list: "{{ user_pass_list|default([]) + [sshvpn_user_pass_dict['msg']] }}"
+- name: "make temp dir"
+  ansible.builtin.file:
+    path: /var/reactance/.temp/
+    state: directory
+
+- name: "add sshvpn user password pair to dict"
+  ansible.builtin.copy:
+    content: "{{ sshvpn_user_pass_dict['msg']|default({}) | to_json }}"
+    dest: /var/reactance/.temp/sshvpn_user_pass_dict

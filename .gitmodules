@@ -1,0 +1,6 @@
+[submodule "webthemes/hugo-book"]
+	path = webthemes/hugo-book
+	url = https://github.com/alex-shpak/hugo-book
+[submodule "web/themes/hugo-book"]
+	path = web/themes/hugo-book
+	url = https://github.com/alex-shpak/hugo-book

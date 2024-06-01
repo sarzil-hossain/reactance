@@ -1,5 +1,5 @@
 ---
-- name: "template out config"
+- name: "template out configs"
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -8,6 +8,14 @@
       dest: /var/unbound/etc/unbound.conf
     - src: resolv.conf.j2
       dest: /etc/resolv.conf.j2
+    - src: hostname.vether0.j2
+      dest: /etc/hostname.vether0
+      # we need a separate virtual network interface for binding the dns resolver to since ocserv doesn't creates tunnel interface for each separate connected client, it does not create a primary interface
+
+  # unbound will fail if there's nonexisting interface in config
+- name: "create vether0 interface"
+  ansible.builtin.shell: "sh /etc/netstart vether0"
+  when: inventory_hostname in (groups['ocserv']|default([])) + (groups['all_vpns']|default([]))
 
 - name: "setup log file"
   ansible.builtin.file:
@@ -15,7 +23,7 @@
     state: touch
     mode: "0600"
 
-# pure convenience
+  # pure convenience
 - name: "obsd : dns : symlink it to /etc"
   ansible.builtin.file:
     src: /var/unbound/etc/unbound.conf

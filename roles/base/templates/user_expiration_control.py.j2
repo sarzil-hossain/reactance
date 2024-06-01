@@ -3,11 +3,12 @@
 import json, os, subprocess
 from datetime import datetime
 
-EXPIRE_USER_JSON_PATH = "/var/vpns/.user_expiration.json"
-OCSERV_CONFIG_PATH = "/var/vpns/ocserv/etc/ocserv.passwd"
-HYSTERIA_CONFIG_FILE = "/var/vpns/hysteria/etc/config.json"
-XRAY_CONFIG_PATH = "/var/vpns/xray/etc/config.json"
-SSH_ROOT = "/var/vpns/sshvpn/.ssh"
+EXPIRE_USER_JSON_PATH = "/var/reactance/.user_expiration.json"
+EXPIRE_WEB_JSON_PATH = "/var/reactance/.web_expiration.json"
+OCSERV_CONFIG_PATH = "/var/reactance/ocserv/etc/ocserv.passwd"
+HYSTERIA_CONFIG_FILE = "/var/reactance/hysteria/etc/config.json"
+XRAY_CONFIG_PATH = "/var/reactance/xray/etc/config.json"
+SSH_ROOT = "/var/reactance/sshvpn/.ssh"
 AUTHORIZED_KEYS = os.path.join(SSH_ROOT, "authorized_keys")
 
 def ocserv_get_users():
@@ -74,19 +75,25 @@ def sshvpn_user_purge(users_to_remove):
                 f.write(pkey.read())
 
 def main():
+    current_unix_time = datetime.now().timestamp()
+
     with open(EXPIRE_USER_JSON_PATH, "r") as f:
         expire_user_dict = json.loads(f.read())
-        current_unix_time = datetime.now().timestamp()
-        for exp in expire_user_dict.keys():
-            if float(exp) <= current_unix_time:
-                users = expire_user_dict[exp]
+    for exp in expire_user_dict.keys():
+        if float(exp) <= current_unix_time:
+            users = expire_user_dict[exp]
 
-                xray_user_purge(users)
-                sshvpn_user_purge(users)
-                ocserv_user_purge(users)
-                hysteria_user_purge(users)
-        with open(EXPIRE_USER_JSON_PATH, "w") as f:
-            f.write(json.dumps(expire_user_dict, indent=1))
+            xray_user_purge(users)
+            sshvpn_user_purge(users)
+            ocserv_user_purge(users)
+            hysteria_user_purge(users)
+    with open(EXPIRE_USER_JSON_PATH, "w") as f:
+        f.write(json.dumps(expire_user_dict, indent=1))
+
+    with open(WEB_EXPIRATION_JSON, "r") as f:
+        expire_web_dict = json.loads(f.read())
+    for exp in expire_user_dict.keys():
+        shutil.rmtree(f"/var/www/reactance/{exp}")
 
 if __name__ == "__main__":
     main()

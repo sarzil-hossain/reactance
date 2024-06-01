@@ -1,12 +1,12 @@
 ---
 - name: "Check if hysteria is already installed"
   ansible.builtin.stat:
-    path: /var/vpns/hysteria
+    path: /var/reactance/hysteria
   register: hysteria_directory
 
 - name: "Check if hysteria is configured"
   ansible.builtin.stat:
-    path: /var/vpns/hysteria/etc/config.json
+    path: /var/reactance/hysteria/etc/config.json
   register: hysteria_config
 
 - name: "Install hysteria if directory doesn't exist"
