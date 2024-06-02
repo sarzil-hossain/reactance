@@ -10,13 +10,15 @@ Note: Please do not try to set up the automation on OpenBSD 7.5 as the xray serv
   - [Server Definitions](#server-definitions)
   - [User Definitions](#user-definitions)
   - [Playbook Execution](#playbook-execution)
-  - [Retrieving Credentials](#retrieving-credentials)
+  - [Client Website](#client-website)
   - [Reading Logs](#reading-logs)
   - [CI/CD Pipelines](#cicd-pipelines)
   - [Contributing](#contributing)
 
 ## Description
 Reactance is a complete automation to handle installation, user management, credential distribution of censorship-resistant VPN protocols on your openbsd server/cloud service(s) of choice. The server configuration is done through setting inventory variables. User configuration is done through using host and group variables. Read [Server Definitions](#server-definitions) and [User Definitions](#user-definitions) for more info.
+
+Reactance builds websites for users/clients to view documentations and credentials. The htpasswd credential and URL of the website is showed at the end of `web` role at the end of reactance run.
 
 It is also possible to test and deploy the VPN automation through using CI/CD pipelines. Please read [CI/CD Pipelines](#cicd-pipelines) for more info.
 
@@ -99,14 +101,15 @@ vless_users:
 ```
 
 ## Playbook Execution
-You need `python3` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible netaddr`
+You need `python3` and `rsync` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible netaddr`
 To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
 
 You can set up specific VPN services by using tags.
 Supported tags: `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
 
-## Retrieving Credentials
-The credentials for each service are shown at the end of drone run. In future, connection packages would be added with a web UI for users to download credentials and use them.
+## Client Website
+The clients can retrieve the VPN credentials and read the docs from the client site that they can access from `http://x.x.x.x/client_name/index.html`. htpasswd based authentication is for authenticating the clients on the sites. The htpasswd credentials along with the URLs are shown at the end of reactance run (web role) or at the end of `setup_web` task in DroneCI.
+The VPN credentials can be retrieved and the docs can be read from the client website. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) to know how to update the site.
 
 ## Reading Logs
 How to debug and fix errors with VPN services
@@ -124,11 +127,6 @@ How to debug and fix errors with VPN services
 ## CI/CD pipeline
 You can test and deploy vpn services on your server using CI/CD pipelines. As of now, only DroneCI is supported because of its simplicity, flexibility and ease of use. A `utils` folder can be found that contains a Dockerfile and drone starlark configuration for running the drone pipeline. Starlark is used instead of YAML, to make it easier to add/remove services.
 You need to set the drone config path to `utils/drone.star` in the webui and also store the ssh key as a drone secret in `ssh_private_key` variable.
-
-## Client Website
-
-The clients can retrieve the VPN credentials and read the docs from the client site that they can access from `http://x.x.x.x/client_name`. 
-The VPN credentials can be retrieved and the docs can be read from the client website. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) to know how to update the site.
 
 ## Contributing
 To contribute to the project, please refer to [CONTRIBUTING.md](./CONTRIBUTING.md)
