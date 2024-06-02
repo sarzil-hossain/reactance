@@ -91,7 +91,7 @@ def pipeline_2(protocols):
 		"name": "setup_base",
 		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
 		"commands": [
-			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+			"/usr/bin/ansible-playbook reactance.yaml -t base"
 		],
 		"depends_on": ["export_ssh_key"]
 	})
