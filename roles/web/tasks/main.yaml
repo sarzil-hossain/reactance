@@ -33,6 +33,8 @@
 - name: "combine dicts"
   ansible.builtin.set_fact:
     user_pass_dict: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)|combine(xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, recursive=true, list_merge='append') }}"
+  notify:
+    - cleanup_temp_dir
 
 - name: "get salamander public key"
   ansible.builtin.slurp:
