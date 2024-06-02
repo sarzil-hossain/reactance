@@ -101,11 +101,23 @@ vless_users:
 ```
 
 ## Playbook Execution
-You need `python3` and `rsync` installed. Make a virtual environment and install ansible in it `python3 -m venv .venv && source .venv/bin/activate && pip3 install ansible netaddr`
-To execute the playbook, simply run `ansible-playbook reactance_setup.yaml`. Include `--ask-become-pass` flag if you need to input your password.
+It's recommended to run the playbook through a DroneCI pipeline. However if you wish to run it locally from your computer, run the following commands:
 
-You can set up specific VPN services by using tags.
-Supported tags: `vless`, `vmess`, `trojan`, `sshvpn`, `hysteria`, `ocserv`
+Step 1: At first, install the dependencies
+```sh
+apt install rsync # or whatever your package manager is
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install ansible netaddr
+git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-book
+```
+
+Step 2: Generate a ssh key for the remote `root` user and store the private key as `reactance/.ssh_private_key`
+
+Step 3: To execute the playbook, simply run
+```sh
+ansible-playbook reactance.yaml
+```
 
 ## Client Website
 The clients can retrieve the VPN credentials and read the docs from the client site that they can access from `http://x.x.x.x/client_name/index.html`. htpasswd based authentication is for authenticating the clients on the sites. The htpasswd credentials along with the URLs are shown at the end of reactance run (web role) or at the end of `setup_web` task in DroneCI.

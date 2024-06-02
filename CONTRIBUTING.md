@@ -63,11 +63,8 @@ The unix date time is compared with current date, and if it's less than the curr
 ## Client Website
 At first, install hugo and git on your host machine. Hugo can be installed with `pip3 install hugo`. Follow your OS's documentations on installing git.
 
-The base website is located in `web` directory. For reactance, we are using a Hugo theme called `Book`. To add/modify contents of the pages, update the markdown files in `web/content.xx` (where xx is language code). You can build the site locally by adding the theme as a submodule by running the following command: `git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-book`
+The base website is located in `web` directory. For reactance, we are using a Hugo theme called `Book`. To add/modify contents of the pages, update the markdown files in `web/content.<lang_code>/docs/<os>/<client_name>.md.j2`.
 
-```sh
-git submodule add https://github.com/alex-shpak/hugo-book themes/hugo-book web/themes/hugo-book
-```
 **Note: You might notice `hugo serve` under `web/` directory would fail. It is because the credentials and hugo config need to be templated out based on the users. Which is why some files end with .j2. The hugo source code is at first copied for each user, based on the VPN/Proxy services that are enabled for it, built and then copied to the remote server.**
 
 ## To-Do
