@@ -1,11 +1,5 @@
 ---
 
-# image files are large, so we don't want them to be copied multiple times
-- name: "copy images directory to root"
-  ansible.builtin.copy:
-    src: web/static/images
-    dest: /var/www/reactance/images
-
 - name: "check if files exist"
   ansible.builtin.stat:
     path: "{{ item }}"

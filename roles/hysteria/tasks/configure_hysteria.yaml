@@ -13,9 +13,6 @@
 
 # retrieve password from file, if exists 
 - name: "use previous password, if it exists"
-  become_user: root
-  become: yes
-  become_method: doas
   ansible.builtin.set_fact:
     salamander_password: "{{ lookup('file', '/var/reactance/hysteria/salamander_password') }}"
   when: salamander_password_file.stat.exists

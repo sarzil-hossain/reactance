@@ -1,3 +1,4 @@
 .venv
 .ssh_private_key
 filter_plugins/__pycache__
+web/themes/hugo-book

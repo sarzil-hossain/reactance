@@ -1,4 +1,7 @@
 ---
+- name: "add root pubkeys"
+  ansible.builtin.include_tasks: add_pubkeys.yaml
+
 - name: "run pre execution checks"
   ansible.builtin.include_tasks: pre_execution_checks.yaml
 

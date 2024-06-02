@@ -28,7 +28,7 @@ def pipeline_1():
 		"commands": [
 			' wget http://registry.opviel.de/v2/_catalog -O - | grep -q "alpine_ansible_hugo" && [ "$force_rebuild" != "true" ] && echo -n "\nBUILD SKIPPED" && exit 78 || exit 0'
 		],
-		"branch": "master"
+		"trigger": {"branch": "master"}
 	})
 
 	# step 2: if doesn't exist, build and publish image to registry
@@ -52,7 +52,7 @@ def pipeline_1():
 		"name": "Build and Publish Image",
 		"platform": { "arch": "arm64" },
 		"steps": steps,
-		"branch": "master"
+		"trigger": {"branch": "master" }
 	}
 
 
@@ -91,7 +91,7 @@ def pipeline_2(protocols):
 		"name": "setup_base",
 		"image": "registry.opviel.de:80/alpine_ansible_hugo:latest",
 		"commands": [
-			"/usr/bin/ansible-playbook reactance.yaml -t dns"
+			"/usr/bin/ansible-playbook reactance.yaml -t base"
 		],
 		"depends_on": ["export_ssh_key"]
 	})
@@ -134,5 +134,5 @@ def pipeline_2(protocols):
 		"platform": { "arch": "arm64" },
 		"steps": steps,
 		"depends_on": ["Build and Publish Image"],
-		"branch": "master"
+		"trigger": {"branch": "master"}
 	}
