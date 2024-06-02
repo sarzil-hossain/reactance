@@ -3,11 +3,11 @@ all_users:
   - user: tech_marine
     regen: false
     expire: '2025-5-25'
-  - user: tech_priest
-    regen: false
 
 vmess_users:
   - user: tech_initiate
     regen: false
     expire: '2025-5-25'
-
+  - user: tech_marine
+    regen: false
+    expire: '2025-5-25'
