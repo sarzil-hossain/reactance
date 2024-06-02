@@ -23,5 +23,5 @@ Reactance doesn't have a client of its own. Instead, we provide documentations a
 {{< hint danger >}}
 A VPN is not a ticket to freedom!
 All it does is exchange one country's censorship policies for another one's.
-Please refrain from criminal activities, whether they be western-ideological or real like torrenting and piracy, to ensure the service's continued existence free from being hassled.
+Please refrain from criminal activities, whether they be western-ideological or real like torrenting and piracy, to ensure the service's continued existence free from trouble.
 {{< /hint >}}
