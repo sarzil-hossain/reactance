@@ -33,6 +33,8 @@
 - name: "combine dicts"
   ansible.builtin.set_fact:
     user_pass_dict: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)|combine(xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, recursive=true, list_merge='append') }}"
+  notify:
+    - cleanup_temp_dir
 
 - name: "get salamander public key"
   ansible.builtin.slurp:
@@ -62,7 +64,18 @@
     web_exp_dict: "{{ web_exp_dict|default({}) | combine({item: ansible_facts.date_time.epoch|int + 86400 }) }}"
   loop: "{{ user_pass_dict.keys() }}"
 
+- name: "check if web_expiration.json exists"
+  ansible.builtin.stat:
+    path: /var/reactance/.web_expiration.json
+  register: web_exp_stat
+
+- name: "slurp previous web_expiration.json contents"
+  ansible.builtin.slurp:
+    path: /var/reactance/.web_expiration.json
+  when: web_exp_stat.stat.exists
+  register: web_exp_e64
+
 - name: "write it to file"
   ansible.builtin.copy:
-    content: "{{ web_exp_dict | to_json }}"
+    content: "{{ web_exp_dict|default({})|combine(web_exp_e64.content|default('e30K')|b64decode|from_json) | to_json }}"
     dest: /var/reactance/.web_expiration.json

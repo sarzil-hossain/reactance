@@ -7,31 +7,31 @@ from ansible.module_utils.basic import AnsibleModule
 import json, shlex, os
 from datetime import datetime
 
-OCSERV_ROOT_DIR = "/var/reactance/ocserv"
-OCSERV_CERTS_DIR = os.path.join(OCSERV_ROOT_DIR, "certs")
+
+OCSERV_CERTS_DIR = "/var/reactance/ocserv/certs"
 
 def exec_shell(cmd, module):
-    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'})
+    rc, stdout, stderr= module.run_command(cmd, environ_update={'TERM': 'dumb'}, use_unsafe_shell=True)
     if rc != 0:
         module.fail_json(stderr)
     return stdout.rstrip()
 
 def ocserv_get_users():
-    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(OCSERV_CERTS_DIR) if i.endswith(".pub") and not i.startswith(("server", "ca"))]
+    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(OCSERV_CERTS_DIR) if i.endswith(".p12")]
     return previous_users
 
 def ocserv_user_control(update_password, module):
     previous_users = ocserv_get_users()
     selected_users = set(update_password.keys())
     new_users_dict = {}
-
+    
     # Remove users not in group_vars
     for user in previous_users:
-        if user not in selected_users:
+        if user not in selected_users or not update_password[user]:
             # new code goes here - remove user, update crl
-            exec_shell(f"cat {OCSERV_CERTS_DIR}/{user}-cert.pem >> {OCSERV_CERTS_DIR}/revoked.pem", module)
+            exec_shell(f"cat {OCSERV_CERTS_DIR}/{user}-cert.pem > {OCSERV_CERTS_DIR}/revoked.pem", module)
             exec_shell(f"certtool --generate-crl --load-ca-privkey {OCSERV_CERTS_DIR}/ca-key.pem --load-ca-certificate {OCSERV_CERTS_DIR}/ca-cert.pem --load-certificate {OCSERV_CERTS_DIR}/revoked.pem --template {OCSERV_CERTS_DIR}/crl.tmpl --outfile {OCSERV_CERTS_DIR}/crl.pem", module)
-            exec_shell("rm {OCSERV_CERTS_DIR}/{user}-cert.pem {OCSERV_CERTS_DIR}/{user}-key.pem", module)
+            exec_shell(f"rm {OCSERV_CERTS_DIR}/{user}-cert.pem {OCSERV_CERTS_DIR}/{user}-key.pem {OCSERV_CERTS_DIR}/{user}.p12", module)
 
     # Add new users or update password of existing users
     for user in selected_users:
@@ -52,7 +52,7 @@ tls_www_client
             exec_shell(f"rm {user_template_file}", module)
             new_users_dict[user] = {"ocserv": []} # a hack
             
-            return new_users_dict 
+    return new_users_dict 
        
 def run_module():
     module = AnsibleModule(
