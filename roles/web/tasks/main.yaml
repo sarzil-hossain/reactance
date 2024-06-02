@@ -66,5 +66,5 @@
 
 - name: "write it to file"
   ansible.builtin.copy:
-    content: "{{ web_exp_dict | to_json }}"
+    content: "{{ web_exp_dict|default({}) | to_json }}"
     dest: /var/reactance/.web_expiration.json
