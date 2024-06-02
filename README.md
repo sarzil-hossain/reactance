@@ -75,6 +75,7 @@ All variables:
 |vmess_port|port number for vmess|4438|all_vpns, xray|
 |disable_webui|disable web interface for clients|false|all|
 |disable_dns|disable dns and adblock setup|false|all|
+|root_keys|root user ssh public keys|None|all|
 
 ## User Definitions
 Users can be set up based on protocol (same users across all servers for same services) or hosts (specific users on specific servers). For user management based on services, write your user definitions in `group_vars/all.yaml`. For user management based on specific hosts, write your user definitions in `host_vars/all.yaml` (group_vars would be overriden for that host).

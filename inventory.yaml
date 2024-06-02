@@ -8,3 +8,6 @@ all_vpns:
       ansible_ssh_private_key_file: ".ssh_private_key"
       ocserv_network: "10.20.30.40/16"
       dns: "46.23.93.39"
+      root_keys:
+        - " ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAmwLjyK06Riqlbon0tbw4an903WDsmC4h1Wbm/dt23SbTZy2l+n9RPjyu7jnHLtnbyXv+Aek+YkG/ff1M8WgH+jFXkSaJHJA9q7/4w+xluv+7b0NC+Nkw+evHCGjfQ3LhRgxcOo27FLlivqk6Hi+vqdcAeyuUYeRewFY3v4QYZJ5x93013VqIfX3zabJ60Thpf5FWY7QxaZl5oe7F sdfsdf s23454 "
+        - " ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABlQN0qCY+4f8AqkLpbsOcSvJv/kllrGRr58pkWIZCIl57ZJ7aoF0geFv3lzdyHqHkzmCqP0oB1zWHDnGTge0ggtV90AnmwlqFsQQvbPDx0oqMYq2qtAIm9UhrQycHnI9/YB0lxmZRZNqnN4NqTVJ5xiBafh6Z9MIGltRTOIy4x2SjArRctanYBIRdsIbFshArm/XLBHknYYjZP1dHqnOKoSlAll0gVQ/zkunn5wMRrr9WlO1oeRLCowT8UVIKFxR+CnU+Vub+i3ticyYSkuYbYV1CebNzFRS0zOZ5RARQQlFwX1KzWtSe4/EkDzEKL0Q6GeXoL4rdCqlhGw+1maKdZs4qvbTylJ8nvA2ZMycqwOrRqb9m1AzQ/U85HIFXLfjzisJMM2Y/dCu6PjwuUmtrFkyCvBeXm+zaOePXobdqQLxwLXxujpyh9lNl8G8Vdu7enWhhpR6DJZqvupNdWZVF6u5459EGGedQihAONejLy/IV0PEOjQMBzL1h/fNbdLspfOcxBEsxfdkNfYM1M9yMeArQU7K/5Q== sdfsdf s23454"
