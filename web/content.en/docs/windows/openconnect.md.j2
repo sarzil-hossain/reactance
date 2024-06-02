@@ -19,7 +19,7 @@ type: docs
 
 ![Openconnect-02](/images/windows-oc-02.png)
 
-4. Download the three files that are provided below:
+4. Download the two files that are provided below:
 
 	1. **User Certificate:** [Click to download User Certificate](/{{item}}-User-Certificate.pem)
 
@@ -29,7 +29,7 @@ type: docs
 
 	1. Enter a **name** (any name you want)
 
-	2. Copy the following and paste it in the server address field: {{ ansible_all_ipv4_addresses[0] }}:{{ ocserv_port | default(4430) }}
+	2. Copy the following and paste it in the server address field: **{{ ansible_all_ipv4_addresses[0] }}:{{ ocserv_port | default(4430) }}**
 
 	4. Click on the button next to the **“User Certificated”** field, and choose the User Certificate file that you downloaded from **step 4**.
 

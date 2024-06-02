@@ -45,7 +45,7 @@ type: docs
 
 	1. Enter any name you want.
 
-	2. Enter the following server address and port: {{ ansible_all_ipv4_addresses[0] }}:{{ ocserv_port | default(4430) }}
+	2. Enter the following server address and port: **{{ ansible_all_ipv4_addresses[0] }}:{{ ocserv_port | default(4430) }}**
 
 	3. Once you entered the server address, click on “Advanced Preferences”.
 
@@ -67,7 +67,7 @@ type: docs
 
 ![AnyConnect-11](/images/anyconnect-11.png)
 
-16. It will ask for a password. **The password is**: [TO BE DECIDED]
+16. It will ask for a password. The password is: **{{ item }}**
 
 ![AnyConnect-12](/images/anyconnect-12.png)
 
