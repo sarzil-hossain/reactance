@@ -4,6 +4,8 @@
     remote_src: true
     src: "/var/reactance/ocserv/certs/{{ item }}-cert.pem"
     dest:  "/var/www/reactance/{{ item }}/{{ item }}-User-Certificate.pem"
+    owner: www
+    group: daemon
   loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"
 
 - name: "copy ocserv key"
@@ -11,6 +13,8 @@
     remote_src: true
     src: "/var/reactance/ocserv/certs/{{ item }}-key.pem"
     dest:  "/var/www/reactance/{{ item }}/{{ item }}-User-Key.pem"
+    owner: www
+    group: daemon
   loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"
 
 - name: "copy ocserv p12 cert"
@@ -18,6 +22,8 @@
     remote_src: true
     src: "/var/reactance/ocserv/certs/{{ item }}.p12"
     dest:  "/var/www/reactance/{{ item }}/{{ item }}-Certificate-Android.pem"
+    owner: www
+    group: daemon
   loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"
 
 - name: "copy sshvpn certs"
@@ -25,4 +31,6 @@
     remote_src: true
     src: "/var/reactance/sshvpn/.ssh/{{ item }}"
     dest:  "/var/www/reactance/{{ item }}/{{ item}}-SSH-Key"
+    owner: www
+    group: daemon
   loop: "{{ (sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"

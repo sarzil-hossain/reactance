@@ -1,9 +1,6 @@
 ---
 - name: "openbsd : apply base role to all"
   hosts: all
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: base
   tags:
@@ -11,9 +8,6 @@
 
 - name: "openbsd : setup ocserv"
   hosts: ocserv, all_vpns
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: ocserv
   tags:
@@ -21,9 +15,6 @@
 
 - name: "openbsd : setup xray vpn"
   hosts: vless, vmess, trojan, all_vpns
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: xray
   tags:
@@ -31,9 +22,6 @@
 
 - name: "openbsd : setup sshvpn"
   hosts: sshvpn, all_vpns
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: sshvpn
   tags:
@@ -41,9 +29,6 @@
 
 - name: "openbsd : setup sshvpn"
   hosts: hysteria, all_vpns
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: hysteria
   tags:
@@ -51,9 +36,6 @@
 
 - name: "openbsd : setup dns resolver with adblock and web interface"
   hosts: all
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: dns
   tags:
@@ -61,9 +43,6 @@
 
 - name: "openbsd : setup web interface for vpn clients"
   hosts: all
-  become: true
-  become_method: doas
-  become_user: root
   roles:
     - role: web
   tags:

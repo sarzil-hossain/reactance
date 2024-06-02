@@ -6,9 +6,3 @@
   notify:
     - restart_httpd
 
-- name: "move images directory"
-  ansible.builtin.copy:
-    src: "{{ inventory_dir }}/web/static/images"
-    dest: /var/www/reactance/images
-    owner: www
-    group: daemon

@@ -3,7 +3,7 @@ all_vpns:
   hosts:
     deez_nuts:
       ansible_host: "sarzil.org"
-      ansible_user: ansible_tmp
+      ansible_user: root
       ansible_port: 22
       ansible_ssh_private_key_file: ".ssh_private_key"
       ocserv_network: "10.20.30.40/16"

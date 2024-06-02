@@ -12,6 +12,7 @@ server "default" {
         location "/{{ uname }}/*" {
                 root "/reactance/{{ uname }}"
 		request strip 1
+		directory auto index
                 authenticate with "/reactance/{{ uname }}/.htpasswd"
         }
 {% endfor %}

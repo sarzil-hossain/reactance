@@ -1,7 +1,6 @@
 ---
 - name: "template out anyconnect.md"
   delegate_to: localhost
-  become: false
   ansible.builtin.template:
     src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/anyconnect.md.j2"
     dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/anyconnect.md"
@@ -9,7 +8,6 @@
 
 - name: "template out openconnect.md"
   delegate_to: localhost
-  become: false
   ansible.builtin.template:
     src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/openconnect.md.j2"
     dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/openconnect.md"
@@ -17,7 +15,6 @@
 
 - name: "template out nekobox.md"
   delegate_to: localhost
-  become: false
   ansible.builtin.template:
     src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekobox.md.j2"
     dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekobox.md"
@@ -28,7 +25,6 @@
 
 - name: "template out nekoray.md"
   delegate_to: localhost
-  become: false
   ansible.builtin.template:
     src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/nekoray.md.j2"
     dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/windows/nekoray.md"
