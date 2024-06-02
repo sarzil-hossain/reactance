@@ -52,7 +52,7 @@ tls_www_client
             exec_shell(f"rm {user_template_file}", module)
             new_users_dict[user] = {"ocserv": []} # a hack
             
-            return new_users_dict 
+    return new_users_dict 
        
 def run_module():
     module = AnsibleModule(
