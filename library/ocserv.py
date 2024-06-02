@@ -17,7 +17,7 @@ def exec_shell(cmd, module):
     return stdout.rstrip()
 
 def ocserv_get_users():
-    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(OCSERV_CERTS_DIR) if i.endswith(".pub") and not i.startswith(("server", "ca"))]
+    previous_users = [".".join(i.split('.')[:-1]) for i in os.listdir(OCSERV_CERTS_DIR) if i.endswith(".p12")]
     return previous_users
 
 def ocserv_user_control(update_password, module):
