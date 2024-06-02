@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-import json, os, subprocess
+import json, os, subprocess, shutil
 from datetime import datetime
 
 EXPIRE_USER_JSON_PATH = "/var/reactance/.user_expiration.json"
@@ -90,9 +90,9 @@ def main():
     with open(EXPIRE_USER_JSON_PATH, "w") as f:
         f.write(json.dumps(expire_user_dict, indent=1))
 
-    with open(WEB_EXPIRATION_JSON, "r") as f:
+    with open(EXPIRE_WEB_JSON_PATH, "r") as f:
         expire_web_dict = json.loads(f.read())
-    for exp in expire_user_dict.keys():
+    for exp in expire_web_dict.keys():
         shutil.rmtree(f"/var/www/reactance/{exp}")
 
 if __name__ == "__main__":
