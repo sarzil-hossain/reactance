@@ -1,20 +1,5 @@
 ---
 all_users:
   - user: tech_marine
-    regen: false
-    expire: '2025-5-25'
-
-vmess_users:
-  - user: tech_marine
-    regen: false
-    expire: '2025-5-25'
-
-trojan_users:
-  - user: tech_marine
-    regen: false
-    expire: '2025-5-25'
-
-vless_users:
-  - user: tech_marine
-    regen: false
+    regen: true
     expire: '2025-5-25'
