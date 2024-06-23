@@ -22,7 +22,6 @@
   vars:
     users: "{{ xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"
 
-
 - name: "template out nekoray.md"
   delegate_to: localhost
   ansible.builtin.template:
@@ -31,3 +30,12 @@
   loop: "{{ users.keys() }}"
   vars:
     users: "{{ xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"
+
+- name: "template out nekossh.md"
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekossh.md.j2"
+    dest: "{{ inventory_dir }}/.hugo_sites_build/{{ item }}/{{ content_dir }}/docs/android/nekossh.md"
+  loop: "{{ users.keys() }}"
+  vars:
+    users: "{{ sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"

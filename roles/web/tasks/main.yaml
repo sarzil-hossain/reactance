@@ -27,9 +27,6 @@
   register: sshvpn_user_pass_dict_contents
   when:  check_pass_stats.results[2].stat.exists
 
-- name: "hi"
-  debug:
-    msg: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)}}"
 - name: "combine dicts"
   ansible.builtin.set_fact:
     user_pass_dict: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json)|combine(xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, sshvpn_user_pass_dict_contents.content|default('e30K')|b64decode|from_json, recursive=true, list_merge='append') }}"
