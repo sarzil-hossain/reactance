@@ -10,7 +10,7 @@
 
 - name: "copy specific folders to hugo_tmp for each user"
   delegate_to: localhost
-  ansible.builtin.shell: "rsync -avz {{ inventory_dir }}/web/ {{ inventory_dir }}/.hugo_sites_build/{{ item }} {{ '--exclude=anyconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=openconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=nekobox.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }} {{'--exclude=nekoray.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }}"
+  ansible.builtin.shell: "rsync -avz {{ inventory_dir }}/web/ {{ inventory_dir }}/.hugo_sites_build/{{ item }} {{ '--exclude=anyconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=openconnect.md' if 'ocserv' not in user_pass_dict[item] }} {{'--exclude=nekobox.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }} {{'--exclude=nekoray.md' if ['trojan','vmess','vless']|intersect(user_pass_dict[item]) == {} }} {{'--exclude=nekossh.md' if 'sshvpn' not in user_pass_dict[item]} }}"
   loop: "{{ user_pass_dict.keys() }}"
 
 - name: "template out hugo.toml"
