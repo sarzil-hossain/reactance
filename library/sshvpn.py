@@ -34,7 +34,8 @@ def sshvpn_update_users(update_password, module):
     for user in update_password.keys():
         if user not in previous_users or update_password[user]:
             exec_shell(f"yes | ssh-keygen -q -t rsa -b 4096 -C {user} -N \'\' -f \'{SSH_ROOT}/{user}\'", module)
-            new_users_dict[user] = {"sshvpn": []}
+            with open(f"{SSH_ROOT}/{user}", "r") as privkey:
+              new_users_dict[user] = {"sshvpn": privkey.read()}
 
     # Overwrite existing authorized_keys file
     users_pubkeys = [i for i in os.listdir(SSH_ROOT) if i.endswith(".pub")]

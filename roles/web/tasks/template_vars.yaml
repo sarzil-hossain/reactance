@@ -31,7 +31,6 @@
   vars:
     users: "{{ xray_user_pass_dict_contents.content|default('e30K')|b64decode|from_json}}"
 
-
 - name: "template out nekossh.md"
   delegate_to: localhost
   ansible.builtin.template:
