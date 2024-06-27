@@ -35,6 +35,7 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 
 6. Copy the VPN URL of your of the protocol of your choice (VMess, VLess and/or Trojan) from below and then click on the “Program” button. This time, click on “Add profile from clipboard”.
 
+{{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
 **VLess:** `{{ users[item].vless }}`
 {% endif %}
@@ -46,6 +47,7 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 {% if users[item].trojan is defined %}
 **Trojan:** `{{ users[item].trojan }}`
 {% endif %}
+{{ '{{<' }} /hint {{ '>}}' }}
 
 ![Nekoray-06](/images/nekoray-4.png)
 
@@ -53,7 +55,7 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 
 ![Nekoray-07](/images/nekoray-6.png)
 
-8. You will see a checkmark appear next to the VPN client and the text turns blue. This happens when a VPN profile is selected. To select another profile, repeat the previous step (Step 5) on another profile.
+8. You will see a checkmark appear next to the VPN profile and the text turns blue. This happens when a VPN profile is selected. To select another profile, repeat the previous step (Step 5) on another profile.
 
 9. In order to turn on the VPN and access the internet, you will need to click on either of the two VPN modes: “System Proxy” and “Tun Mode”. Click on “Tun Mode”. This will tunnel all of your computer's internet traffic through the VPN, this includes all the programs. (You need to run the program as Administrator in order to use “Tun Mode”. If you haven't done so, you will be asked whether or not you want to run the program as Administrator.).
 

@@ -31,9 +31,9 @@ type: docs
 
 	2. Copy the following and paste it in the server address field: **{{ ansible_all_ipv4_addresses[0] }}:{{ ocserv_port | default(4430) }}**
 
-	4. Click on the button next to the **“User Certificated”** field, and choose the User Certificate file that you downloaded from **step 4**.
+	3. Click on the button next to the **“User Certificated”** field, and choose the User Certificate file that you downloaded from **step 4**.
 
-	5. Click on the button next to the **“User Key”** field, and choose the User Key  file that you downloaded from **step 4**.
+	4. Click on the button next to the **“User Key”** field, and choose the User Key  file that you downloaded from **step 4**.
 
 ![Openconnect-03](/images/windows-oc-03.png)
 ![Openconnect-04](/images/windows-oc-04.png)
@@ -51,19 +51,3 @@ type: docs
 ![Openconnect-07](/images/windows-oc-08.png)
 
 And that's it!
-
-## Windows Client Important Notes:
-
-1. It will only prompt you to enter your user and password once. If you enter the correct user and password, you won't need to enter your credentials the next time. However, should you wish to change your username and password, follow the steps below:
-
-	1. Click on the gear icon next to the server bar.
-
-	2. Click on **“Edit selected profile”**
-
-	3. On the third field you'll see your username. Remove it like an ordinary text.
-
-	4. Click Save. It should prompt you to enter your username and password again.
-
-2. You can also turn the VPN on by using the system tray icon at the bottom right corner. Simply right click on the electric plug icon (that's the OpenConnect's system tray icon) go to **“Connect to…”** and select your VPN profile. That way you can turn the VPN on while keeping it minimized. It can also be turned off the same way;  after right clicking on the tray icon, simply click on **“Disconnect”**.
-
-3. It is highly recommended to avoid using the **“Start minimized”** feature of the client. There's a glitch in the app that causes the app GUI to no longer appear if that option is checked (it's related to your PC's graphic settings). Fixing this glitch requires going through the windows registries and it can be risky for the average user.
