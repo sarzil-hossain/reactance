@@ -24,6 +24,7 @@
   ansible.builtin.include_tasks: template_vars.yaml
   loop:
     - content.en
+    - content.fa
   loop_control:
     loop_var: content_dir
 
