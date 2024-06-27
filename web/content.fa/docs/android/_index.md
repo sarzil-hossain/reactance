@@ -1,5 +1,5 @@
 ---
 bookFlatSection: true
-title: Android Clients
+title: اندروید
 weight: 2
 ---

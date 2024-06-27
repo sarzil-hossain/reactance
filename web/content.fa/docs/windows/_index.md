@@ -1,5 +1,5 @@
 ---
 bookFlatSection: true
-title: Windows Clients
+title: ویندوز
 weight: 1
 ---
