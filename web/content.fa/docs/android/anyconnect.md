@@ -7,11 +7,9 @@ type: docs
 
 ۱. برای استفاده از پروتکل AnyConnect، نیاز است که اپلیکیشن **Cisco AnyConnect** از گوگل پلی استور دانلود شود. روی دکمه زیر کلیک کنید تا به صفحه گوگل پلی استور اپلیکیشن بروید.
 
-{{ '{{<' }} button href="https://play.google.com/store/apps/details?id=com.cisco.anyconnect.vpn.android.avf&hl=en&gl=US" {{ '>}}' }}**دانلود اپلیکیشن Cisco AnyConnect از گوگل پلی استور**{{ '{{<' }} /button {{ '>}}' }}
 
 ۲. برای دانلود فایل Certificate روی دکمه زیر کلیک کنید:
 
-{{ '{{<' }} button href="/{{item}}/{{item}}-Certificate-Android.p12" {{ '>}}' }}**Download client .P12 certificate file**{{ '{{<' }} /button {{ '>}}' }}
 
 ۳. اپلیکیشن را اجرا کنید.
 
