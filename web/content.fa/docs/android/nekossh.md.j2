@@ -4,76 +4,76 @@ type: docs
 weight: 1
 ---
 
-# SecureShell (SSH) on NekoBox
+# پروتکل SecureShell (SSH)
 
-In this tutorial you will learn how to make use of the SSH VPN service using NekoBox.
+در این آموزش یاد خواهید گرفت که چگونه از نِکوباکس برای به کارگیری پروتکل SSH استفاده کنید.
 
-NekoBox is a VPN client supporting a variety of VPN protocols, and we will be using this handy client to use SecureShell (SSH) VPN protocol.
+اپلیکیشن نِکوباکس از پروتکل‌های زیادی پشتیبانی می‌کند، و  از این اپلیکیشن برای اتصال به پروتکل SSH استفاده خواهیم کرد.
 
-**Please note that SSH is meant to be used as a last resort option in case the other methods don't work.**
+**توجه داشته باشید که این پروتکل تنها در صورتی ارائه می‌شود که سایر پروتکل و متودها برای شما قابل استفاده نباشد.**
 
-## How to install and use NekoBox for SSH VPN:
+## نحوه نصب و استفاده از نِکوباکس برای استفاده از پروتکل SSH:
 
-1. Go to NekoBox's GitHub page by clicking the link below. Download the APK that is compatible with your device. (In most cases, arm64-v8a version is compatible unless you have an old smartphone.)
+۱. روی دکمه زیر کلیک کنید تا به صفحه گیت‌هاب نِکوباکس بروید. فایل APK که با گوشی شما سازگار است را دانلود کنید. (در اکثر موارد، نسخه **arm64-v8a** با گوشی‌تان سازگار است، مگر این که دستگاه شما قدیمی باشد که در آن صورت نسخه **armeabi-v7a** را نصب کنید.)
 
-{{ '{{<' }} button href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/tag/1.2.9" {{ '>}}' }}**NekoBox's GitHub Page**{{ '{{<' }} /button {{ '>}}' }}
+{{ '{{<' }} button href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/tag/1.2.9" {{ '>}}' }}**صفحه گیت‌هاب نِکوباکس**{{ '{{<' }} /button {{ '>}}' }}
 
-![NekoSSH-01](/images/nekobox-12.png)
+![Nekobox-01](/images/nekobox-12.png)
 
 {{ '{{<' }} hint danger {{ '>}}' }}
-**Warning**
-The version of Nekobox that you can download from Google Play Store is not developed by the official developer of NekoBox, **please do not use that application.**
+**اخطار**
+اپلیکیشن نِکوباکس که در گوگل پلی استور است توسط خود سازنده‌های اصلی نِکوباکس ارائه نشده است. **از استفاده از آن نسخه خودداری کنید.**
 {{ '{{<' }} /hint {{ '>}}' }}
 
-2. Install the application and open it.
+۲. اپلیکیشن را نصب و اجرا کنید.
 
-3. Grant it the permission to send you notifications (if asked).
+۳. در صورت لزوم، دسترسی‌های مورد نیاز را به اپلیکیشن بدهید (دسترسی به **اعلان‌ها**)
 
-![NekoSSH-02](/images/nekobox-01.png)
+![Nekobox-02](/images/nekobox-01.png)
 
-4. In the **“VpnService Policy”**, click on YES.
+۴. در پیام بعدی، روی **YES** کلیک کنید.
 
-![NekoSSH-03](/images/nekobox-02.png)
+![Nekobox-03](/images/nekobox-02.png)
 
-5. Download the NekoBox Settings file by clicking on the link below.
+۵. روی دکمه زیر کلیک کنید و فایل تنظیمات نِکوباکس را دانلود کنید.
 
-[**Download NekoBox Settings**](/nekoboxsettings/Nekobox-Settings.json)
+{{ '{{<' }} button href="/nekoboxsetting/Nekobox-Settings.json" {{ '>}}' }}**دانلود تنظیمات نِکوباکس**{{ '{{<' }} /button {{ '>}}' }}
 
-6. Open the **dashboard** by clicking on the menu icon on the top left corner of the interface and **“Tools”**.
+۶. در بالا سمت چپ، روی دکمه سه خط بزنید تا پنل **تنظیمات** باز شود. سپس، روی **Tools** بزنید.
 
-![NekoSSH-04](/images/nekobox-03.png)
+![Nekobox-04](/images/nekobox-03.png)
 
-7. Go to the **“Backup”** tab and click on **“Import from file”** button.
+۷. به قسمت **Backup** بروید و گزینه **Import from file** را انتخاب کنید.
 
-![NekoSSH-05](/images/nekobox-04.png)
+![Nekobox-05](/images/nekobox-04.png)
 
-8. Select the setting file that you downloaded from **step 5**, then click on **“IMPORT”**.
+۸. فایلی که در قدم **شماره 5** دانلود کردید را انتخاب کنید و سپس روی **IMPORT** بزنید.
 
-![NekoSSH-06](/images/nekobox-05.png)
-![NekoSSH-07](/images/nekobox-06.png)
+![Nekobox-06](/images/nekobox-05.png)
+![Nekobox-07](/images/nekobox-06.png)
 
-9. If done **properly**, the UI should then turn **blue** and you should be brought back to the main screen of the app.
+۹. اگر قدم قبلی را **درست** انجام داده باشید، رنگ محیط کاربری به **آبی** تغییر می‌کند و به صفحه اصلی اپلیکیشن برمی‌گردید.
 
-10. In the app, click on the + icon on at the top of the interface, and select **"Manual"**, then click on **"SSH"** 
+۱۰. در صفحه اصلی، روی گزینه مثبت در بالای صفحه بزنید و سپس **Manual** را انتخاب کنید. پس از آن، **SSH** را انتخاب کنید.
 
 ![NekoSSH-08](/images/nekobox-07.png)
 ![NekoSSH-09](/images/nekossh-01.png)
 ![NekoSSH-10](/images/nekossh-02.png)
 
-11. In the next menu, click on the option that says **"Authentication Type"** and change it to **"Public Key".**
+۱۱. در صفحه‌ای که باز می‌شود، روی گزینه **Authentication Type** بزنید و آن را به **Public Key** تغییر دهید.
 
 ![NekoSSH-11](/images/nekossh-03.png)
 ![NekoSSH-12](/images/nekossh-04.png)
 
-12. Once you've done the preivous step, **copy** and **paste** the following values in their respective fields.
+۱۲. حال موارد زیر را مطابق عکس در جاهای مربوطه کپی کنید.
 
-	1. Any name that you want.
+	1. نام دلخواه خودتان
 
 	2. {{ ansible_all_ipv4_addresses[0] }}
 
 	3. **sshvpn**
 
-	4. Copy and paste the entire box below and paste it in field **#4**.
+	4. محتوای باکس زیر را به طور کامل کپی کنید و در قسمت **Private key** وارد کنید.
 
 {{ '{{<' }} hint info {{ '>}}' }}
 {{ users[item].sshvpn }}
@@ -81,16 +81,16 @@ The version of Nekobox that you can download from Google Play Store is not devel
 
 ![NekoSSH-13](/images/nekossh-05.png)
 
-13. Once done, click on the checkmark button at top right corner. (Note: If it's imported successfully but the VPN profle doesn't appear in the list of your VPN profiles, close the app and open it again, and it will appear in the list.)
+۱۳. پس از وارد کردن موارد قبلی، روی گزینه تیک در بالا سمت چپ بزنید. (نکته، اگر که لینک با موفقیت وارد برنامه شد ولی در صفحه اصلی برنامه چیزی ظاهر نشد، برنامه را ببندید و دوباره باز کنید تا در لیست ظاهر شود.)
 
-14. Click on the VPN profile that was just added to select it. If you have multiple VPN profiles, the one that has a **highlight** on its left side is the one that is selected.
+۱۴. روی VPN که به تازگی ایجاد شد بزنید تا انتخاب شود. اگر چندین پروفایل در لیست دارید، آن که در کنارش نوار رنگی است انتخاب شده است.
 
-13. Click on the **button** at the bottom of the screen to connect to the VPN profile.
+۱۵. روی **دکمه** پایین صفحه بزنید تا به VPN وصل شوید.
 
 ![NekoSSH-14](/images/nekossh-06.png)
 
-14. To check the latency of the VPN profile, click on the tab that says **“Connected, tap to check connection”**. It will tell you the latency in milliseconds.
+۱۶. برای بررسی سرعت و تاخیر، در پایین صفحه روی نوشته **Connected, Tap to check connection** بزنید تا میزان تاخیر به میلی ثانیه به شما نشان داده شود.
 
 ![NekoSSH-15](/images/nekobox-10.png)
 
-15. And that's it! You can check your IP location to ensure that you are connected to the VPN and it's working properly.
+۱۷. تمام! حال به VPN وصل شده‌اید. می‌توانید با استفاده از سایت‌های بررسی IP، لوکیشن خود را بررسی و از اتصال به VPN اطمینان حاصل کنید.

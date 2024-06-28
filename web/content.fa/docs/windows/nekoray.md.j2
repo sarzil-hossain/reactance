@@ -3,37 +3,37 @@ title: NekoRay (V2Ray)
 type: docs
 ---
 
-# NekoRay
+# نِکو رِی (NekoRay)
 
-In this tutorial you will learn how to use NekoRay VPN client on Windows devices.
+در این آموزش یاد خواهید گرفت که چگونه از اپلیکیشن نِکو رِی در ویندوز استفاده کنید.
 
-NekoRay is a VPN client supporting a variety of VPN protocols, and we will be using this handy client to use our main VPN protocols on desktop computers, including VLess, VMess, and Trojan.
+اپلیکیشن نِکو رِی از پروتکل‌های زیادی پشتیبانی می‌کند، و از این اپلیکیشن برای اتصال به پروتکل‌های اصلی‌مان در ویندوز استفاده خواهیم کرد. پروتکل‌هایی که مورد استفاده قرار خواهند گرفت عبارتند از: VLess، VMess و Trojan.
 
-## How to use NekoRay:
+## نحوه نصب و استفاده از نِکو رِی:
 
-1. Go to NekoRay's GitHub page by clicking the button below. Click on the link that is highlighted in the screenshot below and download NekoRay. It doesn't need installation, just extract it somewhere in your computer (it doesn't matter where but preferably somewhere easy to find).
+۱. روی دکمه زیر کلیک کنید تا به صفحه گیت‌هاب NekoRay بروید. بر لینکی که در اسکرین شات زیر دور آن خط کشیده شده است کلیک کنید. برنامه نیاز به نصب کردن ندارد و فقط کافیست آن را در جایی در ویندوز استخراج کنید. (فرقی ندارد در کجای ویندوز، ولی ترجیحاً جایی که قابل پیدا کردن باشد.)
 
-{{ '{{<' }} button href="https://github.com/MatsuriDayo/nekoray/releases" {{ '>}}' }}**NekoRay's GitHub Page**{{ '{{<' }} /button {{ '>}}' }}
+{{ '{{<' }} button href="https://github.com/MatsuriDayo/nekoray/releases" {{ '>}}' }}**صفحه گیت‌هاب نِکو رِی**{{ '{{<' }} /button {{ '>}}' }}
 
 ![Nekoray-01](/images/nekoray-12.png)
 
-2. Go to the folder where you extracted NekoRay and launch “nekoray”.
+۲. به جایی که برنامه را استخراج کردید بروید و فایل **nekoray** را اجرا کنید. (به صورت Run as Administrator)
 
 ![Nekoray-02](/images/nekoray-13.png)
 
-3. Click on the button that says “sing-box”
+۳. روی دکمه **sing-box** کلیک کنید.
 
 ![Nekoray-03](/images/nekoray-1.png)
 
-4. You will see the interface of the program in front of you. Click on the “Program” button at the top left corner.
+۴. صفحه اصلی برنامه برای شما باز خواهد شد. روی دکمه **Program** در بالا سمت چپ کلیک کنید.
 
 ![Nekoray-04](/images/nekoray-2.png)
 
-5. Click on “Remember last profile”.
+۵. روی **Remember my last profile** کلیک کنید.
 
 ![Nekoray-05](/images/nekoray-3.png)
 
-6. Copy the VPN URL of your of the protocol of your choice (VMess, VLess and/or Trojan) from below and then click on the “Program” button. This time, click on “Add profile from clipboard”.
+۶. لینک پروتکل مورد نظرتان را از باکس پایین کپی کنید و بار دیگر روی دکمه **Program** کلیک کنید. این بار، گزینه **Add profile from clipboard** را انتخاب کنید.
 
 {{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
@@ -51,34 +51,34 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 
 ![Nekoray-06](/images/nekoray-4.png)
 
-7. You will see that the VPN profile will appear in the middle. Right click on the VPN profile and choose “Start” (or click on the VPN profile and press Enter)
+۷. با انجام قدم قبلی، در لیست VPNهای برنامه، آن که کپی کرده بودید ظاهر می‌شود. روی آن کلیک راست کنید و **Start** را انتخاب کنید (یا پس از انتخاب آن، کلید Enter را فشار دهید.)
 
 ![Nekoray-07](/images/nekoray-6.png)
 
-8. You will see a checkmark appear next to the VPN profile and the text turns blue. This happens when a VPN profile is selected. To select another profile, repeat the previous step (Step 5) on another profile.
+۸. پس از انجام قدم قبلی، یک تیک کنار پروفایل VPN ظاهر می‌شود و متن آن آبی می‌شود. اگر چند پروفایل دارید، قدم قبلی را روی آن‌ها اجرا کنید.
 
-9. In order to turn on the VPN and access the internet, you will need to click on either of the two VPN modes: “System Proxy” and “Tun Mode”. Click on “Tun Mode”. This will tunnel all of your computer's internet traffic through the VPN, this includes all the programs. (You need to run the program as Administrator in order to use “Tun Mode”. If you haven't done so, you will be asked whether or not you want to run the program as Administrator.).
+۹. برای استفاده از VPN و دسترسی به اینترنت، باید روی یکی از دو گزینه System Proxy**** یا **Tun mode** کلیک کنید. تیک گزینه **Tun mode** را فعال کنید تا تمام ترافیک سیستم از بتواند از VPN استفاده کند.
 
 ![Nekoray-08](/images/nekoray-7.png)
 
-10. After clicking on “Tun Mode”, you will notice that a red dot appears on the system tray icon of NekoRay. This is to indicate that “Tun Mode” is on.
+۱۰. پس از روشن کردن حالت Tun Mode، نقطه قرمزی روی آیکون نِکو رِی در پایین سمت راست ویندوز (آیکون Tray) ظاهر می‌شود که به معنی روشن بودن این حالت است.
 
 ![Nekoray-09](/images/nekoray-11.png)
 
-11. To turn the VPN off, simply click on the “Tun Mode” checkbox again. Do remember to turn off the VPN when you're done using it. Do not turn your PC off or close the program while the VPN is connected.
+۱۱. برای خاموش کردن VPN، تنها کافیست تیک گزینه **Tun mode** را بردارید. حتماً پس از **اتمام استفاده‌تان** از VPN آن را خاموش کنید. **در حین فعال بودن VPN، برنامه را نبندید و سیستم را خاموش نکنید.**
 
-12. And that's it! You can check your IP location to ensure that you are connected to the VPN and it's working properly.
+۱۲. تمام! حال به VPN وصل شده‌اید. می‌توانید با استفاده از سایت‌های بررسی IP، لوکیشن خود را بررسی و از اتصال به VPN اطمینان حاصل کنید.
 
-## Other notes
+## سایر نکات
 
-1. You can turn the VPN on or off via the system tray icon. Right click on the system tray icon and go to system proxy and then choose either mode.
+۱. می‌توان برنامه را از طریق آیکون **Tray** نیز خاموش و روشن کرد. روی آیکون آن در گوشه پایین سمت راست کلیک راست کنید و در قسمت **System proxy**، حالت مورد نظرتان را انتخاب کنید. (همان کاری که در قدم شماره 9 انجام دادید.)
 
 ![Nekoray-10](/images/nekoray-8.png)
 
-2. “System Proxy” mode activates the VPN via a proxy. This mode only works for browsers or web-clients (such as Discord's desktop app) and it will not work on any software is not browser-based (such as online games).
+۲. حالت **System Proxy**، به صورت پروکسی برای شما VPN را فعال می‌کند. به این صورت که تنها اپلیکیشن‌های تحت وب و مرورگرها قابلیت استفاده از آن را دارند و روی سایر اپلیکیشن‌های ویندوز (برای مثال بازی‌های آنلاین) تاثیری نخواهد داشت.
 
-3. In case you forget to turn the VPN off before turning off your PC or closing the program, you might run into some connection issues. This can be solved by launching NekoRay and turning off the VPN mode that you previously selected.
+۳. در صورتی که فراموش کنید قبل از بستن برنامه یا خاموش کردن سیستم، VPN را خاموش کنید، برای اتصال به اینترنت به مشکل بر خواهید خورد. برای رفع آن، بار دیگر برنامه را اجرا کنید و حالت VPN که انتخاب کرده بودید را غیر فعال کنید.
 
-4. In case you decide to change the program's settings and the client stops working, delete NekoRay's folder and download it again, and repeat the steps at the beginning of this tutorial.
+۴. در صورتی که تنظیمات برنامه را دستکاری کردید و برنامه دیگر کار نکرد، پوشه NekoRay را کامل پاک کنید و از ابتدا آموزش را دنبال کنید.
 
-5. If you wish to test the latency of the VPN profile, right click on the profile you want, go to “Current Select” and click on “Url Test”. The number that appears under “Test results” column is the latency. Alternatively, you can click on the bottom left of the program where the name of the selected profile is displayed and it will also tell you what the latency is.
+۵. در صورتی که تمایل به تست سرعت و تاخیر VPN داشتید، می‌توانید روی گوشه پایین سمت چپ برنامه کلیک کنید (جایی که نام پروفایل انتخاب شده نوشته شده است) تا تاخیر به میلی ثانیه به شما نمایش داده شود.
