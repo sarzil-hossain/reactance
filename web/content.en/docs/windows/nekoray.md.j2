@@ -37,15 +37,15 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 
 {{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
-**VLess:** `{{ users[item].vless }}`
+{{ users[item].vless }}
 {% endif %}
 
 {% if users[item].vmess is defined %}
-**VMess URL:** `{{ users[item].vmess }}`
+{{ users[item].vmess }}
 {% endif %}
 
 {% if users[item].trojan is defined %}
-**Trojan:** `{{ users[item].trojan }}`
+{{ users[item].trojan }}
 {% endif %}
 {{ '{{<' }} /hint {{ '>}}' }}
 

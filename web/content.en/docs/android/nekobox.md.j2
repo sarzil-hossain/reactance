@@ -56,15 +56,15 @@ The version of Nekobox that you can download from Google Play Store is not devel
 
 {{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
-**VLess:** `{{ users[item].vless }}`
+{{ users[item].vless }}
 {% endif %}
 
 {% if users[item].vmess is defined %}
-**VMess URL:** `{{ users[item].vmess }}`
+{{ users[item].vmess }}
 {% endif %}
 
 {% if users[item].trojan is defined %}
-**Trojan:** `{{ users[item].trojan }}`
+{{ users[item].trojan }}
 {% endif %}
 {{ '{{<' }} /hint {{ '>}}' }}
 
