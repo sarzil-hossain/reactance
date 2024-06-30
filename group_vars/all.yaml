@@ -1,15 +1,5 @@
 ---
 all_users:
-  - user: tech_marine
-    regen: true
-    expire: '2025-5-25'
-
-ocserv_users:
-  - user: tech_priest
-    regen: true
-    expire: '2025-5-25'
-
-vless_users:
-  - user: tech_initiate
+  - user: testuser
     regen: true
     expire: '2025-5-25'
