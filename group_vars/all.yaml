@@ -1,5 +1,15 @@
 ---
 all_users:
-  - user: testuser
+  - user: testalluser
+    regen: true
+    expire: '2025-5-25'
+
+sshvpn_users:
+  - user: testsshuser
+    regen: true
+    expire: '2025-5-25'
+
+trojan_users:
+  - user: testtrojanuser
     regen: true
     expire: '2025-5-25'
