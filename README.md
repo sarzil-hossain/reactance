@@ -104,9 +104,8 @@ vless_users:
 ```
 
 ## Playbook Execution
-It's recommended to run the playbook through a DroneCI pipeline. However if you wish to run it locally from your computer, run the following commands:
 
-Step 1: At first, install the dependencies
+Step 1: It's recommended to run the playbook through a DroneCI pipeline. However if you wish to run it locally from your computer, run the following commands:
 ```sh
 apt install rsync # or whatever your package manager is
 python3 -m venv .venv
@@ -117,7 +116,7 @@ git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-boo
 
 Step 2: Reactance is ran as the root user. Please copy a public key to your server's `/root/.ssh/authorized_keys` file. Copy the private key and store it on DroneCI under the secret `ssh_private_key`. Or, if you're running reactance manually, store the private key file path under the `private_key_file` parameter in inventory.yaml.
 
-Step 3: To execute the playbook, simply run
+Step 3: To execute the playbook, you can run a manual pipeline build on DroneCI from the Web UI. If you want to execute the playbook manually, simply run:
 ```sh
 ansible-playbook reactance.yaml
 ```
