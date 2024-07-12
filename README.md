@@ -100,7 +100,7 @@ all_users:
 vless_users:
     - user: baz
       regen: true # will regenerate password
-      expires: 2025-10-13 # will remove user after yyyy-mm-dd
+      expire: 2025-10-13 # will remove user after yyyy-mm-dd
 ```
 
 ## Playbook Execution
