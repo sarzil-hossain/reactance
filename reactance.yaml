@@ -1,4 +1,27 @@
 ---
+- name: initial
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "set facts"
+      ansible.builtin.set_fact:
+        ansible_host: "{{ host }}"
+        ansible_port: "{{ port|default(22) }}"
+        ansible_user: "root"
+        ansible_ssh_private_key_file: "{{ private_key_file | default('.ssh_private_key') }}"
+      changed_when: false
+      throttle: 1
+
+    - name: bootstrap
+      ansible.builtin.raw: which python3 || pkg_add python3 || apk add python3 || apt install python3
+      when: bootstrap|default(true)
+      changed_when: false
+      throttle: 1
+
+    - name: gather facts
+      ansible.builtin.setup:
+      throttle: 1
+
 - name: "openbsd : apply base role to all"
   hosts: all
   roles:

@@ -40,7 +40,7 @@ tunnel-all-dns = true
 {% if not lookup('vars', 'disable_dns', default=false) %}
 dns = {{ (ocserv_network|default("172.16.16.0/24"))|ansible.utils.nthhost(2) }}
 {% else %}
-dns = 1.1.1.1
+dns = 9.9.9.9
 {% endif %}
 ping-leases = false
 route = default

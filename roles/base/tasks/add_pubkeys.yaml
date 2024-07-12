@@ -2,6 +2,7 @@
 - name: "add pubkeys to root user"
   ansible.builtin.lineinfile:
     path: /root/.ssh/authorized_keys
+    create: true
     line: "{{ item | trim }}"
     search_string: "{{ (item | trim | split(' '))[2:-1]|join(' ') }}"
   when: "root_keys is defined"
