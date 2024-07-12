@@ -33,6 +33,7 @@
     marker: "### REACTANCE - Unbound Adblock - {mark} ###"
     insertafter: "EOF"
     block: |
+      permit nopass root
       permit nopass _adblock cmd /usr/sbin/unbound-control args -q status
       permit nopass _adblock cmd /usr/sbin/unbound-control args -q flush_zone unbound-adblock
       permit nopass _adblock cmd /usr/sbin/unbound-control args -q auth_zone_reload unbound-adblock
@@ -59,5 +60,12 @@
     enabled: true
 
 - name: "create first ruleset"
-  ansible.builtin.command: "doas -u _adblock /usr/local/bin/unbound-adblock -O openbsd"
+  ansible.builtin.shell: "cd /var/unbound/db && doas -u _adblock /usr/local/bin/unbound-adblock -O openbsd"
   changed_when: false
+
+- name: "setup daily cronjob"
+  ansible.builtin.cron:
+    name: "update dns blocklist"
+    user: root
+    job: "cd /var/unbound/db && doas -u _adblock /usr/local/bin/unbound-adblock -O openbsd 1> /dev/null"
+    special_time: daily

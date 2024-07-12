@@ -21,6 +21,14 @@
     - name: gather facts
       ansible.builtin.setup:
       throttle: 1
+  tags:
+    - base
+    - web
+    - dns
+    - xray
+    - ocserv
+    - sshvpn
+    - hysteria
 
 - name: "openbsd : apply base role to all"
   hosts: all

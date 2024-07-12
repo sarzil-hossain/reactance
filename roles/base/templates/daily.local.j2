@@ -1,4 +1,0 @@
-su -l root -c "python3 /root/.user_expiration_control.py"
-{% if not disable_dns|default(false) %}
-su -l _adblock -c "unbound-adblock -O openbsd"
-{% endif %}

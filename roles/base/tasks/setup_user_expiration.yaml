@@ -1,21 +1,19 @@
 ---
-- name: "Template out user expiration script and daily.local"
+- name: "Template out user expiration script"
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode }}"
-    owner: "{{ item.owner }}"
-  loop:
-    - src: daily.local.j2
-      dest: /etc/daily.local
-      mode: "0644"
-      owner: root
-    - src: user_expiration_control.py.j2
-      dest: /root/.user_expiration_control.py
-      owner: root
-      group: nogroup
-      mode: "0400"
+    src: user_expiration_control.py.j2
+    dest: /root/.user_expiration_control.py
+    mode: "0400"
+    owner: root
+    group: nogroup
 
 - name: "write user expiration information to file"
   user_expiration:
     users: "{{ all_users|default([]) + ocserv_users|default([]) + vless_users|default([]) + vmess_users|default([]) + trojan_users|default([]) + sshvpn_users|default([]) + hysteria_users|default([]) }}"
+
+- name: "setup daily user expiration cronjob"
+  ansible.builtin.cron:
+    name: "daily run user expiration script"
+    user: root
+    job: "python3 /root/.user_expiration_control.py"
+    special_time: daily
