@@ -2,7 +2,9 @@
 Censorship resistant scalable VPN/Proxy automation for OpenBSD with user management for servers and cloud services.
 
 Supported OpenBSD versions: 7.4 (Tested)
-Note: Please do not try to set up the automation on OpenBSD 7.5 as the xray server would fail because of x/sys library in golang. Check out [this issue on github](https://github.com/golang/go/issues/36435) for more info. Until the issue is resolved, the Xray server will not work on OpenBSD 7.5 .
+
+
+**Note:** Please do not try to set up the automation on OpenBSD 7.5 as the xray server would fail because of x/sys library in golang. Check out [this issue on github](https://github.com/golang/go/issues/36435) for more info. Until the issue is resolved, the Xray server will not work on OpenBSD 7.5 .
 
 ## Table of Contents
   - [Description](#description)
@@ -113,7 +115,7 @@ pip3 install ansible netaddr
 git submodule add -f https://github.com/alex-shpak/hugo-book web/themes/hugo-book
 ```
 
-Step 2: Generate a ssh key for the remote `root` user and store the private key as `reactance/.ssh_private_key`
+Step 2: Reactance is ran as the root user. Please copy a public key to your server's `/root/.ssh/authorized_keys` file. Copy the private key and store it on DroneCI under the secret `ssh_private_key`. Or, if you're running reactance manually, store the private key file path under the `private_key_file` parameter in inventory.yaml.
 
 Step 3: To execute the playbook, simply run
 ```sh
