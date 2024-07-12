@@ -52,28 +52,28 @@ Example: The following config will setup all vpn servers on box1, only ocserv on
 all_vpns:
     hosts:
         box1:
-            ansible_host: deez.example.com
-            ansible_user: user1
+            host: deez.example.com
 
 ocserv:
     hosts:
         box2:
-            ansible_host: nuts.example.com
-            ansible_user: user2
+            host: nuts.example.com
+            user: user2
             ocserv_network: "10.20.30.40/24"
-        box3:
 ```
    
 All variables:
 |Name|Description|Default Value|Used Under|
 |--|--|--|--|
+|host|server hostname|(None)|all|
+|port|server ssh port|22|all|
+|private_key_file|path to ssh private key file|.ssh_private_key (required for DroneCI)|all|
 |ocserv_network|network address for ocserv|172.16.16.1/24|all_vpns, ocserv|
 |ocserv_port|port number for openconnect server|4430|all_vpns, ocserv|
 |hysteria_port|port number for hysteria|4435|all_vpns, hysteria|
 |trojan_port|port number for trojan|4436|all_vpns, xray|
 |vless_port|port number for vless|4437|all_vpns, xray|
 |vmess_port|port number for vmess|4438|all_vpns, xray|
-|disable_webui|disable web interface for clients|false|all|
 |disable_dns|disable dns and adblock setup|false|all|
 |root_keys|root user ssh public keys|None|all|
 
