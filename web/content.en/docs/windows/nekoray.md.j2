@@ -35,19 +35,23 @@ NekoRay is a VPN client supporting a variety of VPN protocols, and we will be us
 
 6. Copy the VPN URL of your of the protocol of your choice (VMess, VLess and/or Trojan) from below and then click on the “Program” button. This time, click on “Add profile from clipboard”.
 
-{{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
+```
 {{ users[item].vless }}
+```
 {% endif %}
 
 {% if users[item].vmess is defined %}
+```
 {{ users[item].vmess }}
+```
 {% endif %}
 
 {% if users[item].trojan is defined %}
+```
 {{ users[item].trojan }}
+```
 {% endif %}
-{{ '{{<' }} /hint {{ '>}}' }}
 
 ![Nekoray-06](/images/nekoray-4.png)
 

@@ -54,19 +54,23 @@ weight: 1
 
 ۱۰. لینک پروتکل مورد نظرتان را از قسمت پایین کپی کنید.
 
-{{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
+```
 {{ users[item].vless }}
+```
 {% endif %}
 
 {% if users[item].vmess is defined %}
+```
 {{ users[item].vmess }}
+```
 {% endif %}
 
 {% if users[item].trojan is defined %}
+```
 {{ users[item].trojan }}
+```
 {% endif %}
-{{ '{{<' }} /hint {{ '>}}' }}
 
 ۱۱. در اپلیکیشن، روی علامت مثبت در بالای صحفه بزنید و **Import from Clipboard** را انتخاب کنید. (**نکته: ** اگر که لینک با موفقیت وارد برنامه شد ولی در صفحه اصلی برنامه چیزی ظاهر نشد، برنامه را ببندید و دوباره باز کنید تا در لیست ظاهر شود.)
 

@@ -35,19 +35,23 @@ type: docs
 
 ۶. لینک پروتکل مورد نظرتان را از باکس پایین کپی کنید و بار دیگر روی دکمه **Program** کلیک کنید. این بار، گزینه **Add profile from clipboard** را انتخاب کنید.
 
-{{ '{{<' }} hint info {{ '>}}' }}
 {% if users[item].vless is defined %}
+```
 {{ users[item].vless }}
+```
 {% endif %}
 
 {% if users[item].vmess is defined %}
+```
 {{ users[item].vmess }}
+```
 {% endif %}
 
 {% if users[item].trojan is defined %}
+```
 {{ users[item].trojan }}
+```
 {% endif %}
-{{ '{{<' }} /hint {{ '>}}' }}
 
 ![Nekoray-06](/images/nekoray-4.png)
 
