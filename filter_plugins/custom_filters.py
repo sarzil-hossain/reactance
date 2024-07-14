@@ -11,6 +11,6 @@ class FilterModule(object):
         msg.append("##################################################################")
         msg.append("###################  CHANGED USERS - HTPASSWD  ###################")
         for user in htpasswd_dict.keys():
-            msg.append(f"{user}: {htpasswd_dict[user]} [LINK: http://{hostname}/{user}/index.html]")
+            msg.append(f"{user}: {htpasswd_dict[user]} [LINK: http://{hostname}:80/{user}/index.html]")
         msg.append("##################################################################")
         return '\n'.join(msg)
