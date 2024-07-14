@@ -39,3 +39,20 @@
     - src: newsyslog.conf.j2
       dest: /etc/newsyslog.conf
     
+
+# openbsd_pkg cant be run parallely otherwise there could be package locks and pipeline would fail
+- name: "install necessary utils"
+  community.general.openbsd_pkg:
+    name:
+      - unzip--
+      - curl--
+      - rsync--
+      - jq--
+    state: present
+  when: inventory_hostname in (groups['vless']|default([]) + groups['vmess']|default([]) + groups['trojan']|default([]) + groups['all_vpns']|default([]))
+
+- name: "tune unbound performance"
+  community.general.openbsd_pkg:
+    name: ripgrep
+    state: present
+  when: not disable_dns|default(False)

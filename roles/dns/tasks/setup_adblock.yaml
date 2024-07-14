@@ -38,11 +38,6 @@
       permit nopass _adblock cmd /usr/sbin/unbound-control args -q flush_zone unbound-adblock
       permit nopass _adblock cmd /usr/sbin/unbound-control args -q auth_zone_reload unbound-adblock
 
-- name: "tune unbound performance"
-  community.general.openbsd_pkg:
-    name: ripgrep
-    state: present
-
 - name: "create binaries for adblock"
   ansible.builtin.command: "{{ item }}"
   loop:

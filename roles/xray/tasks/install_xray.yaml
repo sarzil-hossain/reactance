@@ -13,15 +13,6 @@
     - "/var/reactance/xray/logs"
     - "/var/log/xray"
 
-- name: "install necessary utils"
-  community.general.openbsd_pkg:
-    name:
-      - unzip--
-      - curl--
-      - rsync--
-      - jq--
-    state: present
-
 - name: "create temporary directory"
   ansible.builtin.tempfile:
     state: directory

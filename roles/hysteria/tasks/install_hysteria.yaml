@@ -19,6 +19,7 @@
 		mode: "0600"
 	changed_when: false
 
+# this can remain here while hysteria is not being used
 - name: "install necessary utils"
   community.general.openbsd_pkg:
     name:

@@ -1,6 +1,7 @@
 ---
 # ocserv has built-in chroot functionality
 
+# it's fine here, other roles won't be running any pkg_add
 - name: "install ocserv"
   community.general.openbsd_pkg:
     name: ocserv--
