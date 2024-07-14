@@ -3,7 +3,6 @@ all_vpns:
   hosts:
     deez_nuts:
       host: 68.183.228.19
-      private_key_file: "/home/rpq/.ssh/tmp_ansible"
       ocserv_network: "10.20.30.40/16"
       disable_dns: False
       root_keys:
