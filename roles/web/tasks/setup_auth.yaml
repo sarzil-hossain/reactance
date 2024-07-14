@@ -9,3 +9,4 @@
   loop: "{{ user_pass_dict.keys() }}"
   notify:
     - show_htpasswd_passwords
+    - restart_httpd

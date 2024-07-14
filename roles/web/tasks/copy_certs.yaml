@@ -21,7 +21,7 @@
   ansible.builtin.copy:
     remote_src: true
     src: "/var/reactance/ocserv/certs/{{ item }}.p12"
-    dest:  "/var/www/reactance/{{ item }}/{{ item }}-Certificate-Android.pem"
+    dest:  "/var/www/reactance/{{ item }}/{{ item }}-Certificate-Android.p12"
     owner: www
     group: daemon
   loop: "{{ (ocserv_user_pass_dict_contents.content|default('e30K')|b64decode|from_json).keys()}}"
