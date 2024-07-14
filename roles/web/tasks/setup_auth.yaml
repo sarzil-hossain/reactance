@@ -5,7 +5,7 @@
   loop: "{{ user_pass_dict.keys() }}"
 
 - name: "generate htpasswd"
-  community.builtin.shell: "echo {{item}}:{{htpasswd_passwords[item]} | htpasswd -I /var/www/reactance/{{ item }}/.htpasswd && chown -R www /var/www/reactance/{{ item }}/.htpasswd"
+  community.builtin.shell: " echo {{item}}:{{htpasswd_passwords[item]}} | htpasswd -I /var/www/reactance/{{ item }}/.htpasswd && chown www /var/www/reactance/{{ item }}/.htpasswd && chmod 700 /var/www/reactance/{{ item }}/.htpasswd"
   loop: "{{ user_pass_dict.keys() }}"
   notify:
     - show_htpasswd_passwords
