@@ -1,0 +1,69 @@
+---
+- name: "create directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: _vpn
+    group: _vpn
+    mode: 0700
+  loop:
+    - "/var/reactance/xray"
+    - "/var/reactance/xray/bin"
+    - "/var/reactance/xray/etc"
+    - "/var/reactance/xray/logs"
+    - "/var/log/xray"
+
+- name: "create temporary directory"
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: temp
+  register: xray_tempdir
+  notify:
+    - remove_xray_tempdir
+
+- name: "get latest version"
+  ansible.builtin.shell: 'curl --silent "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | jq -r .tag_name'
+  register: xray_latest_version
+
+- name: "download latest version"
+  ansible.builtin.get_url:
+    url: "https://github.com/XTLS/Xray-core/releases/download/{{ xray_latest_version.stdout }}/Xray-openbsd-64.zip"
+    dest: "{{ xray_tempdir.path }}/xray.zip"
+
+- name: "unzip xray"
+  ansible.builtin.unarchive:
+    src: "{{ xray_tempdir.path }}/xray.zip"
+    dest: "{{ xray_tempdir.path }}"
+    remote_src: yes
+
+- name: "template out init script"
+  ansible.builtin.template:
+    src: "{{ item.file_src }}"
+    dest: "{{ item.file_dest }}"
+  loop:
+    - file_src: xray.rc.j2
+      file_dest: "{{ xray_tempdir.path }}/xray.rc"
+
+- name: "install xray"
+  ansible.builtin.shell: "{{ item }}"
+  loop:
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/xray /var/reactance/xray/bin/xray"
+    - {{ "install -m 755 -o _vpn -g bin {{ xray_tempdir.path }}/xray.rc /etc/rc.d/xray" if ansible_distribution|lower == "openbsd" else "install -m 755 -o _vpn -g bin {{ xray_tempdir.path }}/xray.alpine /etc/init.d/xray" }}
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geoip.dat /var/reactance/xray/bin/geoip.dat"
+    - "install -m 700 -o _vpn -g bin {{ xray_tempdir.path }}/geosite.dat /var/reactance/xray/bin/geosite.dat"
+
+- name: "copy chroot dependencies"
+  ansible.builtin.shell: "deps=$(ldd /var/reactance/xray/bin/xray | awk 'FNR > 3 {print $7}'); for dep in $deps; do rsync -av --relative $dep /var/reactance/xray; done"
+
+# xray will fail without these two files 
+- name: "copy hosts and resolv.conf"
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - src: /etc/hosts
+      dest: /var/reactance/xray/etc/hosts
+    - src: resolv.conf.j2
+      dest: /var/reactance/xray/etc/resolv.conf
+

@@ -64,6 +64,6 @@
   loop:
     - src: /etc/hosts
       dest: /var/reactance/xray/etc/hosts
-    - src: /etc/resolv.conf
+    - src: resolv.conf.j2
       dest: /var/reactance/xray/etc/resolv.conf
 

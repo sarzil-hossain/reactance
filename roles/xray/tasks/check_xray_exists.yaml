@@ -10,8 +10,12 @@
   register: xray_config
 
 - name: "Install xray if directory doesn't exist"
-  ansible.builtin.include_tasks: install_xray.yaml
-  when:  xray_directory.stat.exists == false
+  ansible.builtin.include_tasks: install_xray_openbsd.yaml
+  when:  xray_directory.stat.exists == false and ansible_distribution|lower == "openbsd"
+
+- name: "Install xray if directory doesn't exist"
+  ansible.builtin.include_tasks: install_xray_alpine.yaml
+  when:  xray_directory.stat.exists == false and ansible_distribution|lower == "alpine"
 
 - name: "Configure xray"
   ansible.builtin.include_tasks: configure_xray.yaml

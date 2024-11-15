@@ -1,0 +1,53 @@
+---
+- name: "add ipv6 as a module"
+  ansible.builtin.lineinfile:
+    path: /etc/modules
+    regex: "^ipv6"
+    owner: root
+    group: root
+    mode: 644
+    create: true
+    backup: true
+    insertafter: "EOF"
+    line: "ipv6"
+
+- name: "templating out ip forwarding rules in sysctl.conf"
+  ansible.builtin.blockinfile:
+    path: /etc/sysctl.conf
+    create: true
+    backup: true
+    marker: "### REACTANCE - IP Forwarding - {mark} ###"
+    insertafter: "EOF"
+    block: |
+      net.ipv4.ip_forward = 0
+      net.ipv6.conf.all.forwarding = 2
+      net.ipv6.conf.default.forwarding = 2
+
+- name: "templating out sysctl.conf"
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: '0644'
+  notify: syslogd_restart
+  loop:
+    - src: syslog.conf.j2
+      dest: /etc/syslog.conf
+    - src: newsyslog.conf.j2
+      dest: /etc/newsyslog.conf
+
+# openbsd_pkg cant be run parallely otherwise there could be package locks and pipeline would fail
+- name: "install necessary utils"
+  community.general.openbsd_pkg:
+    name:
+      - unzip--
+      - curl--
+      - rsync--
+      - jq--
+    state: present
+  when: inventory_hostname in (groups['vless']|default([]) + groups['vmess']|default([]) + groups['trojan']|default([]) + groups['all_vpns']|default([]))
+
+- name: "tune unbound performance"
+  community.general.openbsd_pkg:
+    name: ripgrep
+    state: present
+  when: not disable_dns|default(False)

@@ -1,0 +1,29 @@
+baseURL = 'http://192.168.121.82/testuser'
+languageCode = 'en-us'
+title = 'Reactance VPN'
+theme = 'hugo-book'
+
+[params]
+  # (Optional, default light) Sets color theme: light, dark or auto.
+  # Theme 'auto' switches between dark and light modes based on browser/os preferences
+  BookTheme = 'light'
+	BookRepo = 'https://github.com/sarzilhossain'
+
+[languages]
+[languages.en]
+    contentDir = 'content.en'
+    disabled = false
+    languageCode = 'en-US'
+    languageDirection = 'ltr'
+    languageName = 'English'
+    title = 'Reactance VPN'
+    weight = 1
+
+[languages.fa]
+    contentDir = 'content.fa'
+    disabled = false
+    languageCode = 'fa-IR'
+    languageDirection = 'rtl'
+    languageName = 'فارسی'
+    title = 'راکتانس وی پی ان'
+    weight = 2
